@@ -4,9 +4,9 @@
 </svelte:head>
 
 <script>
-  import RootElemetsMenu from '$lib/components/RootElemetsMenu.svelte';
+import MenuElementsRoot from "../../lib/components/MenuElementsRoot.svelte";
 </script>
 
 <div>
-  <RootElemetsMenu />
+  <MenuElementsRoot />
 </div>
