@@ -1,9 +1,9 @@
 <script lang="ts">
   import MenuItemComponent from "./MenuItemComponent.svelte";
-  import type {ComponentDir} from "../interfaces/ComponentDir.js";
+  import type {MenuDir} from "../interfaces/MenuDir.js";
 
 
-  export let item: ComponentDir
+  export let item: MenuDir
 </script>
 
 <div>

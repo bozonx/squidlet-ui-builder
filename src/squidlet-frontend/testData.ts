@@ -1,55 +1,65 @@
-import type {ComponentsCollection} from '../lib/interfaces/types';
-import type {ComponentDir} from '../lib/interfaces/ComponentDir';
+import type {MenuDir} from '../lib/interfaces/MenuDir';
 import type {Screen} from '../lib/interfaces/Screen';
-import type {Library} from '../lib/interfaces/Library';
+import type {ScreensMenuFile} from '../lib/interfaces/ScreensMenuFile';
+import type {MenuElement} from '../lib/interfaces/MenuElement';
+import type {CustomComponent} from '../lib/interfaces/UiElement';
 
 
-export const screens: Screen[] = [
-  {
+
+export const testData: Record<string, any> = {
+  'menu/screensMenu': [
+    {
+      screenId: '00000011',
+      children: [
+        {
+          screenId: '00000012'
+        }
+      ]
+    }
+  ] as ScreensMenuFile[],
+  'menu/components': [
+    {
+      name: 'Some dir',
+      type: 'dir',
+      children: [
+        {
+          type: 'element',
+          elId: '00000001',
+        },
+      ]
+    } as MenuDir<MenuElement>,
+  ],
+  'menu/commonElements': [
+    {
+      name: 'Some dir',
+      type: 'dir',
+      children: [
+        {
+          type: 'element',
+          elId: '00000002',
+        },
+      ]
+    } as MenuDir<MenuElement>,,
+  ],
+  'menu/orderedLibs': [],
+  'enabledLibs': [],
+
+  'screens/00000011': {
+    $id: '00000011',
     name: 'about',
-    children: [
-
-    ]
-  }
-]
-
-export const testComponents: ComponentsCollection =  [
-  {
-    name: 'Some dir',
-    type: 'ComponentDir',
-    children: [
-      {
-        name: 'My component',
-        type: 'CustomComponent',
-        template: '<div>some content</div>',
-      },
-    ]
-  } as ComponentDir,
-]
-
-export const testCommonElements: ComponentsCollection = [
-  {
-    name: 'Some dir',
-    type: 'ComponentDir',
-    children: [
-      {
-        name: 'Button',
-        type: 'CustomComponent',
-        template: '<div>btn</div>',
-      },
-    ]
-  } as ComponentDir,
-]
-
-export const testLibs: Library[] = [
-  {
-    name: 'my base elements',
-    elements: [
-      {
-        name: 'LibComponent',
-        type: 'CustomComponent',
-        template: '<div>lib content</div>',
-      },
-    ]
-  }
-]
+  } as Screen,
+  'screens/00000012': {
+    $id: '00000012',
+    name: 'nested',
+  } as Screen,
+  'elements/00000001': {
+    $id: '00000001',
+    name: 'My component',
+    template: '<div>some content</div>',
+  } as CustomComponent,
+  'elements/00000002': {
+    $id: '00000002',
+    name: 'Button',
+    template: '<div>btn</div>',
+  } as CustomComponent,
+}

@@ -2,11 +2,11 @@
   import MenuItemComponent from "./MenuItemComponent.svelte";
   import MenuItemDir from './MenuItemDir.svelte';
   import type {ComponentsCollection} from '../interfaces/types';
-  import type {ComponentDir} from "../interfaces/ComponentDir.js";
+  import type {MenuDir} from "../interfaces/MenuDir.js";
   import {CustomComponent} from '../interfaces/CustomComponent';
 
 
-  export let item: CustomComponent | ComponentDir
+  export let item: CustomComponent | MenuDir
 </script>
 
 <div>
