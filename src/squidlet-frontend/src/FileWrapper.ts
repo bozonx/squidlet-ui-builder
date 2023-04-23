@@ -6,6 +6,8 @@ export class FileWrapper {
     loaded: false,
     exists: null,
   }
+  private filePath: string
+
 
   get loaded(): boolean {
     return this.status.loaded
@@ -17,13 +19,41 @@ export class FileWrapper {
 
 
   constructor(filePath: string) {
-
+    this.filePath = filePath
   }
 
-  async getContent() {
+  async getStringContent(): Promise<string> {
     // TODO: load content
     // TODO: cache content for couple of minutes
     // TODO: if content is cached then give it
+
+    if (this.filePath === 'screensMenu') {
+
+    }
+    else if (this.filePath === 'menu/components') {
+
+    }
+    else if (this.filePath === 'menu/commonElements') {
+
+    }
+    else if (this.filePath === 'menu/orderedLibs') {
+
+    }
+    else if (this.filePath === 'enabledLibs') {
+
+    }
+    else if (this.filePath === 'elements/00000001') {
+
+    }
+    else if (this.filePath === 'elements/00000002') {
+
+    }
+    else if (this.filePath === 'elements/00000004') {
+
+    }
+    else if (this.filePath === 'elements/00000005') {
+
+    }
   }
 
   onUpdated() {

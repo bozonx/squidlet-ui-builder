@@ -5,7 +5,7 @@
 
 <script lang="ts">
 import MenuElementsRoot from "../../lib/components/MenuElementsRoot.svelte";
-import {screens, testCommonElements, testComponents, testLibs} from '../../lib/testData';
+import {screens, testCommonElements, testComponents, testLibs} from '../../squidlet-frontend/testData';
 
 
 </script>

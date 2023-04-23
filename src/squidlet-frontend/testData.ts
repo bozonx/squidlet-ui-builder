@@ -1,7 +1,7 @@
-import type {ComponentsCollection} from './interfaces/types';
-import type {ComponentDir} from './interfaces/ComponentDir';
-import type {Screen} from './interfaces/Screen';
-import type {Library} from './interfaces/Library';
+import type {ComponentsCollection} from '../lib/interfaces/types';
+import type {ComponentDir} from '../lib/interfaces/ComponentDir';
+import type {Screen} from '../lib/interfaces/Screen';
+import type {Library} from '../lib/interfaces/Library';
 
 
 export const screens: Screen[] = [
