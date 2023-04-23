@@ -34,7 +34,9 @@ export class FileWrapper {
         {
           screenId: '00000011',
           children: [
-            '00000012'
+            {
+              screenId: '00000012'
+            }
           ]
         }
       ] as ScreensMenuFile[]
