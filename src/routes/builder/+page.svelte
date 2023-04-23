@@ -5,11 +5,11 @@
 
 <script lang="ts">
 import MenuElementsRoot from "../../lib/components/MenuElementsRoot.svelte";
-import {testComponents} from '../../lib/testData';
+import {screens, testComponents} from '../../lib/testData';
 
 
 </script>
 
 <div>
-  <MenuElementsRoot components={testComponents} />
+  <MenuElementsRoot screens={screens} components={testComponents} />
 </div>
