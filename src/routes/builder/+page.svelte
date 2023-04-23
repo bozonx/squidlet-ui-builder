@@ -4,17 +4,20 @@
 </svelte:head>
 
 <script lang="ts">
-import MenuElementsRoot from "../../lib/components/MenuElementsRoot.svelte";
-import {screens, testCommonElements, testComponents, testLibs} from '../../squidlet-frontend/testData';
+import type {ScreensMenuFile} from '../../lib/interfaces/ScreensMenuFile';
+import type {MenuDir} from '../../lib/interfaces/MenuDir';
+import type {MenuElement} from '../../lib/interfaces/MenuElement';
+
+
+export let data: {
+  menuScreens: ScreensMenuFile[]
+  menuComponents: MenuDir<MenuElement>
+}
 
 
 </script>
 
 <div>
-  <MenuElementsRoot
-      screens={screens}
-      components={testComponents}
-      commonElements={testCommonElements}
-      libs={testLibs}
-  />
+  {data.menuScreens}
+
 </div>
