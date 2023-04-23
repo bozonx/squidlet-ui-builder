@@ -27,3 +27,17 @@ export const testComponents: ComponentsCollection =  [
     ]
   } as ComponentDir,
 ]
+
+export const testCommonElements: ComponentsCollection = [
+  {
+    name: 'Some dir',
+    type: 'ComponentDir',
+    children: [
+      {
+        name: 'Button',
+        type: 'CustomComponent',
+        template: '<div>btn</div>',
+      },
+    ]
+  } as ComponentDir,
+]

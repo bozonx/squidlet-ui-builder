@@ -5,11 +5,15 @@
 
 <script lang="ts">
 import MenuElementsRoot from "../../lib/components/MenuElementsRoot.svelte";
-import {screens, testComponents} from '../../lib/testData';
+import {screens, testCommonElements, testComponents} from '../../lib/testData';
 
 
 </script>
 
 <div>
-  <MenuElementsRoot screens={screens} components={testComponents} />
+  <MenuElementsRoot
+      screens={screens}
+      components={testComponents}
+      commonElements=""{testCommonElements}
+  />
 </div>

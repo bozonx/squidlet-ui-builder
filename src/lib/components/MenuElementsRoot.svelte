@@ -8,6 +8,7 @@
 
   export let screens: Screen[] = []
   export let components: ComponentsCollection = []
+  export let commonElements: ComponentsCollection = []
 </script>
 
 <div>
@@ -38,4 +39,22 @@
       {/each}
     </ul>
   </div>
+
+  <div>
+    <div>Common elements</div>
+    <ul>
+      {#each components as item}
+        {#if item.type === 'CustomComponent'}
+          <li>
+            <MenuItemComponent item={item} />
+          </li>
+        {:else if item.type === 'ComponentDir'}
+          <li>
+            <MenuItemDir item={item} />
+          </li>
+        {/if}
+      {/each}
+    </ul>
+  </div>
+
 </div>
