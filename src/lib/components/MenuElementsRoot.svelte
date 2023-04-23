@@ -1,7 +1,7 @@
 <script lang="ts">
   import MenuItemComponent from "./MenuItemComponent.svelte";
-  import {ComponentsCollection} from "../interfaces/types.js";
   import MenuItemDir from "./MenuItemDir.svelte";
+  import {ComponentsCollection} from "../interfaces/types.js";
 
 
   export let components: ComponentsCollection = []
