@@ -3,7 +3,7 @@
   import MenuItemComponent from "./MenuItemComponent.svelte";
 
 
-  export let item: ComponentDir = {}
+  export let item: ComponentDir
 </script>
 
 <div>
