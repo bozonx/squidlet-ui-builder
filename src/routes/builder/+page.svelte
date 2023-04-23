@@ -5,11 +5,13 @@
 
 <script>
 import MenuElementsRoot from "../../lib/components/MenuElementsRoot.svelte";
+import {ComponentsCollection} from "../../lib/interfaces/types.js";
 
 
-const testComponents = [
+const testComponents: ComponentsCollection = [
   {
     name: 'My component',
+    type: 'CustomComponent',
     template: '<div>some content</div>',
   }
 ]
