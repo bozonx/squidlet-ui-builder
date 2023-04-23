@@ -10,7 +10,8 @@ export const csr = dev;
 export const prerender = true;
 
 
-export async function load({ params }: any) {
+export async function load(params: any) {
+  console.log(111, params)
   // TODO: инстанс надо затулить в какой-то синглтон
   const squidletFronend = new SquidletFrontend()
   const menuScreens = squidletFronend.userFiles.instantiateStringFile('menu/screensMenu')

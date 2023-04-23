@@ -1,13 +1,32 @@
 <script lang="ts">
-  import {ScreensMenuFile} from '../interfaces/ScreensMenuFile';
+  import {SquidletFrontend} from '../../squidlet-frontend';
+  import type {ScreensMenuFile} from '../interfaces/ScreensMenuFile';
+  import type {Screen} from '../interfaces/Screen';
 
   export let item: ScreensMenuFile
+  export let data: {
+    screen: Screen
+  }
 
-  // TODO: load file
+
+  export async function load(params: {screenId: string}) {
+    console.log(2222, params)
+    //TODO: инстанс надо затулить в какой-то синглтон
+    const squidletFronend = new SquidletFrontend()
+    const screen = squidletFronend.userFiles.instantiateStringFile(`screens/${params.screenId}`)
+
+    return {
+      screen: screen.getJsonContent(),
+    }
+  }
+
+  // TODO: on component init
+  //load({screenId: item.screenId})
+
 </script>
 
 <div>
-  <div>{item.name}</div>
+  <div>{data?.screen?.name}</div>
   {#if item.children?.length}
     <ul>
       {#each item.children as child}

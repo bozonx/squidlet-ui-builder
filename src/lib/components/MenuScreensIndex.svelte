@@ -1,6 +1,6 @@
 <script lang="ts">
   import MenuItemScreen from './MenuItemScreen.svelte';
-  import {ScreensMenuFile} from '../interfaces/ScreensMenuFile';
+  import type {ScreensMenuFile} from '../interfaces/ScreensMenuFile';
 
 
   export let items: ScreensMenuFile[] = []
