@@ -1,18 +1,13 @@
 <script>
   import MenuItemComponent from "./MenuItemComponent.svelte";
 
-  const testComponents = [
-    {
-      name: 'My component',
-      template: '<div>some content</div>',
-    }
-  ]
+  export let components = []
 
 </script>
 
 <div>
   gggg
-  {#each testComponents as item}
+  {#each components as item}
     <MenuItemComponent item={item} />
   {/each}
 </div>

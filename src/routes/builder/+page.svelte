@@ -5,8 +5,17 @@
 
 <script>
 import MenuElementsRoot from "../../lib/components/MenuElementsRoot.svelte";
+
+
+const testComponents = [
+  {
+    name: 'My component',
+    template: '<div>some content</div>',
+  }
+]
+
 </script>
 
 <div>
-  <MenuElementsRoot />
+  <MenuElementsRoot components={testComponents} />
 </div>
