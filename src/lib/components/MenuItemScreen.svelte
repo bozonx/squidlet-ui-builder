@@ -1,7 +1,9 @@
 <script lang="ts">
-  import type {Screen} from '../interfaces/Screen';
+  import {ScreensMenuFile} from '../interfaces/ScreensMenuFile';
 
-  export let item: Screen
+  export let item: ScreensMenuFile
+
+  // TODO: load file
 </script>
 
 <div>
