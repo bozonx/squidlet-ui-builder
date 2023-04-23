@@ -5,7 +5,7 @@
 
 <script lang="ts">
 import MenuElementsRoot from "../../lib/components/MenuElementsRoot.svelte";
-import {ComponentsCollection} from "../../lib/interfaces/types.js";
+import type {ComponentsCollection} from '../../lib/interfaces/types'
 
 
 const testComponents: ComponentsCollection = [

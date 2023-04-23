@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type {ComponentDir} from "../interfaces/ComponentDir.js";
   import MenuItemComponent from "./MenuItemComponent.svelte";
+  import type {ComponentDir} from "../interfaces/ComponentDir.js";
 
 
   export let item: ComponentDir
