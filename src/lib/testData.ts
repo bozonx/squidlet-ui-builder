@@ -1,6 +1,7 @@
 import type {ComponentsCollection} from './interfaces/types';
 import type {ComponentDir} from './interfaces/ComponentDir';
 import type {Screen} from './interfaces/Screen';
+import type {Library} from './interfaces/Library';
 
 
 export const screens: Screen[] = [
@@ -40,4 +41,17 @@ export const testCommonElements: ComponentsCollection = [
       },
     ]
   } as ComponentDir,
+]
+
+export const testLibs: Library[] = [
+  {
+    name: 'my base elements',
+    elements: [
+      {
+        name: 'LibComponent',
+        type: 'CustomComponent',
+        template: '<div>lib content</div>',
+      },
+    ]
+  }
 ]
