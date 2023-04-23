@@ -4,6 +4,7 @@
 </svelte:head>
 
 <script lang="ts">
+import MenuScreensIndex from '../../lib/components/MenuScreensIndex.svelte';
 import type {ScreensMenuFile} from '../../lib/interfaces/ScreensMenuFile';
 import type {MenuDir} from '../../lib/interfaces/MenuDir';
 import type {MenuElement} from '../../lib/interfaces/MenuElement';
@@ -13,11 +14,8 @@ export let data: {
   menuScreens: ScreensMenuFile[]
   menuComponents: MenuDir<MenuElement>
 }
-
-
 </script>
 
 <div>
-  {data.menuScreens}
-
+  <MenuScreensIndex items={data.menuScreens} />
 </div>

@@ -10,7 +10,7 @@
   <div>
     <div>Screens</div>
     <ul>
-      {#each screens as item}
+      {#each items as item}
         <li>
           <MenuItemScreen item={item} />
         </li>
