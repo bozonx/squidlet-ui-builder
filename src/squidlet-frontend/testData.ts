@@ -8,9 +8,7 @@ export const screens: Screen[] = [
   {
     name: 'about',
     children: [
-      {
-        name: 'page1'
-      }
+
     ]
   }
 ]
