@@ -1,6 +1,7 @@
 # idea's files
 .idea
 build
+_build
 __example
 _vite-test
 
