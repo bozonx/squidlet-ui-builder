@@ -21,6 +21,13 @@ export class BuilderMain {
   }
 
   async build() {
+    await this.output.copyPeripheralStatic()
+    await this.output.installDeps()
+    await this.buildRoutes()
+  }
+
+
+  private async buildRoutes() {
     const routesDir = path.join(this.options.prjDir, ROOT_DIRS.routes)
     const routes = await fs.readdir(routesDir)
 
@@ -30,7 +37,6 @@ export class BuilderMain {
       await this.output.write(ROOT_DIRS.routes, fileName, content, SVELTE_EXT)
     }
   }
-
 
   private prepareOptions(options: BuilderOptions): BuilderOptions {
     return {

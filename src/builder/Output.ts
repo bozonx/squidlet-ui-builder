@@ -1,8 +1,14 @@
 import path from 'node:path';
+import {exec} from 'node:child_process';
 import * as fs from 'node:fs/promises';
 import {pathTrimExt} from 'squidlet-lib'
 import {BuilderMain} from './BuilderMain.js';
 import {mkdirP} from '../helpers/common.js';
+import {fileURLToPath} from 'url';
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 export class Output {
@@ -27,7 +33,7 @@ export class Output {
    * @param content
    */
   async write(subDir: string, fileName: string, content: string, replaceExt?: string,) {
-    const dirPath = path.join(this.main.options.outputDir, subDir)
+    const dirPath = path.join(this.main.options.outputDir, 'src', subDir)
     const finalFileName: string = (replaceExt)
       ? `${pathTrimExt(fileName)}.${replaceExt}`
       : fileName
@@ -35,6 +41,64 @@ export class Output {
 
     await mkdirP(dirPath)
     await fs.writeFile(filePath, content, 'utf8')
+  }
+
+  async copyPeripheralStatic() {
+    const source = path.join(__dirname, '../peripheral/asIs')
+    const dest = path.join(this.main.options.outputDir)
+
+    await fs.cp(source, dest,{recursive: true})
+  }
+
+  async makePackageJson() {
+/*
+{
+  "name": "${PRJ_NAME}",
+  "private": true,
+  "version": "${PRJ_VERSION}",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^2.0.3",
+    "svelte": "^3.57.0",
+    "vite": "^4.3.2"
+  }
+}
+ */
+    const jsonStr = JSON.stringify({
+      "name": `"${this.main.options.prjName}"`,
+      "private": true,
+      "version": "0.0.1",
+      "type": "module",
+      "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview"
+      },
+    })
+    const packageJsonPath = path.join(this.main.options.outputDir, 'package.json')
+
+    await fs.writeFile(packageJsonPath, jsonStr, 'utf8')
+  }
+
+  async installDeps() {
+    await new Promise<void>((resolve, reject) => {
+      const packages = [
+        '@sveltejs/vite-plugin-svelte',
+        'svelte',
+        'vite'
+      ]
+      const cmd = `cd ${this.main.options.outputDir}; npm install -D ${packages.join(' ')}`
+      exec(cmd, (error, stdout, stderr) => {
+        if (error) return reject(error)
+
+        resolve()
+      })
+    })
   }
 
 }
