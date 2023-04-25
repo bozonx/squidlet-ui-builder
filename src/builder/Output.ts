@@ -3,7 +3,7 @@ import {exec} from 'node:child_process';
 import * as fs from 'node:fs/promises';
 import {pathTrimExt} from 'squidlet-lib'
 import {BuilderMain} from './BuilderMain.js';
-import {mkdirP} from '../helpers/common.js';
+import {fileExists, mkdirP} from '../helpers/common.js';
 import {fileURLToPath} from 'url';
 
 
@@ -15,14 +15,19 @@ export class Output {
   private readonly main: BuilderMain
 
 
+  get packageJsonPath(): string {
+    return path.join(this.main.options.outputDir, 'package.json')
+  }
+
+
   constructor(main: BuilderMain) {
     this.main = main
   }
 
 
   async init() {
-    await fs.rm(`${this.main.options.outputDir}`, {recursive: true})
     await mkdirP(this.main.options.outputDir)
+    await this.clear()
   }
 
 
@@ -62,12 +67,13 @@ export class Output {
         "preview": "vite preview"
       },
     }, null, 2)
-    const packageJsonPath = path.join(this.main.options.outputDir, 'package.json')
 
-    await fs.writeFile(packageJsonPath, jsonStr, 'utf8')
+    await fs.writeFile(this.packageJsonPath, jsonStr, 'utf8')
   }
 
   async installDeps() {
+    if (!this.main.options.force && await fileExists(this.packageJsonPath)) return
+
     await new Promise<void>((resolve, reject) => {
       const packages = [
         '@sveltejs/vite-plugin-svelte',
@@ -87,6 +93,16 @@ export class Output {
         }
       )
     })
+  }
+
+
+  private async clear() {
+    const toDelete = (await fs.readdir(this.main.options.outputDir))
+      .filter((el) => !['node_modules', 'package.json'].includes(el))
+
+    for (const fileOrDir of toDelete) {
+      await fs.rm(path.join(this.main.options.outputDir, fileOrDir), {recursive: true})
+    }
   }
 
 }

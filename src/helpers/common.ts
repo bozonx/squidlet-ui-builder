@@ -22,16 +22,18 @@ export async function applyTemplate(tmplPath: string, data: Record<string, any>)
 export async function mkdirP (dirName: string){
   return mkdirPLogic(
     dirName,
-    async (pathTo: string) => {
-      try {
-        await fs.stat(pathTo)
-
-        return true
-      }
-      catch (e) {
-        return false
-      }
-    },
+    async (pathTo: string) => fileExists(pathTo),
     (pathTo: string) => fs.mkdir(pathTo)
   )
+}
+
+export async function fileExists(pathTo: string): Promise<boolean> {
+  try {
+    await fs.stat(pathTo)
+
+    return true
+  }
+  catch (e) {
+    return false
+  }
 }
