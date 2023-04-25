@@ -74,14 +74,18 @@ export class Output {
         'svelte',
         'vite'
       ]
-      const cmd = `cd ${this.main.options.outputDir}; npm install -D ${packages.join(' ')}`
-      exec(cmd, (error, stdout, stderr) => {
-        if (error) return reject(error)
+      const cmd = `npm install -D ${packages.join(' ')}`
+      exec(
+        cmd,
+        {cwd: this.main.options.outputDir},
+        (error, stdout, stderr) => {
+          if (error) return reject(error)
 
-        console.log(stdout)
+          console.log(stdout)
 
-        resolve()
-      })
+          resolve()
+        }
+      )
     })
   }
 
