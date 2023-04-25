@@ -3,3 +3,4 @@ responseSchema: RouteItem[]
 method: files.stringFile
 params:
   path: 'menu/routes.yaml'
+# можно добавить ф-ю обработки

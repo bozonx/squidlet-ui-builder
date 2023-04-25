@@ -1,0 +1,23 @@
+{
+  "name": "squidlet-ui-builder",
+  "version": "0.0.1",
+  "description": "Squidlet UI builder",
+  "repository": "https://github.com/bozonx/squidlet-ui-builder.git",
+  "author": "Ivan <ipkozyrin@gmail.com>",
+  "exports": "./src/index.js",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-esm ./src/index.ts"
+  },
+  "dependencies": {
+    "squidlet-lib": "file:../squidlet-lib",
+    "yaml": "^2.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.0",
+    "ts-node": "^10.9.1",
+    "tslint": "^6.1.3",
+    "typescript": "^5.0.4"
+  }
+}
