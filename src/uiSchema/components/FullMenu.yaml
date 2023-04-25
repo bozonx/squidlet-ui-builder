@@ -1,15 +1,15 @@
 
-vars:
+data:
   - routes:
-      schema: RouteItem[]
+      resource: menuRoutes
+      # you cad add some request params here
 
-# TODO: add key to each
 tmpl: '''
   <ul>
-    {#each routes as item}
+    <Load resource={routes}>
       <li>
         <MenuItemRoute item={item} />
       </li>
-    {/each}
+    </Load>
   </ul>
   '''
