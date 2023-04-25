@@ -3,7 +3,7 @@ import {exec} from 'node:child_process';
 import * as fs from 'node:fs/promises';
 import {pathTrimExt} from 'squidlet-lib'
 import {BuilderMain} from './BuilderMain.js';
-import {fileExists, mkdirP} from '../helpers/common.js';
+import {mkdirP} from '../helpers/common.js';
 import {fileURLToPath} from 'url';
 
 
@@ -72,7 +72,7 @@ export class Output {
   }
 
   async installDeps() {
-    if (!this.main.options.force && await fileExists(this.packageJsonPath)) return
+    if (!this.main.options.force && !this.main.isInitialBuild) return
 
     await new Promise<void>((resolve, reject) => {
       const packages = [
@@ -88,7 +88,6 @@ export class Output {
           if (error) return reject(error)
 
           console.log(stdout)
-
           resolve()
         }
       )

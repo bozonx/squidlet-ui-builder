@@ -4,11 +4,13 @@ import {ROOT_DIRS, SVELTE_EXT} from '../types/constants.js';
 import {Output} from './Output.js';
 import {makeRouteContent} from './svelte/makeRoute.js';
 import {BuilderOptions} from '../types/BuilderOptions.js';
+import {fileExists} from '../helpers/common.js';
 
 
 export class BuilderMain {
   readonly options: BuilderOptions
   readonly output = new Output(this)
+  isInitialBuild = true
 
 
   constructor(options: BuilderOptions) {
@@ -18,6 +20,10 @@ export class BuilderMain {
 
   async init() {
     await this.output.init()
+
+    if (await fileExists(this.output.packageJsonPath)) {
+      this.isInitialBuild = false
+    }
   }
 
   async build() {

@@ -29,7 +29,7 @@ export async function mkdirP (dirName: string){
 
 export async function fileExists(pathTo: string): Promise<boolean> {
   try {
-    await fs.stat(pathTo)
+    await fs.lstat(pathTo)
 
     return true
   }
