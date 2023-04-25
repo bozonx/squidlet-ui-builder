@@ -1,5 +1,6 @@
 import path from 'node:path';
 import * as fs from 'node:fs/promises';
+import {pathTrimExt} from 'squidlet-lib'
 import {BuilderMain} from './BuilderMain.js';
 import {mkdirP} from '../helpers/common.js';
 
@@ -14,6 +15,7 @@ export class Output {
 
 
   async init() {
+    await fs.rm(`${this.main.options.outputDir}`, {recursive: true})
     await mkdirP(this.main.options.outputDir)
   }
 
@@ -24,9 +26,12 @@ export class Output {
    * @param fileName - only file name without dir
    * @param content
    */
-  async write(subDir: string, fileName: string, content: string) {
+  async write(subDir: string, fileName: string, content: string, replaceExt?: string,) {
     const dirPath = path.join(this.main.options.outputDir, subDir)
-    const filePath = path.join(dirPath, fileName)
+    const finalFileName: string = (replaceExt)
+      ? `${pathTrimExt(fileName)}.${replaceExt}`
+      : fileName
+    const filePath = path.join(dirPath, finalFileName)
 
     await mkdirP(dirPath)
     await fs.writeFile(filePath, content, 'utf8')

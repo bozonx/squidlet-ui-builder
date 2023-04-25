@@ -1,6 +1,6 @@
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
-import {ROOT_DIRS} from '../types/constants.js';
+import {ROOT_DIRS, SVELTE_EXT} from '../types/constants.js';
 import {Output} from './Output.js';
 import {makeRouteContent} from './svelte/makeRoute.js';
 import {BuilderOptions} from '../types/BuilderOptions.js';
@@ -27,7 +27,7 @@ export class BuilderMain {
     for (const fileName of routes) {
       const content = await makeRouteContent(this, fileName)
 
-      await this.output.write(ROOT_DIRS.routes, fileName, content)
+      await this.output.write(ROOT_DIRS.routes, fileName, content, SVELTE_EXT)
     }
   }
 
