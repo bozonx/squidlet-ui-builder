@@ -1,6 +1,7 @@
 import path from 'node:path';
 import * as fs from 'node:fs/promises';
 import {BuilderMain} from './BuilderMain.js';
+import {mkdirP} from '../helpers/common.js';
 
 
 export class Output {
@@ -13,7 +14,7 @@ export class Output {
 
 
   async init() {
-    await this.main.mkdirP(this.main.options.outputDir)
+    await mkdirP(this.main.options.outputDir)
   }
 
 
@@ -27,7 +28,7 @@ export class Output {
     const dirPath = path.join(this.main.options.outputDir, subDir)
     const filePath = path.join(dirPath, fileName)
 
-    await this.main.mkdirP(dirPath)
+    await mkdirP(dirPath)
     await fs.writeFile(filePath, content, 'utf8')
   }
 

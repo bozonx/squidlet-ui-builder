@@ -1,0 +1,9 @@
+<script>
+${CODE}
+</script>
+
+${TEMPLATE}
+
+<style>
+${STYLES}
+</style>

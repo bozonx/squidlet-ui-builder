@@ -9,13 +9,6 @@ import {BuilderOptions} from '../types/BuilderOptions.js';
 export class BuilderMain {
   readonly options: BuilderOptions
   readonly output = new Output(this)
-  readonly mkdirP = async (dirName: string) => {
-    // TODO: make it
-    return mkdirPLogic(
-      dirName,
-
-    )
-  }
 
 
   constructor(options: BuilderOptions) {
@@ -32,7 +25,7 @@ export class BuilderMain {
     const routes = await fs.readdir(routesDir)
 
     for (const fileName of routes) {
-      const content = await makeRouteContent(fileName)
+      const content = await makeRouteContent(this, fileName)
 
       await this.output.write(ROOT_DIRS.routes, fileName, content)
     }
