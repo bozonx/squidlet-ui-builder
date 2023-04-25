@@ -1,4 +1,3 @@
-import { dev } from '$app/environment';
 import {SquidletFrontend} from '../../squidlet-frontend';
 
 

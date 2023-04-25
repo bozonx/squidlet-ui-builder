@@ -1,0 +1,15 @@
+
+vars:
+  - routes:
+      schema: RouteItem[]
+
+# TODO: add key to each
+tmpl: '''
+  <ul>
+    {#each routes as item}
+      <li>
+        <MenuItemRoute item={item} />
+      </li>
+    {/each}
+  </ul>
+  '''

@@ -1,0 +1,15 @@
+imports:
+  - /components/FullMenu
+tmpl: '''
+  <div class="app">
+    <section>
+      <FullMenu />
+    </section>
+    <section><slot></slot></section>
+  </div>
+  '''
+styles: '''
+  app {
+    display: flex;
+  }
+  '''

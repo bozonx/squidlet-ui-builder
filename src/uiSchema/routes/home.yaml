@@ -1,0 +1,11 @@
+layout: 'MainLayout'
+tmpl: '''
+  <div>
+    <h2>Home</h2>
+  </div>
+  '''
+styles: '''
+  h2 {
+    font-size: 3em;
+  }
+  '''
