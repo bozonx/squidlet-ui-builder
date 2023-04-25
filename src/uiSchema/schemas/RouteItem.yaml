@@ -1,2 +1,4 @@
 $id: string
-name: string
+name:
+  type: string
+  required: true
