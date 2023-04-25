@@ -9,6 +9,9 @@ import {BuilderOptions} from '../types/BuilderOptions.js';
 export class BuilderMain {
   readonly options: BuilderOptions
   readonly output = new Output(this)
+  readonly mkdirP = async (dirName: string) => {
+    await mkdirPLogic()
+  }
 
 
   constructor(options: BuilderOptions) {
