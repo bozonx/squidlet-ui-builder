@@ -17,8 +17,14 @@ export class Output {
   }
 
 
-  async write(fileName: string, dir: string, content: string) {
-    const dirPath = path.join(this.main.options.outputDir, dir)
+  /**
+   * Write file to output dir
+   * @param subDir - directory relative to rootDir
+   * @param fileName - only file name without dir
+   * @param content
+   */
+  async write(subDir: string, fileName: string, content: string) {
+    const dirPath = path.join(this.main.options.outputDir, subDir)
     const filePath = path.join(dirPath, fileName)
 
     await this.main.mkdirP(dirPath)

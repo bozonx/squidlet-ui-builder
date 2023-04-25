@@ -10,7 +10,11 @@ export class BuilderMain {
   readonly options: BuilderOptions
   readonly output = new Output(this)
   readonly mkdirP = async (dirName: string) => {
-    await mkdirPLogic()
+    // TODO: make it
+    return mkdirPLogic(
+      dirName,
+
+    )
   }
 
 
@@ -24,20 +28,14 @@ export class BuilderMain {
   }
 
   async build() {
-    // TODO: формируем svelte файл экрана и файл маршрута
-    // TODO: если встречаем зависимые компоненты то подгружаем их в объект компонентов
-    // TODO: компонента формируем 1 раз и далее уже его не трогаем если ещё раз встречается
-    // TODO: так же с ресурсами - подключаем только 1 раз
-
     const routesDir = path.join(this.options.prjDir, ROOT_DIRS.routes)
     const routes = await fs.readdir(routesDir)
 
     for (const fileName of routes) {
       const content = await makeRouteContent(fileName)
 
-      await this.output.write(fileName, ROOT_DIRS.routes, content)
+      await this.output.write(ROOT_DIRS.routes, fileName, content)
     }
-
   }
 
 }
