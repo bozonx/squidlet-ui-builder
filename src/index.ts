@@ -1,8 +1,8 @@
 import {BuilderMain} from './builder/BuilderMain.js'
 
 (async () => {
-  const builder = new BuilderMain()
+  const builder = new BuilderMain('./src/uiSchema')
 
   // TODO: get from param
-  await builder.build('./src/uiSchema')
+  await builder.build()
 })()

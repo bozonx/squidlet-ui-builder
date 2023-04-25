@@ -1,14 +1,21 @@
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import {ROOT_DIRS} from '../types/constants.js';
+import {Output} from './Output.js';
+import {makeRouteContent} from './helpers/makeRoute.js';
 
 
 export class BuilderMain {
-  constructor() {
+  readonly prjPath
+  readonly output = new Output(this)
+
+
+  constructor(prjPath: string) {
+    this.prjPath = prjPath
   }
 
 
-  async build(prjPath: string) {
+  async build() {
     // TODO: загружаем список файлов директории routes
     // TODO: проходимся по каждому route
     // TODO: формируем svelte файл экрана и файл маршрута
@@ -20,7 +27,12 @@ export class BuilderMain {
     const routes = await fs.readdir(routesDir)
 
     for (const fileName of routes) {
-      console.log(111, fileName)
+      const fullFileName = path.join(routesDir, fileName)
+      console.log(111, fullFileName)
+
+      const content = makeRouteContent()
+
+      await this.output.write(fileName, ROOT_DIRS.routes, content)
     }
 
   }
