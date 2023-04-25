@@ -1,8 +1,8 @@
-import type {MenuDir} from '../lib/interfaces/MenuDir';
-import type {Screen} from '../lib/interfaces/Screen';
-import type {ScreensMenuFile} from '../lib/interfaces/ScreensMenuFile';
-import type {MenuElement} from '../lib/interfaces/MenuElement';
-import type {CustomComponent} from '../lib/interfaces/UiElement';
+import type {MenuDir} from '../../_sveltekit/src/lib/interfaces/MenuDir';
+import type {Screen} from '../../_sveltekit/src/lib/interfaces/Screen';
+import type {ScreensMenuFile} from '../../_sveltekit/src/lib/interfaces/ScreensMenuFile';
+import type {MenuElement} from '../../_sveltekit/src/lib/interfaces/MenuElement';
+import type {CustomComponent} from '../../_sveltekit/src/lib/interfaces/UiElement';
 
 
 

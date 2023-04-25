@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {SquidletFrontend} from '../../squidlet-frontend';
+  import {SquidletFrontend} from '../../../../src/squidlet-frontend';
   import type {ScreensMenuFile} from '../interfaces/ScreensMenuFile';
   import type {Screen} from '../interfaces/Screen';
 

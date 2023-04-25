@@ -1,4 +1,4 @@
-import {SquidletFrontend} from '../../squidlet-frontend';
+import {SquidletFrontend} from '../../../../src/squidlet-frontend';
 
 
 export async function load(params: any) {
