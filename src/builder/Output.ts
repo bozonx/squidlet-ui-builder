@@ -51,26 +51,8 @@ export class Output {
   }
 
   async makePackageJson() {
-/*
-{
-  "name": "${PRJ_NAME}",
-  "private": true,
-  "version": "${PRJ_VERSION}",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^2.0.3",
-    "svelte": "^3.57.0",
-    "vite": "^4.3.2"
-  }
-}
- */
     const jsonStr = JSON.stringify({
-      "name": `"${this.main.options.prjName}"`,
+      "name": `${this.main.options.prjName}`,
       "private": true,
       "version": "0.0.1",
       "type": "module",
@@ -79,7 +61,7 @@ export class Output {
         "build": "vite build",
         "preview": "vite preview"
       },
-    })
+    }, null, 2)
     const packageJsonPath = path.join(this.main.options.outputDir, 'package.json')
 
     await fs.writeFile(packageJsonPath, jsonStr, 'utf8')
@@ -95,6 +77,8 @@ export class Output {
       const cmd = `cd ${this.main.options.outputDir}; npm install -D ${packages.join(' ')}`
       exec(cmd, (error, stdout, stderr) => {
         if (error) return reject(error)
+
+        console.log(stdout)
 
         resolve()
       })

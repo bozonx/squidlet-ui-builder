@@ -22,7 +22,8 @@ export class BuilderMain {
 
   async build() {
     await this.output.copyPeripheralStatic()
-    await this.output.installDeps()
+    await this.output.makePackageJson()
+    //await this.output.installDeps()
     await this.buildRoutes()
   }
 
