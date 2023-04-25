@@ -12,7 +12,7 @@ export class BuilderMain {
 
 
   constructor(options: BuilderOptions) {
-    this.options = options
+    this.options = this.prepareOptions(options)
   }
 
 
@@ -28,6 +28,15 @@ export class BuilderMain {
       const content = await makeRouteContent(this, fileName)
 
       await this.output.write(ROOT_DIRS.routes, fileName, content)
+    }
+  }
+
+
+  private prepareOptions(options: BuilderOptions): BuilderOptions {
+    return {
+      ...options,
+      prjDir: path.join(process.cwd(), options.prjDir),
+      outputDir: path.join(process.cwd(), options.outputDir),
     }
   }
 

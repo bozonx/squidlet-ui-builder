@@ -1,12 +1,11 @@
 route: '/'
 layout: 'MainLayout'
-tmpl: '''
+tmpl: >
   <div>
     <h2>Home</h2>
   </div>
-  '''
-styles: '''
+
+styles: >
   h2 {
     font-size: 3em;
   }
-  '''

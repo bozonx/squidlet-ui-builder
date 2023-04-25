@@ -1,15 +1,21 @@
 import path from 'node:path';
+import {fileURLToPath} from 'url';
 import {ROOT_DIRS} from '../../types/constants.js';
 import {BuilderMain} from '../BuilderMain.js';
 import {applyTemplate, loadYamlFile} from '../../helpers/common.js';
 import {RouteComponent} from '../../types/RouteComponent.js';
 
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
 export async function makeRouteContent(main: BuilderMain, fileName: string): Promise<string> {
   const component: RouteComponent = await loadYamlFile(main, ROOT_DIRS.routes, fileName)
 
+
   return await applyTemplate(
-    path.join(__dirname, 'svelteComponentTmpl.txt'),
+    path.join(__dirname, './svelteComponentTmpl.txt'),
     {
       // TODO: add code
       // TODO: use layout
