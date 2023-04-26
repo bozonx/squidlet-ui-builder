@@ -82,6 +82,7 @@ export class Output {
         'prettier',
         'prettier-plugin-tailwindcss',
         'vitawind',
+        'svelte-router-spa',
         // TODO: зачем ???
         'cross-env',
       ]

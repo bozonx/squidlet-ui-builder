@@ -5,7 +5,7 @@ tmpl: '''
     <section>
       <FullMenu />
     </section>
-    <section><slot></slot></section>
+    <main><slot></slot></main>
   </div>
   '''
 styles: '''
