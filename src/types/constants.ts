@@ -2,7 +2,7 @@ export const SVELTE_EXT = '.svelte'
 export const CODE_EXT = '.js'
 export const YAML_EXT = '.yaml'
 export const FILE_NAMES = {
-  router: 'router',
+  routes: 'routes',
 }
 export const ROOT_DIRS = {
   app: 'app',

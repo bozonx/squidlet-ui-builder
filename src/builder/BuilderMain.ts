@@ -36,7 +36,7 @@ export class BuilderMain {
     await this.buildScreens()
     await this.output.createFile(
       ROOT_DIRS.app,
-      FILE_NAMES.router + CODE_EXT,
+      FILE_NAMES.routes + CODE_EXT,
       await this.router.makeJs()
     )
   }
