@@ -78,7 +78,12 @@ export class Output {
       const packages = [
         '@sveltejs/vite-plugin-svelte',
         'svelte',
-        'vite'
+        'vite',
+        'prettier',
+        'prettier-plugin-tailwindcss',
+        'vitawind',
+        // TODO: зачем ???
+        'cross-env',
       ]
       const cmd = `npm install -D ${packages.join(' ')}`
       exec(
