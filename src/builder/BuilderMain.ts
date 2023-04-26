@@ -1,6 +1,6 @@
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
-import {replaceExt} from 'squidlet-lib'
+import {pathTrimExt, replaceExt} from 'squidlet-lib'
 import {CODE_EXT, FILE_NAMES, Frameworks, ROOT_DIRS, SVELTE_EXT} from '../types/constants.js';
 import {Output} from './Output.js';
 import {BuilderOptions} from '../types/BuilderOptions.js';
@@ -21,6 +21,7 @@ export class BuilderMain {
   readonly router = new MakeRouter(this)
   readonly frameworkBuilder: FrameworkBuilder
   isInitialBuild = true
+  allComponentNames: string[] = []
 
 
   constructor(options: Partial<BuilderOptions>) {
@@ -31,6 +32,9 @@ export class BuilderMain {
 
   async init() {
     await this.output.init()
+
+    this.allComponentNames = (await fs.readdir(path.join(this.options.prjDir, ROOT_DIRS.components)))
+      .map((el) => pathTrimExt(el))
 
     if (await fileExists(this.output.packageJsonPath)) {
       this.isInitialBuild = false
