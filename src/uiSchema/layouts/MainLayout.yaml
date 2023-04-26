@@ -9,7 +9,7 @@ tmpl: '''
   </div>
   '''
 styles: '''
-  app {
+  .app {
     display: flex;
   }
   '''

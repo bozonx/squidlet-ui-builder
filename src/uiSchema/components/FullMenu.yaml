@@ -1,14 +1,14 @@
 
 data:
   - screens:
-      resource: menuRoutes
+      resource: menuScreens
       # you cad add some request params here
 
 tmpl: '''
   <ul>
     <Load resource={screens}>
       <li>
-        <MenuItemRoute item={item} />
+        <MenuItemScreen item={item} />
       </li>
     </Load>
   </ul>
