@@ -1,13 +1,12 @@
-tmpl: '''
+tmpl: >
   <div class="app">
     <section>
       <FullMenu />
     </section>
     <main><slot></slot></main>
   </div>
-  '''
-styles: '''
+styles: >
   .app {
     display: flex;
   }
-  '''
+

@@ -23,7 +23,7 @@ export class BuilderMain {
   isInitialBuild = true
 
 
-  constructor(options: BuilderOptions) {
+  constructor(options: Partial<BuilderOptions>) {
     this.options = this.prepareOptions(options)
     this.frameworkBuilder = new builders[this.options.framework](this)
   }
@@ -64,14 +64,18 @@ export class BuilderMain {
     }
   }
 
-  private prepareOptions(options: BuilderOptions): BuilderOptions {
+  private prepareOptions(options: Partial<BuilderOptions>): BuilderOptions {
+    if (!options.prjName) throw new Error(`No prjName`)
+    else if (!options.prjDir) throw new Error(`No prjDir`)
+    else if (!options.outputDir) throw new Error(`No outputDir`)
+
     return {
       prjDir: path.join(process.cwd(), options.prjDir),
       outputDir: path.join(process.cwd(), options.outputDir),
       prjName: options.prjName,
       // svelte by default
-      framework: 'svelte',
-      force: options.force,
+      framework: options.framework || 'svelte',
+      force: Boolean(options.force),
     }
   }
 

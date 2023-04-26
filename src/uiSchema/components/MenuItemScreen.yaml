@@ -2,8 +2,8 @@ props:
   - item:
       schema: RouteItem
 # TODO: add schema
-tmpl: '''
+tmpl: >
   <div>
     {item.name}
   </div>
-  '''
+

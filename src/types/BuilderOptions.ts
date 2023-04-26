@@ -7,5 +7,5 @@ export interface BuilderOptions {
   prjName: string
   framework: Frameworks
   // force full rebuild
-  force?: boolean
+  force: boolean
 }
