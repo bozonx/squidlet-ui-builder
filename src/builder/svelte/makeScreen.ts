@@ -3,15 +3,15 @@ import {fileURLToPath} from 'url';
 import {ROOT_DIRS} from '../../types/constants.js';
 import {BuilderMain} from '../BuilderMain.js';
 import {applyTemplate, loadYamlFile} from '../../helpers/common.js';
-import {RouteComponent} from '../../types/RouteComponent.js';
+import {ScreenComponent} from '../../types/ScreenComponent.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
-export async function makeRouteContent(main: BuilderMain, fileName: string): Promise<string> {
-  const component: RouteComponent = await loadYamlFile(main, ROOT_DIRS.routes, fileName)
+export async function makeScreenContent(main: BuilderMain, fileName: string): Promise<string> {
+  const component: ScreenComponent = await loadYamlFile(main, ROOT_DIRS.screens, fileName)
 
 
   return await applyTemplate(

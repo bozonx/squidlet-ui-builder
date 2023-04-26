@@ -1,12 +1,12 @@
 
 data:
-  - routes:
+  - screens:
       resource: menuRoutes
       # you cad add some request params here
 
 tmpl: '''
   <ul>
-    <Load resource={routes}>
+    <Load resource={screens}>
       <li>
         <MenuItemRoute item={item} />
       </li>

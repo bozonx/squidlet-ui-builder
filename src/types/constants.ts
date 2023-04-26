@@ -1,6 +1,6 @@
 export const SVELTE_EXT = 'svelte'
 export const ROOT_DIRS = {
-  routes: 'routes',
+  screens: 'screens',
   schemas: 'schemas',
   components: 'components',
   elements: 'elements',

@@ -2,5 +2,5 @@ use: squidletFrontend
 responseSchema: RouteItem[]
 method: files.stringFile
 params:
-  path: 'menu/routes.yaml'
+  path: 'menu/screens.yaml'
 # можно добавить ф-ю обработки
