@@ -1,24 +1,31 @@
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import {replaceExt} from 'squidlet-lib'
-import {CODE_EXT, FILE_NAMES, ROOT_DIRS, SVELTE_EXT} from '../types/constants.js';
+import {CODE_EXT, FILE_NAMES, Frameworks, ROOT_DIRS, SVELTE_EXT} from '../types/constants.js';
 import {Output} from './Output.js';
-import {makeScreenContent} from './svelte/makeScreen.js';
 import {BuilderOptions} from '../types/BuilderOptions.js';
-import {fileExists} from '../helpers/common.js';
+import {fileExists, loadYamlFile} from '../helpers/common.js';
 import {MakeRouter} from './MakeRouter.js';
-import {makeLayoutContent} from './svelte/makeLayout.js';
+import {FrameworkBuilder} from '../types/FrameworkBuilder.js';
+import {SvelteBuilder} from './svelte/SvelteBuilder.js';
+
+
+const builders: Record<Frameworks, new(main: BuilderMain) => FrameworkBuilder> = {
+  svelte: SvelteBuilder
+}
 
 
 export class BuilderMain {
   readonly options: BuilderOptions
   readonly output = new Output(this)
   readonly router = new MakeRouter(this)
+  readonly frameworkBuilder: FrameworkBuilder
   isInitialBuild = true
 
 
   constructor(options: BuilderOptions) {
     this.options = this.prepareOptions(options)
+    this.frameworkBuilder = new builders[this.options.framework](this)
   }
 
 
@@ -34,8 +41,9 @@ export class BuilderMain {
     await this.output.copyPeripheralStatic()
     await this.output.makePackageJson()
     await this.output.installDeps()
-    await this.buildLayouts()
-    await this.buildScreens()
+    await this.buildEntities(ROOT_DIRS.layouts, this.frameworkBuilder.buildLayout)
+    await this.buildEntities(ROOT_DIRS.screens, this.frameworkBuilder.buildScreen)
+    await this.buildEntities(ROOT_DIRS.components, this.frameworkBuilder.buildComponent)
     await this.output.createFile(
       ROOT_DIRS.app,
       FILE_NAMES.routes + CODE_EXT,
@@ -44,25 +52,15 @@ export class BuilderMain {
   }
 
 
-  private async buildScreens() {
-    const screensDir = path.join(this.options.prjDir, ROOT_DIRS.screens)
-    const screens = await fs.readdir(screensDir)
+  private async buildEntities(entityDir: string, builder: (obj: any) => Promise<string>) {
+    const srcDir = path.join(this.options.prjDir, entityDir)
+    const entities = await fs.readdir(srcDir)
 
-    for (const fileName of screens) {
-      const content = await makeScreenContent(this, fileName)
+    for (const fileName of entities) {
+      const obj: any = await loadYamlFile(this, entityDir, fileName)
+      const content = await builder(obj)
 
-      await this.output.createFile(ROOT_DIRS.screens, replaceExt(fileName, SVELTE_EXT), content)
-    }
-  }
-
-  private async buildLayouts() {
-    const layoutsDir = path.join(this.options.prjDir, ROOT_DIRS.layouts)
-    const layouts = await fs.readdir(layoutsDir)
-
-    for (const fileName of layouts) {
-      const content = await makeLayoutContent(this, fileName)
-
-      await this.output.createFile(ROOT_DIRS.layouts, replaceExt(fileName, SVELTE_EXT), content)
+      await this.output.createFile(entityDir, replaceExt(fileName, SVELTE_EXT), content)
     }
   }
 

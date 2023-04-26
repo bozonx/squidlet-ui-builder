@@ -1,5 +1,3 @@
-imports:
-  - /components/FullMenu
 tmpl: '''
   <div class="app">
     <section>
