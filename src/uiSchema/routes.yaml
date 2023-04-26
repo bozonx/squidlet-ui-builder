@@ -1,0 +1,4 @@
+routes:
+  - name: '/'
+    component: MainLayout
+    layout: Home

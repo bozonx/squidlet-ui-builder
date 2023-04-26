@@ -1,7 +1,6 @@
 import path from 'node:path';
 import {exec} from 'node:child_process';
 import * as fs from 'node:fs/promises';
-import {pathTrimExt} from 'squidlet-lib'
 import {BuilderMain} from './BuilderMain.js';
 import {mkdirP} from '../helpers/common.js';
 import {fileURLToPath} from 'url';
@@ -33,16 +32,13 @@ export class Output {
 
   /**
    * Write file to output dir
-   * @param subDir - directory relative to rootDir
+   * @param outputSubDir - directory relative to rootDir
    * @param fileName - only file name without dir
    * @param content
    */
-  async write(subDir: string, fileName: string, content: string, replaceExt?: string,) {
-    const dirPath = path.join(this.main.options.outputDir, 'src', subDir)
-    const finalFileName: string = (replaceExt)
-      ? `${pathTrimExt(fileName)}.${replaceExt}`
-      : fileName
-    const filePath = path.join(dirPath, finalFileName)
+  async createFile(outputSubDir: string, fileName: string, content: string) {
+    const dirPath = path.join(this.main.options.outputDir, 'src', outputSubDir)
+    const filePath = path.join(dirPath, fileName)
 
     await mkdirP(dirPath)
     await fs.writeFile(filePath, content, 'utf8')
