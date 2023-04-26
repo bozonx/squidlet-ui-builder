@@ -1,13 +1,19 @@
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import {pathTrimExt, replaceExt} from 'squidlet-lib'
-import {CODE_EXT, FILE_NAMES, Frameworks, ROOT_DIRS, SVELTE_EXT} from '../types/constants.js';
+import {CODE_EXT, FILE_NAMES, Frameworks, ROOT_DIRS, SVELTE_EXT, YAML_EXT} from '../types/constants.js';
 import {Output} from './Output.js';
 import {BuilderOptions} from '../types/BuilderOptions.js';
-import {fileExists, loadYamlFile} from '../helpers/common.js';
+import {fileExists, loadPrjYamlFile, loadYamlFile} from '../helpers/common.js';
 import {MakeRouter} from './MakeRouter.js';
 import {FrameworkBuilder} from '../types/FrameworkBuilder.js';
 import {SvelteBuilder} from './svelte/SvelteBuilder.js';
+import {fileURLToPath} from 'url';
+import {LibCfg} from '../types/LibCfg.js';
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 const builders: Record<Frameworks, new(main: BuilderMain) => FrameworkBuilder> = {
@@ -21,7 +27,8 @@ export class BuilderMain {
   readonly router = new MakeRouter(this)
   readonly frameworkBuilder: FrameworkBuilder
   isInitialBuild = true
-  allComponentNames: string[] = []
+  prjComponentNames: string[] = []
+  libsComponentNames: Record<string, string[]> = {}
 
 
   constructor(options: Partial<BuilderOptions>) {
@@ -33,8 +40,10 @@ export class BuilderMain {
   async init() {
     await this.output.init()
 
-    this.allComponentNames = (await fs.readdir(path.join(this.options.prjDir, ROOT_DIRS.components)))
+    this.prjComponentNames = (await fs.readdir(path.join(this.options.prjDir, ROOT_DIRS.components)))
       .map((el) => pathTrimExt(el))
+
+    this.libsComponentNames = await this.makeLibComponentName()
 
     if (await fileExists(this.output.packageJsonPath)) {
       this.isInitialBuild = false
@@ -61,11 +70,27 @@ export class BuilderMain {
     const entities = await fs.readdir(srcDir)
 
     for (const fileName of entities) {
-      const obj: any = await loadYamlFile(this, entityDir, fileName)
+      const obj: any = await loadPrjYamlFile(this, entityDir, fileName)
       const content = await builder(obj)
 
       await this.output.createFile(entityDir, replaceExt(fileName, SVELTE_EXT), content)
     }
+  }
+
+  private async makeLibComponentName(): Promise<Record<string, string[]>> {
+    const result: Record<string, string[]> = {}
+
+    for (const libPath of this.options.componentLibPaths) {
+      const cfgFileName = FILE_NAMES.cfg + YAML_EXT
+      const libCfgPath = path.join(libPath, cfgFileName)
+      const libCfgObj: LibCfg = await loadYamlFile(libCfgPath)
+
+      result[libCfgObj.libPrefix] = (await fs.readdir(libPath))
+        .filter((el) => el !== cfgFileName)
+        .map((el) => pathTrimExt(el))
+    }
+
+    return result
   }
 
   private prepareOptions(options: Partial<BuilderOptions>): BuilderOptions {
@@ -80,6 +105,10 @@ export class BuilderMain {
       // svelte by default
       framework: options.framework || 'svelte',
       force: Boolean(options.force),
+      componentLibPaths: [
+        ...options.componentLibPaths || [],
+        path.resolve(__dirname, '../stdComponentsLib')
+      ]
     }
   }
 

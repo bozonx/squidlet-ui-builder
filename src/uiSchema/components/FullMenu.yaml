@@ -6,9 +6,9 @@ data:
 
 tmpl: >
   <ul>
-    <Load resource={screens}>
+    <SLoad resource={screens}>
       <li>
         <MenuItemScreen item={item} />
       </li>
-    </Load>
+    </SLoad>
   </ul>

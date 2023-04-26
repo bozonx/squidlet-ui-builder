@@ -62,7 +62,7 @@ export class SvelteBuilder implements FrameworkBuilder {
   private makeImportsStr(tmpl: string): string {
     let imports = ''
 
-    for (const cmpName of this.main.allComponentNames) {
+    for (const cmpName of this.main.prjComponentNames) {
       if (tmpl.indexOf('<' + cmpName) === -1) continue
 
       imports += `import ${cmpName} from '../${ROOT_DIRS.components}/${cmpName}${SVELTE_EXT}'\n`

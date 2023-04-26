@@ -6,11 +6,16 @@ import {mkdirPLogic} from 'squidlet-lib';
 import {BuilderMain} from '../builder/BuilderMain.js';
 
 
-export async function loadYamlFile(main: BuilderMain, subDir: string, fileName: string): Promise<any> {
-  const fullFileName = path.join(main.options.prjDir, subDir, fileName)
-  const fileContentStr = await fs.readFile(fullFileName, 'utf8')
+export async function loadYamlFile(filePath: string): Promise<any> {
+  const fileContentStr = await fs.readFile(filePath, 'utf8')
 
   return yaml.parse(fileContentStr)
+}
+
+export async function loadPrjYamlFile(main: BuilderMain, subDir: string, fileName: string): Promise<any> {
+  const fullFileName = path.join(main.options.prjDir, subDir, fileName)
+
+  return loadYamlFile(fullFileName)
 }
 
 export async function applyTemplate(tmplPath: string, data: Record<string, any>): Promise<string> {

@@ -3,6 +3,7 @@ export const CODE_EXT = '.js'
 export const YAML_EXT = '.yaml'
 export const FILE_NAMES = {
   routes: 'routes',
+  cfg: 'cfg'
 }
 export const ROOT_DIRS = {
   app: 'app',

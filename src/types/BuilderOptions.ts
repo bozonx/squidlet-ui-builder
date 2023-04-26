@@ -8,4 +8,5 @@ export interface BuilderOptions {
   framework: Frameworks
   // force full rebuild
   force: boolean
+  componentLibPaths: string[]
 }
