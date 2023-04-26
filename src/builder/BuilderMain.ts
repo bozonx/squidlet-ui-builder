@@ -34,6 +34,7 @@ export class BuilderMain {
     await this.output.copyPeripheralStatic()
     await this.output.makePackageJson()
     await this.output.installDeps()
+    await this.buildLayouts()
     await this.buildScreens()
     await this.output.createFile(
       ROOT_DIRS.app,
@@ -67,9 +68,12 @@ export class BuilderMain {
 
   private prepareOptions(options: BuilderOptions): BuilderOptions {
     return {
-      ...options,
       prjDir: path.join(process.cwd(), options.prjDir),
       outputDir: path.join(process.cwd(), options.outputDir),
+      prjName: options.prjName,
+      // svelte by default
+      framework: 'svelte',
+      force: options.force,
     }
   }
 

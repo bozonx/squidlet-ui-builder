@@ -13,3 +13,9 @@ export const ROOT_DIRS = {
   layouts: 'layouts',
   resources: 'resources',
 }
+
+export type Frameworks = 'svelte'
+
+export const FRAMEWORKS: Record<Frameworks, Frameworks> = {
+  svelte: 'svelte'
+}
