@@ -43,7 +43,7 @@ export class BuilderMain {
     this.prjComponentNames = (await fs.readdir(path.join(this.options.prjDir, ROOT_DIRS.components)))
       .map((el) => pathTrimExt(el))
 
-    this.libsComponentNames = await this.makeLibComponentName()
+    //this.libsComponentNames = await this.makeLibComponentName()
 
     if (await fileExists(this.output.packageJsonPath)) {
       this.isInitialBuild = false
@@ -54,6 +54,7 @@ export class BuilderMain {
     await this.output.copyPeripheralStatic()
     await this.output.makePackageJson()
     await this.output.installDeps()
+    await this.buildLibs(this.frameworkBuilder.buildComponent)
     await this.buildEntities(ROOT_DIRS.layouts, this.frameworkBuilder.buildLayout)
     await this.buildEntities(ROOT_DIRS.screens, this.frameworkBuilder.buildScreen)
     await this.buildEntities(ROOT_DIRS.components, this.frameworkBuilder.buildComponent)
@@ -77,21 +78,50 @@ export class BuilderMain {
     }
   }
 
-  private async makeLibComponentName(): Promise<Record<string, string[]>> {
-    const result: Record<string, string[]> = {}
+  private async buildLibs(builder: (obj: any) => Promise<string>) {
+    const libsComponentNames: Record<string, string[]> = {}
 
     for (const libPath of this.options.componentLibPaths) {
       const cfgFileName = FILE_NAMES.cfg + YAML_EXT
       const libCfgPath = path.join(libPath, cfgFileName)
       const libCfgObj: LibCfg = await loadYamlFile(libCfgPath)
-
-      result[libCfgObj.libPrefix] = (await fs.readdir(libPath))
+      const componentsFileNames = (await fs.readdir(libPath))
         .filter((el) => el !== cfgFileName)
-        .map((el) => pathTrimExt(el))
-    }
 
-    return result
+      libsComponentNames[libCfgObj.libPrefix] = (await fs.readdir(libPath))
+        .map((el) => pathTrimExt(el))
+
+      for (const fileName of componentsFileNames) {
+        const obj: any = await loadYamlFile(path.join(libPath, fileName))
+        const content = await builder(obj)
+
+        //console.log(1111, path.join(this.options.outputDir, 'src', ROOT_DIRS.componentLibs, libCfgObj.libPrefix))
+        await this.output.createFile(
+          path.join(ROOT_DIRS.componentLibs, libCfgObj.libPrefix),
+          replaceExt(fileName, SVELTE_EXT),
+          content
+        )
+      }
+
+      this.libsComponentNames = libsComponentNames
+    }
   }
+
+  // private async makeLibComponentName(): Promise<Record<string, string[]>> {
+  //   const result: Record<string, string[]> = {}
+  //
+  //   for (const libPath of this.options.componentLibPaths) {
+  //     const cfgFileName = FILE_NAMES.cfg + YAML_EXT
+  //     const libCfgPath = path.join(libPath, cfgFileName)
+  //     const libCfgObj: LibCfg = await loadYamlFile(libCfgPath)
+  //
+  //     result[libCfgObj.libPrefix] = (await fs.readdir(libPath))
+  //       .filter((el) => el !== cfgFileName)
+  //       .map((el) => pathTrimExt(el))
+  //   }
+  //
+  //   return result
+  // }
 
   private prepareOptions(options: Partial<BuilderOptions>): BuilderOptions {
     if (!options.prjName) throw new Error(`No prjName`)
