@@ -1,8 +1,11 @@
-export const SVELTE_EXT = 'svelte'
+export const SVELTE_EXT = '.svelte'
+export const CODE_EXT = '.js'
+export const YAML_EXT = '.yaml'
 export const FILE_NAMES = {
-  router: 'router.js',
+  router: 'router',
 }
 export const ROOT_DIRS = {
+  app: 'app',
   screens: 'screens',
   schemas: 'schemas',
   components: 'components',

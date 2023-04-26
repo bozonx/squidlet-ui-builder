@@ -1,18 +1,18 @@
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import {replaceExt} from 'squidlet-lib'
-import {FILE_NAMES, ROOT_DIRS, SVELTE_EXT} from '../types/constants.js';
+import {CODE_EXT, FILE_NAMES, ROOT_DIRS, SVELTE_EXT} from '../types/constants.js';
 import {Output} from './Output.js';
 import {makeScreenContent} from './svelte/makeScreen.js';
 import {BuilderOptions} from '../types/BuilderOptions.js';
 import {fileExists} from '../helpers/common.js';
-import {Router} from './Router.js';
+import {MakeRouter} from './MakeRouter.js';
 
 
 export class BuilderMain {
   readonly options: BuilderOptions
   readonly output = new Output(this)
-  readonly router = new Router(this)
+  readonly router = new MakeRouter(this)
   isInitialBuild = true
 
 
@@ -34,7 +34,11 @@ export class BuilderMain {
     await this.output.makePackageJson()
     await this.output.installDeps()
     await this.buildScreens()
-    await this.output.createFile('/', FILE_NAMES.router, await this.router.makeJs())
+    await this.output.createFile(
+      ROOT_DIRS.app,
+      FILE_NAMES.router + CODE_EXT,
+      await this.router.makeJs()
+    )
   }
 
 
