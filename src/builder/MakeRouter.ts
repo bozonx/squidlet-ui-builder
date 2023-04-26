@@ -3,6 +3,9 @@ import {loadYamlFile} from '../helpers/common.js';
 import {FILE_NAMES, ROOT_DIRS, YAML_EXT} from '../types/constants.js';
 import {RoutesFile} from '../types/RoutesFile.js';
 
+
+// TODO: наверное лучше переделать в просто ф-ю
+
 export class MakeRouter {
   private readonly main: BuilderMain
 
@@ -18,12 +21,8 @@ export class MakeRouter {
       ROOT_DIRS.app,
       FILE_NAMES.routes + YAML_EXT
     )
-
     const layouts: Record<string, any> = {}
     const screens: Record<string, any> = {}
-    let importsString = ''
-    let result = ''
-    let routesJsonStr = JSON.stringify(routesFile.routes, null, 2)
 
     for (const route of routesFile.routes) {
       if (route.layout) {
@@ -33,19 +32,42 @@ export class MakeRouter {
       screens[route.component] = route.component
     }
 
-    for (const layoutClassName of Object.keys(layouts)) {
-      importsString += `import ${layoutClassName} from '../${ROOT_DIRS.layouts}/${layoutClassName}.svelte'`
-    }
-
-    for (const screenClassName of Object.keys(screens)) {
-      importsString += `import ${screenClassName} from '../${ROOT_DIRS.screens}/${screenClassName}.svelte'`
-    }
+    const importsString = this.makeImportsString(Object.keys(layouts), Object.keys(screens))
+    const routesArrString = this.makeRoutesArrString(routesFile)
+    let result = ''
 
     result += importsString
-    result += '\n'
-    result += 'export const routes = ' + routesJsonStr
+    result += '\n\n'
+    result += 'export const routes = ' + routesArrString
 
     return result
+  }
+
+
+  private makeImportsString(layouts: string[], screens: string[]): string {
+    let importsString = ''
+
+    for (const layoutClassName of layouts) {
+      importsString += `import ${layoutClassName} from '../${ROOT_DIRS.layouts}/${layoutClassName}.svelte'\n`
+    }
+
+    for (const screenClassName of screens) {
+      importsString += `import ${screenClassName} from '../${ROOT_DIRS.screens}/${screenClassName}.svelte'\n`
+    }
+
+    return importsString
+  }
+
+  private makeRoutesArrString(routesFile: RoutesFile): string {
+    let routesJsonStr = JSON.stringify(routesFile.routes, null, 2)
+
+    // TODO: replace не очень решение - лучше пройтись по элементам и вставить в них !!
+    routesJsonStr = routesJsonStr
+      .replace(/("component": )"([\w\d_$]+)"/g, '$1$2')
+    routesJsonStr = routesJsonStr
+      .replace(/("layout": )"([\w\d_$]+)"/g, '$1$2')
+
+    return routesJsonStr
   }
 
 }

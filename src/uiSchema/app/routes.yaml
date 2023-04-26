@@ -1,4 +1,4 @@
 routes:
   - name: '/'
-    component: MainLayout
-    layout: Home
+    layout: MainLayout
+    component: Home
