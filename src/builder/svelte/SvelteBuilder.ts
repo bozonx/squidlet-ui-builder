@@ -68,6 +68,18 @@ export class SvelteBuilder implements FrameworkBuilder {
       imports += `import ${cmpName} from '../${ROOT_DIRS.components}/${cmpName}${SVELTE_EXT}'\n`
     }
 
+    for (const libPrefix of Object.keys(this.main.libsComponentNames)) {
+      for (const cmpName of this.main.libsComponentNames[libPrefix]) {
+        const cmpFullName = libPrefix + cmpName
+
+        if (tmpl.indexOf('<' + cmpFullName) === -1) continue
+
+        const cmpPath = `../${ROOT_DIRS.componentLibs}/${libPrefix}/${cmpName}${SVELTE_EXT}`
+
+        imports += `import ${cmpFullName} from '${cmpPath}'\n`
+      }
+    }
+
     return imports
   }
 

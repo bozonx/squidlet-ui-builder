@@ -10,6 +10,7 @@ export const ROOT_DIRS = {
   screens: 'screens',
   schemas: 'schemas',
   components: 'components',
+  componentLibs: 'componentLibs',
   elements: 'elements',
   layouts: 'layouts',
   resources: 'resources',
