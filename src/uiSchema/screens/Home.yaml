@@ -1,5 +1,3 @@
-route: '/'
-layout: 'MainLayout'
 tmpl: >
   <div>
     <h2>Home</h2>

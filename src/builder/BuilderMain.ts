@@ -7,6 +7,7 @@ import {makeScreenContent} from './svelte/makeScreen.js';
 import {BuilderOptions} from '../types/BuilderOptions.js';
 import {fileExists} from '../helpers/common.js';
 import {MakeRouter} from './MakeRouter.js';
+import {makeLayoutContent} from './svelte/makeLayout.js';
 
 
 export class BuilderMain {
@@ -50,6 +51,17 @@ export class BuilderMain {
       const content = await makeScreenContent(this, fileName)
 
       await this.output.createFile(ROOT_DIRS.screens, replaceExt(fileName, SVELTE_EXT), content)
+    }
+  }
+
+  private async buildLayouts() {
+    const layoutsDir = path.join(this.options.prjDir, ROOT_DIRS.layouts)
+    const layouts = await fs.readdir(layoutsDir)
+
+    for (const fileName of layouts) {
+      const content = await makeLayoutContent(this, fileName)
+
+      await this.output.createFile(ROOT_DIRS.layouts, replaceExt(fileName, SVELTE_EXT), content)
     }
   }
 
