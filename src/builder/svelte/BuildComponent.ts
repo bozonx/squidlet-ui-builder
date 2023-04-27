@@ -1,7 +1,7 @@
 import {mergeDeepObjects} from 'squidlet-lib';
 import {CommonComponent, ComponentData, ComponentResource} from '../../types/CommonComponent.js';
 import {loadPrjYamlFile} from '../buildHelpers.js';
-import {CODE_EXT, ROOT_DIRS, SVELTE_EXT, YAML_EXT} from '../../types/constants.js';
+import {ROOT_DIRS, SVELTE_EXT, YAML_EXT} from '../../types/constants.js';
 import {BuilderMain} from '../BuilderMain.js';
 import {SchemaItem} from '../../types/SchemaItem.js';
 import {makeValueCorrespondingType} from '../../system/helpers/common.js';

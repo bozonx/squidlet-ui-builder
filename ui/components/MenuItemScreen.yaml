@@ -14,5 +14,5 @@ state:
 # TODO: add schema
 tmpl: >
   <div>
-    menu item {test} {localState}
+    menu item {test} {localState} {item.name}
   </div>
