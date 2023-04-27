@@ -3,28 +3,35 @@ import {ItemStore, ItemStoreData} from '../types/ItemStore.js';
 
 
 export function makeItemStore (initialValue: any): ItemStore {
-  const initialData: ItemStoreData = {
+  let data: ItemStoreData = {
     data: initialValue,
     initialized: false,
     pending: true,
     updateId: 0,
   }
-  let setValue: (val: any) => void
+  let setValue: (data: ItemStoreData) => void
 
-  const { subscribe } = readable(initialData, (set) => {
+  const store = readable(data, (set) => {
     setValue = set
   })
 
   return {
-    subscribe,
-
+    subscribe: store.subscribe,
+    $$setPending(pending: boolean) {
+      setValue({
+        ...data,
+        pending,
+      })
+    },
     $$setValue(value: any) {
       const newDate: ItemStoreData = {
+        ...data,
         data: value,
         initialized: true,
-        pending: false,
-        updateId: 0,
+        updateId: data.updateId + 1,
       }
+
+      if (!data.initialized) newDate.pending = false
 
       setValue(newDate)
     },

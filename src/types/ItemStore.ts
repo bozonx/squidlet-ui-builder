@@ -9,6 +9,6 @@ export interface ItemStoreData<Data = any> {
 }
 
 export interface ItemStore<Data = any> extends Readable<Data> {
-
+  $$setPending(pending: boolean): void
   $$setValue(value: Data): void
 }
