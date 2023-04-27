@@ -1,7 +1,7 @@
 import {FrameworkBuilder} from '../../types/FrameworkBuilder.js';
 import {LayoutComponent} from '../../types/LayoutComponent.js';
 import {ScreenComponent} from '../../types/ScreenComponent.js';
-import {CommonComponent, ComponentData, ComponentResource} from '../../types/CommonComponent.js';
+import {CommonComponent, ComponentData, ComponentResource, RESOURCE_CLASSES} from '../../types/CommonComponent.js';
 import {BuilderMain} from '../BuilderMain.js';
 import {applyTemplate, makeValueCorrespondingType} from '../../helpers/common.js';
 import path from 'node:path';
@@ -149,11 +149,11 @@ export class SvelteBuilder implements FrameworkBuilder {
     for (const resourceName of Object.keys(resources)) {
       const res = resources[resourceName]
       const cfg = (res.config) ? JSON.stringify(res.config) : ''
+      const resClass = RESOURCE_CLASSES[res.type]
 
       // TODO: подгрузить Resource ???
-      // TODO: будет ли отличаться Item от List
 
-      result += `  localFiles: new Resource(${res.adapter}, ${cfg}),\n`
+      result += `  localFiles: new ${resClass}(${res.adapter}, ${cfg}),\n`
     }
 
     result += '}\n\n'
