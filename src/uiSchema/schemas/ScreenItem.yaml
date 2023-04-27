@@ -2,3 +2,5 @@ $id: string
 name:
   type: string
   required: true
+children:
+  - '000001'

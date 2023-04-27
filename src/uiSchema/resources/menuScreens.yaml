@@ -1,6 +1,10 @@
-use: squidletFrontend
+adapter: LocalFiles
+method: dataFile
 responseSchema: ScreenItem[]
-method: files.stringFile
+config:
+  rootPath: ''
 params:
-  path: 'menu/screens.yaml'
-# можно добавить ф-ю обработки
+  path:
+    type: string
+
+# TODO: можно добавить ф-ю обработки

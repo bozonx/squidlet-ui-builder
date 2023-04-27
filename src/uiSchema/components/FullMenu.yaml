@@ -1,7 +1,9 @@
 
 data:
-  - screens:
+  - menuScreens:
       resource: menuScreens
+      params:
+        path: 'menu/screens.yaml'
       # you cad add some request params here
 
 tmpl: >
