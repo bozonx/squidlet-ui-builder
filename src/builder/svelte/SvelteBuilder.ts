@@ -1,7 +1,7 @@
 import {FrameworkBuilder} from '../../types/FrameworkBuilder.js';
 import {LayoutComponent} from '../../types/LayoutComponent.js';
 import {ScreenComponent} from '../../types/ScreenComponent.js';
-import {CommonComponent} from '../../types/CommonComponent.js';
+import {CommonComponent, ComponentData, ComponentResource} from '../../types/CommonComponent.js';
 import {BuilderMain} from '../BuilderMain.js';
 import {applyTemplate, makeValueCorrespondingType} from '../../helpers/common.js';
 import path from 'node:path';
@@ -127,6 +127,39 @@ export class SvelteBuilder implements FrameworkBuilder {
       }
       else {
         result += `let ${propName} = ${makeValueCorrespondingType(state[propName].type, state[propName].default)}`
+      }
+    }
+
+    return result
+  }
+
+  private makeResourcesAndDataCode(
+    resources?: Record<string, ComponentResource>,
+    data?: Record<string, ComponentData>
+  ): string {
+    if (!resources) return ''
+
+    let result = ''
+
+    result += `const resources = {\n`
+
+    for (const resourceName of Object.keys(resources)) {
+      // TODO: подгрузить темплейт ресурса
+      // TODO: использовать config
+      // TODO: использовать adapter
+      // TODO: использовать method
+      result += `localFiles: new Resource()`
+    }
+
+    result += '}\n'
+
+    if (data) {
+      for (const dataName of Object.keys(data)) {
+        const dt = data[dataName]
+        const method = dt.method || resources[dt.resource].method
+        const params = (dt.params) ? JSON.stringify(dt.params) : ''
+
+        result += `const ${dataName} = resources.${dt.resource}.${method}(${params})\n`
       }
     }
 
