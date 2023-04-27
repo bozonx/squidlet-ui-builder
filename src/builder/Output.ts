@@ -4,6 +4,7 @@ import * as fs from 'node:fs/promises';
 import {BuilderMain} from './BuilderMain.js';
 import {mkdirP} from '../helpers/common.js';
 import {fileURLToPath} from 'url';
+import {ROOT_DIRS} from '../types/constants.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -98,7 +99,7 @@ export class Output {
   }
 
   async buildLib() {
-    const tsConfigPath = path.resolve(__dirname, '../lib/tsconfig.json')
+    const tsConfigPath = path.resolve(__dirname, `../${ROOT_DIRS.system}/tsconfig.json`)
     const cmd = `tsc --project ${tsConfigPath}`
 
     await new Promise<void>((resolve, reject) => {
