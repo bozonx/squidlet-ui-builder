@@ -135,7 +135,7 @@ export class SvelteBuilder implements FrameworkBuilder {
     return result
   }
 
-  private makeResourcesAndDataCode(
+  private async makeResourcesAndDataCode(
     resources: Record<string, ComponentResource>,
     data?: Record<string, ComponentData>
   ): Promise<string> {
@@ -147,19 +147,24 @@ export class SvelteBuilder implements FrameworkBuilder {
     result += `const resources = {\n`
 
     for (const resourceName of Object.keys(resources)) {
-      // TODO: использовать config
-      // TODO: использовать adapter
-      // TODO: использовать method
-      result += `localFiles: new Resource(),\n`
+      const res = resources[resourceName]
+      const cfg = (res.config) ? JSON.stringify(res.config) : ''
+
+      // TODO: подгрузить Resource ???
+      // TODO: будет ли отличаться Item от List
+
+      result += `  localFiles: new Resource(${res.adapter}, ${cfg}),\n`
     }
 
-    result += '}\n'
+    result += '}\n\n'
 
     if (data) {
       for (const dataName of Object.keys(data)) {
         const dt = data[dataName]
         const method = dt.method || resources[dt.resource].method
         const params = (dt.params) ? JSON.stringify(dt.params) : ''
+
+        if (!method) throw new Error(`Can't resolve method of resource "${dt.resource}"`)
 
         result += `const ${dataName} = resources.${dt.resource}.${method}(${params})\n`
       }

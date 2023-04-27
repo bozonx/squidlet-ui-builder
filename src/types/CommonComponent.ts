@@ -2,10 +2,10 @@ import {SchemaItem} from './SchemaItem.js';
 
 
 export interface ComponentResource {
-  tmpl?: string
-  config: Record<string, any>
   adapter: string
-  method: string
+  method?: string
+  tmpl?: string
+  config?: Record<string, any>
 }
 
 export interface ComponentData {
