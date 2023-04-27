@@ -3,7 +3,7 @@ import {LayoutComponent} from '../../types/LayoutComponent.js';
 import {ScreenComponent} from '../../types/ScreenComponent.js';
 import {CommonComponent} from '../../types/CommonComponent.js';
 import {BuilderMain} from '../BuilderMain.js';
-import {applyTemplate} from '../../helpers/common.js';
+import {applyTemplate, makeValueCorrespondingType} from '../../helpers/common.js';
 import path from 'node:path';
 import {fileURLToPath} from 'url';
 import {ROOT_DIRS, SVELTE_EXT} from '../../types/constants.js';
@@ -100,7 +100,7 @@ export class SvelteBuilder implements FrameworkBuilder {
         result += `export let ${propName}`
       }
       else {
-        result += `export let ${propName} = ${props[propName].default}`
+        result += `export let ${propName} = ${makeValueCorrespondingType(props[propName].type, props[propName].default)}`
       }
     }
 
@@ -117,7 +117,7 @@ export class SvelteBuilder implements FrameworkBuilder {
         result += `let ${propName}`
       }
       else {
-        result += `let ${propName} = ${state[propName].default}`
+        result += `let ${propName} = ${makeValueCorrespondingType(state[propName].type, state[propName].default)}`
       }
     }
 

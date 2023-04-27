@@ -4,6 +4,7 @@ import yaml from 'yaml';
 import _ from 'lodash';
 import {mkdirPLogic} from 'squidlet-lib';
 import {BuilderMain} from '../builder/BuilderMain.js';
+import {SchemaItemType} from '../types/SchemaItem.js';
 
 
 export async function loadYamlFile(filePath: string): Promise<any> {
@@ -40,5 +41,19 @@ export async function fileExists(pathTo: string): Promise<boolean> {
   }
   catch (e) {
     return false
+  }
+}
+
+export function makeValueCorrespondingType(type: SchemaItemType, value: any): any {
+  switch (type) {
+    case 'number':
+      return parseInt(value)
+    case 'string':
+      return '"' + String(value) + '"'
+    case 'null':
+      return null
+    default:
+      // TODO: что с остальными типами???
+      return value
   }
 }
