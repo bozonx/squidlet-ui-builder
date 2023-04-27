@@ -8,7 +8,6 @@ import path from 'node:path';
 import {fileURLToPath} from 'url';
 import {ROOT_DIRS, SVELTE_EXT} from '../../types/constants.js';
 import {SchemaItem} from '../../types/SchemaItem.js';
-import {rest} from 'lodash';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -28,7 +27,7 @@ export class SvelteBuilder implements FrameworkBuilder {
     return await applyTemplate(
       path.join(__dirname, './svelteComponentTmpl.txt'),
       {
-        CODE: this.makeCode(layout),
+        CODE: await this.makeCode(layout),
         TEMPLATE: layout.tmpl,
         STYLES: layout.styles,
       }
@@ -42,7 +41,7 @@ export class SvelteBuilder implements FrameworkBuilder {
     return await applyTemplate(
       path.join(__dirname, './svelteComponentTmpl.txt'),
       {
-        CODE: this.makeCode(screen),
+        CODE: await this.makeCode(screen),
         TEMPLATE: screen.tmpl,
         STYLES: screen.styles,
       }
@@ -53,7 +52,7 @@ export class SvelteBuilder implements FrameworkBuilder {
     return await applyTemplate(
       path.join(__dirname, './svelteComponentTmpl.txt'),
       {
-        CODE: this.makeCode(component),
+        CODE: await this.makeCode(component),
         TEMPLATE: component.tmpl,
         STYLES: component.styles,
       }
@@ -61,7 +60,7 @@ export class SvelteBuilder implements FrameworkBuilder {
   }
 
 
-  private makeCode(component: CommonComponent): string {
+  private async makeCode(component: CommonComponent): Promise<string> {
     let result = ''
 
     // TODO: собрать все импорты воедино
@@ -70,7 +69,10 @@ export class SvelteBuilder implements FrameworkBuilder {
     if (component.tmpl) result += this.makeImportsStr(component.tmpl) + '\n'
     if (component.props) result += this.makeProps(component.props) + '\n'
     if (component.state) result += this.makeState(component.state) + '\n'
-    if (component.resources) result += this.makeResourcesAndDataCode(component.resources, component.data) + '\n'
+    if (component.resources) result += await this.makeResourcesAndDataCode(
+      component.resources,
+      component.data
+    ) + '\n'
 
     return result
   }
@@ -136,7 +138,7 @@ export class SvelteBuilder implements FrameworkBuilder {
   private makeResourcesAndDataCode(
     resources: Record<string, ComponentResource>,
     data?: Record<string, ComponentData>
-  ): string {
+  ): Promise<string> {
     let result = ''
     const fullResources = {
       // TODO: подгрузить темплейт ресурса
