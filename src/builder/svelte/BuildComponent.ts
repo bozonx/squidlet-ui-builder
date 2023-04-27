@@ -125,7 +125,7 @@ export class BuildComponent {
 
       this.registerImport(`import ${resClass} from "../lib/${resClass + CODE_EXT}"`)
 
-      result += `  localFiles: new ${resClass}(${res.adapter}, ${cfg}),\n`
+      result += `  localFiles: new ${resClass}("${res.adapter}", ${cfg}),\n`
     }
 
     result += '}\n\n'
