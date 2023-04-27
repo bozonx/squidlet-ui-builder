@@ -1,4 +1,7 @@
 props:
+  item:
+    type: MenuScreens
+    required: true
   test:
     type: number
     default: 4

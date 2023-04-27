@@ -16,7 +16,7 @@ data:
     # вызывается ресурс.
     # Можно указать метод, если не указывать то будет тот что указан в ресурсе
     # method: default
-    schema: ScreenItem[]
+    schema: MenuScreens
     params:
       filePath: 'screens.yaml'
 
@@ -24,7 +24,7 @@ tmpl: >
   <ul>
     <SLoad pending={!menuScreens.initialized}>
       <li>
-        <MenuItemScreen item={menuScreens.data} test={5} />
+        <MenuItemScreen item={menuScreens.data} />
       </li>
     </SLoad>
   </ul>

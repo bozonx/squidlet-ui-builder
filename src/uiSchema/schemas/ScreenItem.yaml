@@ -2,6 +2,3 @@ $id: string
 name:
   type: string
   required: true
-children:
-  type: string[]
-
