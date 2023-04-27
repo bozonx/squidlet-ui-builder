@@ -13,6 +13,7 @@
   "dependencies": {
     "lodash": "^4.17.21",
     "squidlet-lib": "file:../squidlet-lib",
+    "svelte": "^3.58.0",
     "yaml": "^2.2.2"
   },
   "devDependencies": {
