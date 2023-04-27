@@ -1,2 +1,6 @@
+props:
+  pending:
+    type: boolean
+    required: true
 tmpl: >
   <slot></slot>

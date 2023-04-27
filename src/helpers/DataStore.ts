@@ -10,9 +10,11 @@ export class DataStore<T = any> {
   /**
    * True if the first value was set
    */
-  initiated = readable(false, (set) => {
+  initialized = readable(false, (set) => {
     this.setInitiated = set
   })
+
+  // TODO: add pending - каждый раз когда подгружаются данные
 
   updateId = readable(0, (set) => {
     this.setUpdateId = set

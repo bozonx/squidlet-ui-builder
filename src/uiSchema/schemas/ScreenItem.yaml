@@ -3,4 +3,5 @@ name:
   type: string
   required: true
 children:
-  - '000001'
+  type: string[]
+

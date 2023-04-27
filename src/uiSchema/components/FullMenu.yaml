@@ -22,9 +22,9 @@ data:
 
 tmpl: >
   <ul>
-    <SLoad>
+    <SLoad pending={!menuScreens.initialized}>
       <li>
-        <MenuItemScreen item={menuScreens} test={5} />
+        <MenuItemScreen item={menuScreens.data} test={5} />
       </li>
     </SLoad>
   </ul>

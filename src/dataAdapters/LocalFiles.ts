@@ -7,7 +7,7 @@ export class LocalFiles extends DataAdapterBase {
     super()
   }
 
-  async dataFile(params: {filePath: string}): Promise<DataStore> {
+  dataFile(params: {filePath: string}): DataStore {
     const instanceId = this.makeInstanceId()
     const destroyFn = async () => this.destroyInstance(instanceId)
     const dataStore = new DataStore(destroyFn)

@@ -123,7 +123,7 @@ export class BuildComponent {
       const cfg = (res.config) ? JSON.stringify(res.config) : ''
       const resClass = RESOURCE_CLASSES[res.type]
 
-      this.registerImport(`import ${resClass} from "../lib/${resClass + CODE_EXT}"`)
+      this.registerImport(`import {${resClass}} from "../${ROOT_DIRS.system}"`)
 
       result += `  localFiles: new ${resClass}("${res.adapter}", ${cfg}),\n`
     }
