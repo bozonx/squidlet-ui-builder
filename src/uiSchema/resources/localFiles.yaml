@@ -1,9 +1,9 @@
 adapter: LocalFiles
 method: dataFile
 config:
-  rootPath: ''
-params:
-  path:
-    type: string
+  basePath: ''
+#params:
+#  path:
+#    type: string
 
 # TODO: можно добавить ф-ю обработки

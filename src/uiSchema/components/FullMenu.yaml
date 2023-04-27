@@ -1,17 +1,31 @@
 
+resources:
+  # это будет интерфейс data adapter. Из него можно загружать разные файлы
+  # можно использовать его под другим именем
+  localFiles:
+    # можно использовать ресурс из папки /resources
+    # или создать новый ресурс прям тут
+    use: localFiles
+    # далее идут параметры конфига адаптера
+    basePath: 'menu'
+
+# это данные полученные из ресурса
 data:
-  - menuScreens:
-      resource: localFiles
-      schema: ScreenItem[]
-      params:
-        filePath: 'menu/screens.yaml'
-      # you cad add some request params here
+  menuScreens:
+    # то имя которое указанно в перечислении resources
+    resource: localFiles
+    # вызывается ресурс.
+    # Можно указать метод, если не указывать то будет тот что указан в ресурсе
+    # method: default
+    schema: ScreenItem[]
+    params:
+      filePath: 'screens.yaml'
 
 tmpl: >
   <ul>
     <SLoad>
       <li>
-        <MenuItemScreen test={5} />
+        <MenuItemScreen item={menuScreens} test={5} />
       </li>
     </SLoad>
   </ul>
