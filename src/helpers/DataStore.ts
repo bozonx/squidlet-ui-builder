@@ -10,19 +10,24 @@ export class DataStore<T = any> {
   /**
    * True if the first value was set
    */
-  get initiated(): boolean {
-    return Boolean(this.updateCount)
-  }
+  initiated = readable(false, (set) => {
+    this.setInitiated = set
+  })
 
-  get updateId(): number {
-    return this.updateCount
-  }
+  updateId = readable(0, (set) => {
+    this.setUpdateId = set
+  })
 
   private setValue!: (data: T | null) => void
+  private setInitiated!: (data: boolean) => void
+  private setUpdateId!: (data: number) => void
+  // TODO: может сразу использвать updateId
   private updateCount: number = 0
+  private destroyState: () => Promise<void>
 
 
-  constructor() {
+  constructor(destroyState: () => Promise<void>) {
+    this.destroyState = destroyState
     this.data = readable<T | null>(null, (set) => {
       this.setValue = set
     })
@@ -30,7 +35,11 @@ export class DataStore<T = any> {
 
 
   async destroy() {
-    // TODO: наверное вызвать дестрой который передан в конструктор
+    await this.destroyState()
+    // @ts-ignore
+    delete this.destroyState
+    // @ts-ignore
+    delete this.data
   }
 
 
@@ -38,7 +47,13 @@ export class DataStore<T = any> {
    * It has to be set only via data adapter on first load or update
    */
   $$setValue(data: T) {
+    if (this.updateCount === 0) {
+      this.setInitiated(true)
+    }
+
     this.updateCount++
+
+    this.setUpdateId(this.updateCount)
     this.setValue(data)
   }
 
