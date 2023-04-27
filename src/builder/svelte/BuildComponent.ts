@@ -22,7 +22,6 @@ export class BuildComponent {
   async buildCode(): Promise<string> {
     let result = ''
 
-    if (this.component.tmpl) result += this.makeImportsStr(this.component.tmpl) + '\n'
     if (this.component.props) result += this.makeProps(this.component.props) + '\n'
     if (this.component.state) result += this.makeState(this.component.state) + '\n'
     if (this.component.resources) result += await this.makeResourcesAndDataCode(
@@ -37,18 +36,22 @@ export class BuildComponent {
     const allImports = [
       ...imports || [],
       ...this.importStrings,
+      ...(this.component.tmpl) ? this.makeImportsStr(this.component.tmpl) : [],
     ]
 
     return allImports.join('\n')
   }
 
-  private makeImportsStr(tmpl: string): string {
-    let imports = ''
+  /**
+   * Make import strings from template
+   */
+  private makeImportsStr(tmpl: string): string[] {
+    let result: string[] = []
 
     for (const cmpName of this.main.prjComponentNames) {
       if (tmpl.indexOf('<' + cmpName) === -1) continue
 
-      imports += `import ${cmpName} from '../${ROOT_DIRS.components}/${cmpName}${SVELTE_EXT}'\n`
+      result.push(`import ${cmpName} from '../${ROOT_DIRS.components}/${cmpName}${SVELTE_EXT}'`)
     }
 
     for (const libPrefix of Object.keys(this.main.libsComponentNames)) {
@@ -59,11 +62,11 @@ export class BuildComponent {
 
         const cmpPath = `../${ROOT_DIRS.componentLibs}/${libPrefix}/${cmpName}${SVELTE_EXT}`
 
-        imports += `import ${cmpFullName} from '${cmpPath}'\n`
+        result.push(`import ${cmpFullName} from '${cmpPath}'`)
       }
     }
 
-    return imports
+    return result
   }
 
   private makeProps(props: Record<string, SchemaItem>): string {
@@ -71,10 +74,10 @@ export class BuildComponent {
 
     for (const propName of Object.keys(props)) {
       if (typeof props[propName].default === 'undefined') {
-        result += `export let ${propName}`
+        result += `export let ${propName}\n`
       }
       else {
-        result += `export let ${propName} = ${makeValueCorrespondingType(props[propName].type, props[propName].default)}`
+        result += `export let ${propName} = ${makeValueCorrespondingType(props[propName].type, props[propName].default)}\n`
       }
     }
 
@@ -86,10 +89,10 @@ export class BuildComponent {
 
     for (const propName of Object.keys(state)) {
       if (typeof state[propName].default === 'undefined') {
-        result += `let ${propName}`
+        result += `let ${propName}\n`
       }
       else {
-        result += `let ${propName} = ${makeValueCorrespondingType(state[propName].type, state[propName].default)}`
+        result += `let ${propName} = ${makeValueCorrespondingType(state[propName].type, state[propName].default)}\n`
       }
     }
 
