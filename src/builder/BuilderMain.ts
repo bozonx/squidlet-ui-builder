@@ -12,7 +12,7 @@ import {
 } from '../types/constants.js';
 import {Output} from './Output.js';
 import {BuilderOptions} from '../types/BuilderOptions.js';
-import {fileExists, loadPrjYamlFile, loadYamlFile} from '../helpers/common.js';
+import {fileExists, loadPrjYamlFile, loadYamlFile} from './buildHelpers.js';
 import {MakeRouter} from './MakeRouter.js';
 import {FrameworkBuilder} from '../types/FrameworkBuilder.js';
 import {SvelteBuilder} from './svelte/SvelteBuilder.js';

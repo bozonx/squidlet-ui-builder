@@ -5,7 +5,7 @@ import {LayoutComponent} from '../../types/LayoutComponent.js';
 import {ScreenComponent} from '../../types/ScreenComponent.js';
 import {CommonComponent} from '../../types/CommonComponent.js';
 import {BuilderMain} from '../BuilderMain.js';
-import {applyTemplate} from '../../helpers/common.js';
+import {applyTemplate} from '../buildHelpers.js';
 import {BuildComponent} from './BuildComponent.js';
 
 

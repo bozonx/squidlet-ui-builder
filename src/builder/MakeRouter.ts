@@ -1,5 +1,5 @@
 import {BuilderMain} from './BuilderMain.js';
-import {loadPrjYamlFile} from '../helpers/common.js';
+import {loadPrjYamlFile} from './buildHelpers.js';
 import {FILE_NAMES, ROOT_DIRS, YAML_EXT} from '../types/constants.js';
 import {RoutesFile} from '../types/RoutesFile.js';
 

@@ -2,7 +2,7 @@ import path from 'node:path';
 import {exec} from 'node:child_process';
 import * as fs from 'node:fs/promises';
 import {BuilderMain} from './BuilderMain.js';
-import {mkdirP} from '../helpers/common.js';
+import {mkdirP} from './buildHelpers.js';
 import {fileURLToPath} from 'url';
 import {ROOT_DIRS} from '../types/constants.js';
 
