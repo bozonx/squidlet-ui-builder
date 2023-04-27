@@ -100,7 +100,8 @@ export class Output {
 
   async buildLib() {
     const tsConfigPath = path.resolve(__dirname, `../${ROOT_DIRS.system}/tsconfig.json`)
-    const cmd = `tsc --project ${tsConfigPath}`
+    const outDir = path.resolve(__dirname, `../../_build/src/${ROOT_DIRS.system}`)
+    const cmd = `tsc --project ${tsConfigPath} --outDir ${outDir}`
 
     await new Promise<void>((resolve, reject) => {
       exec(
