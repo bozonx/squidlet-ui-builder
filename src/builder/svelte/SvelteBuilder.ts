@@ -8,6 +8,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'url';
 import {ROOT_DIRS, SVELTE_EXT} from '../../types/constants.js';
 import {SchemaItem} from '../../types/SchemaItem.js';
+import {rest} from 'lodash';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -27,10 +28,7 @@ export class SvelteBuilder implements FrameworkBuilder {
     return await applyTemplate(
       path.join(__dirname, './svelteComponentTmpl.txt'),
       {
-        CODE: this.makeExtImports(layout.imports) + '\n' +
-          this.makeImportsStr(layout.tmpl) + '\n' +
-          this.makeProps(layout.props) + '\n' +
-          this.makeState(layout.state) + '\n',
+        CODE: this.makeCode(layout),
         TEMPLATE: layout.tmpl,
         STYLES: layout.styles,
       }
@@ -44,10 +42,7 @@ export class SvelteBuilder implements FrameworkBuilder {
     return await applyTemplate(
       path.join(__dirname, './svelteComponentTmpl.txt'),
       {
-        CODE: this.makeExtImports(screen.imports) + '\n' +
-          this.makeImportsStr(screen.tmpl) + '\n\n' +
-          this.makeProps(screen.props) + '\n\n' +
-          this.makeState(screen.state) + '\n\n',
+        CODE: this.makeCode(screen),
         TEMPLATE: screen.tmpl,
         STYLES: screen.styles,
       }
@@ -58,10 +53,7 @@ export class SvelteBuilder implements FrameworkBuilder {
     return await applyTemplate(
       path.join(__dirname, './svelteComponentTmpl.txt'),
       {
-        CODE: this.makeExtImports(component.imports) + '\n' +
-          this.makeImportsStr(component.tmpl) + '\n' +
-          this.makeProps(component.props) + '\n' +
-          this.makeState(component.state) + '\n',
+        CODE: this.makeCode(component),
         TEMPLATE: component.tmpl,
         STYLES: component.styles,
       }
@@ -69,9 +61,21 @@ export class SvelteBuilder implements FrameworkBuilder {
   }
 
 
-  private makeExtImports(imports?: string[]): string {
-    if (!imports) return ''
+  private makeCode(component: CommonComponent): string {
+    let result = ''
 
+    // TODO: собрать все импорты воедино
+
+    if (component.imports) result += this.makeExtImports(component.imports) + '\n'
+    if (component.tmpl) result += this.makeImportsStr(component.tmpl) + '\n'
+    if (component.props) result += this.makeProps(component.props) + '\n'
+    if (component.state) result += this.makeState(component.state) + '\n'
+    if (component.resources) result += this.makeResourcesAndDataCode(component.resources, component.data) + '\n'
+
+    return result
+  }
+
+  private makeExtImports(imports: string[]): string {
     return imports.map((el) => el + '\n').join('')
   }
 
@@ -99,9 +103,7 @@ export class SvelteBuilder implements FrameworkBuilder {
     return imports
   }
 
-  private makeProps(props?: Record<string, SchemaItem>): string {
-    if (!props) return ''
-
+  private makeProps(props: Record<string, SchemaItem>): string {
     let result = ''
 
     for (const propName of Object.keys(props)) {
@@ -116,9 +118,7 @@ export class SvelteBuilder implements FrameworkBuilder {
     return result
   }
 
-  private makeState(state?: Record<string, SchemaItem>): string {
-    if (!state) return ''
-
+  private makeState(state: Record<string, SchemaItem>): string {
     let result = ''
 
     for (const propName of Object.keys(state)) {
@@ -134,21 +134,21 @@ export class SvelteBuilder implements FrameworkBuilder {
   }
 
   private makeResourcesAndDataCode(
-    resources?: Record<string, ComponentResource>,
+    resources: Record<string, ComponentResource>,
     data?: Record<string, ComponentData>
   ): string {
-    if (!resources) return ''
-
     let result = ''
+    const fullResources = {
+      // TODO: подгрузить темплейт ресурса
+    }
 
     result += `const resources = {\n`
 
     for (const resourceName of Object.keys(resources)) {
-      // TODO: подгрузить темплейт ресурса
       // TODO: использовать config
       // TODO: использовать adapter
       // TODO: использовать method
-      result += `localFiles: new Resource()`
+      result += `localFiles: new Resource(),\n`
     }
 
     result += '}\n'
