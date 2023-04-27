@@ -3,7 +3,7 @@ import {BuilderMain} from './builder/BuilderMain.js'
 (async () => {
   // TODO: get from param
   const builder = new BuilderMain({
-    prjDir: './src/uiSchema',
+    prjDir: './ui',
     prjName: 'some-project',
   })
 
