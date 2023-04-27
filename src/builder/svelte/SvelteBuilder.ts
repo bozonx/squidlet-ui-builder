@@ -27,7 +27,8 @@ export class SvelteBuilder implements FrameworkBuilder {
     return await applyTemplate(
       path.join(__dirname, './svelteComponentTmpl.txt'),
       {
-        CODE: this.makeImportsStr(layout.tmpl) + '\n' +
+        CODE: this.makeExtImports(layout.imports) + '\n' +
+          this.makeImportsStr(layout.tmpl) + '\n' +
           this.makeProps(layout.props) + '\n' +
           this.makeState(layout.state) + '\n',
         TEMPLATE: layout.tmpl,
@@ -43,7 +44,8 @@ export class SvelteBuilder implements FrameworkBuilder {
     return await applyTemplate(
       path.join(__dirname, './svelteComponentTmpl.txt'),
       {
-        CODE: this.makeImportsStr(screen.tmpl) + '\n\n' +
+        CODE: this.makeExtImports(screen.imports) + '\n' +
+          this.makeImportsStr(screen.tmpl) + '\n\n' +
           this.makeProps(screen.props) + '\n\n' +
           this.makeState(screen.state) + '\n\n',
         TEMPLATE: screen.tmpl,
@@ -56,7 +58,8 @@ export class SvelteBuilder implements FrameworkBuilder {
     return await applyTemplate(
       path.join(__dirname, './svelteComponentTmpl.txt'),
       {
-        CODE: this.makeImportsStr(component.tmpl) + '\n' +
+        CODE: this.makeExtImports(component.imports) + '\n' +
+          this.makeImportsStr(component.tmpl) + '\n' +
           this.makeProps(component.props) + '\n' +
           this.makeState(component.state) + '\n',
         TEMPLATE: component.tmpl,
@@ -65,6 +68,12 @@ export class SvelteBuilder implements FrameworkBuilder {
     )
   }
 
+
+  private makeExtImports(imports?: string[]): string {
+    if (!imports) return ''
+
+    return imports.map((el) => el + '\n').join('')
+  }
 
   private makeImportsStr(tmpl: string): string {
     let imports = ''

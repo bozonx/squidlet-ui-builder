@@ -1,12 +1,21 @@
+imports:
+  - import { Route } from 'svelte-router-spa'
+props:
+  currentRoute:
+    type: any
+state:
+  params:
+    type: object
 tmpl: >
   <div class="app">
     <section>
       <FullMenu />
     </section>
-    <main><slot></slot></main>
+    <main>
+      <Route {currentRoute}  {params} />
+    </main>
   </div>
 styles: >
   .app {
     display: flex;
   }
-

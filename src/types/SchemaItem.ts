@@ -1,4 +1,4 @@
-export type SchemaItemType = 'number' | 'string' | 'boolean' | 'null' | 'array' | 'object'
+export type SchemaItemType = 'any' | 'number' | 'string' | 'boolean' | 'null' | 'array' | 'object'
 
 
 /**

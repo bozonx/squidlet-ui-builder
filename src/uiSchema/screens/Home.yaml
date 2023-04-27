@@ -1,4 +1,9 @@
 tmpl: >
+
+  <svelte:head>
+    <title>Home</title>
+  </svelte:head>
+
   <div>
     <h2>Home</h2>
   </div>
