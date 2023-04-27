@@ -50,12 +50,12 @@ export class DataStore<T = any> {
    */
   $$setValue(data: T) {
     if (this.updateCount === 0) {
-      this.setInitiated(true)
+      //this.setInitiated(true)
     }
 
     this.updateCount++
 
-    this.setUpdateId(this.updateCount)
+    //this.setUpdateId(this.updateCount)
     this.setValue(data)
   }
 
