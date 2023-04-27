@@ -15,7 +15,7 @@ export const ROOT_DIRS = {
   componentLibs: 'componentLibs',
   elements: 'elements',
   layouts: 'layouts',
-  resources: 'resources',
+  resourcesTmpl: 'resourcesTmpl',
 }
 
 export type Frameworks = 'svelte'

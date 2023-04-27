@@ -1,12 +1,13 @@
+import {mergeDeepObjects} from 'squidlet-lib';
+import path from 'node:path';
+import {fileURLToPath} from 'url';
 import {FrameworkBuilder} from '../../types/FrameworkBuilder.js';
 import {LayoutComponent} from '../../types/LayoutComponent.js';
 import {ScreenComponent} from '../../types/ScreenComponent.js';
 import {CommonComponent, ComponentData, ComponentResource, RESOURCE_CLASSES} from '../../types/CommonComponent.js';
 import {BuilderMain} from '../BuilderMain.js';
-import {applyTemplate, makeValueCorrespondingType} from '../../helpers/common.js';
-import path from 'node:path';
-import {fileURLToPath} from 'url';
-import {ROOT_DIRS, SVELTE_EXT} from '../../types/constants.js';
+import {applyTemplate, loadPrjYamlFile, makeValueCorrespondingType} from '../../helpers/common.js';
+import {ROOT_DIRS, SVELTE_EXT, YAML_EXT} from '../../types/constants.js';
 import {SchemaItem} from '../../types/SchemaItem.js';
 
 
@@ -140,18 +141,32 @@ export class SvelteBuilder implements FrameworkBuilder {
     data?: Record<string, ComponentData>
   ): Promise<string> {
     let result = ''
-    const fullResources = {
-      // TODO: подгрузить темплейт ресурса
+
+    const fullRes: Record<string, ComponentResource> = { ...resources }
+
+    for (const resourceName of Object.keys(resources)) {
+      if (!resources[resourceName].tmpl) continue
+
+      const tmlObj: ComponentResource = await loadPrjYamlFile(
+        this.main,
+        ROOT_DIRS.resourcesTmpl,
+        resources[resourceName].tmpl + YAML_EXT
+      )
+
+      fullRes[resourceName] = mergeDeepObjects(tmlObj, resources[resourceName])
+
+      console.log(1111, fullRes[resourceName])
     }
 
     result += `const resources = {\n`
 
-    for (const resourceName of Object.keys(resources)) {
-      const res = resources[resourceName]
+    for (const resourceName of Object.keys(fullRes)) {
+      const res = fullRes[resourceName]
+
       const cfg = (res.config) ? JSON.stringify(res.config) : ''
       const resClass = RESOURCE_CLASSES[res.type]
 
-      // TODO: подгрузить Resource ???
+      // TODO: import resClass
 
       result += `  localFiles: new ${resClass}(${res.adapter}, ${cfg}),\n`
     }
@@ -161,7 +176,7 @@ export class SvelteBuilder implements FrameworkBuilder {
     if (data) {
       for (const dataName of Object.keys(data)) {
         const dt = data[dataName]
-        const method = dt.method || resources[dt.resource].method
+        const method = dt.method || fullRes[dt.resource].method
         const params = (dt.params) ? JSON.stringify(dt.params) : ''
 
         if (!method) throw new Error(`Can't resolve method of resource "${dt.resource}"`)
