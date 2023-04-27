@@ -2,10 +2,17 @@ import {DataAdapterBase} from '../DataAdapterBase.js';
 import {DataStore} from '../DataStore.js';
 
 
-export class LocalFiles extends DataAdapterBase {
-  constructor() {
-    super()
+interface LocalFilesConfig {
+
+}
+
+
+export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
+  constructor(config: LocalFilesConfig) {
+    super(config)
   }
+
+  // TODO: должен регистрировать все стейты
 
   dataFile(params: {filePath: string}): DataStore {
     const instanceId = this.makeInstanceId()

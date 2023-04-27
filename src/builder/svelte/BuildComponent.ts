@@ -1,5 +1,5 @@
 import {mergeDeepObjects} from 'squidlet-lib';
-import {CommonComponent, ComponentData, ComponentResource, RESOURCE_CLASSES} from '../../types/CommonComponent.js';
+import {CommonComponent, ComponentData, ComponentResource} from '../../types/CommonComponent.js';
 import {loadPrjYamlFile} from '../buildHelpers.js';
 import {CODE_EXT, ROOT_DIRS, SVELTE_EXT, YAML_EXT} from '../../types/constants.js';
 import {BuilderMain} from '../BuilderMain.js';
@@ -113,7 +113,7 @@ export class BuildComponent {
         resources[resourceName].tmpl + YAML_EXT
       )
 
-      fullRes[resourceName] = mergeDeepObjects(tmlObj, resources[resourceName])
+      fullRes[resourceName] = mergeDeepObjects(resources[resourceName], tmlObj)
     }
 
     result += `const resources = {\n`
@@ -122,11 +122,11 @@ export class BuildComponent {
       const res = fullRes[resourceName]
 
       const cfg = (res.config) ? JSON.stringify(res.config) : ''
-      const resClass = RESOURCE_CLASSES[res.type]
+      //const resClass = RESOURCE_CLASSES[res.type]
 
-      this.registerImport(`import {${resClass}} from "../${ROOT_DIRS.system}"`)
+      this.registerImport(`import {instantiateAdapter} from "../${ROOT_DIRS.system}"`)
 
-      result += `  localFiles: new ${resClass}("${res.adapter}", ${cfg}),\n`
+      result += `  localFiles: instantiateAdapter("${res.adapter}", ${cfg}),\n`
     }
 
     result += '}\n\n'

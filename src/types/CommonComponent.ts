@@ -1,15 +1,15 @@
 import {SchemaItem} from './SchemaItem.js';
 
 
-export const RESOURCE_CLASSES = {
-  item: 'ItemResource',
-  list: 'ListResource',
-}
-
-export type ResourceType = 'item' | 'list'
+// export const RESOURCE_CLASSES = {
+//   item: 'ItemResource',
+//   list: 'ListResource',
+// }
+//
+// export type ResourceType = 'item' | 'list'
 
 export interface ComponentResource {
-  type: ResourceType
+  //type: ResourceType
   adapter: string
   method?: string
   tmpl?: string

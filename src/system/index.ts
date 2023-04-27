@@ -1,2 +1,1 @@
-export * from './ItemResource.js'
-export * from './ListResource.js'
+export * from './instantiateAdapter.js'

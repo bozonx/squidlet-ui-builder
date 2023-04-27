@@ -1,7 +1,11 @@
 import {DataStore} from './DataStore.js';
 
-export class DataAdapterBase {
-  constructor() {
+export class DataAdapterBase<Config = Record<string, any>> {
+  protected config: Config
+
+
+  constructor(config: Config) {
+    this.config = config
   }
 
 
