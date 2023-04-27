@@ -28,7 +28,8 @@ export class SvelteBuilder implements FrameworkBuilder {
       path.join(__dirname, './svelteComponentTmpl.txt'),
       {
         CODE: this.makeImportsStr(layout.tmpl) + '\n' +
-          this.makeProps(layout.props) + '\n',
+          this.makeProps(layout.props) + '\n' +
+          this.makeState(layout.state) + '\n',
         TEMPLATE: layout.tmpl,
         STYLES: layout.styles,
       }
@@ -42,8 +43,9 @@ export class SvelteBuilder implements FrameworkBuilder {
     return await applyTemplate(
       path.join(__dirname, './svelteComponentTmpl.txt'),
       {
-        CODE: this.makeImportsStr(screen.tmpl) + '\n' +
-          this.makeProps(screen.props) + '\n',
+        CODE: this.makeImportsStr(screen.tmpl) + '\n\n' +
+          this.makeProps(screen.props) + '\n\n' +
+          this.makeState(screen.state) + '\n\n',
         TEMPLATE: screen.tmpl,
         STYLES: screen.styles,
       }
@@ -55,7 +57,8 @@ export class SvelteBuilder implements FrameworkBuilder {
       path.join(__dirname, './svelteComponentTmpl.txt'),
       {
         CODE: this.makeImportsStr(component.tmpl) + '\n' +
-          this.makeProps(component.props) + '\n',
+          this.makeProps(component.props) + '\n' +
+          this.makeState(component.state) + '\n',
         TEMPLATE: component.tmpl,
         STYLES: component.styles,
       }
@@ -98,6 +101,23 @@ export class SvelteBuilder implements FrameworkBuilder {
       }
       else {
         result += `export let ${propName} = ${props[propName].default}`
+      }
+    }
+
+    return result
+  }
+
+  private makeState(state?: Record<string, SchemaItem>): string {
+    if (!state) return ''
+
+    let result = ''
+
+    for (const propName of Object.keys(state)) {
+      if (typeof state[propName].default === 'undefined') {
+        result += `let ${propName}`
+      }
+      else {
+        result += `let ${propName} = ${state[propName].default}`
       }
     }
 

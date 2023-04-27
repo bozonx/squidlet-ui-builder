@@ -2,10 +2,14 @@ props:
   test:
     type: number
     default: 4
+state:
+  localState:
+    type: string
+    default: 'str'
   #- item:
   #    schema: RouteItem
 # TODO: add schema
 tmpl: >
   <div>
-    menu item {test}
+    menu item {test} {localState}
   </div>
