@@ -1,5 +1,5 @@
-import {DataAdapterBase} from '../../helpers/DataAdapterBase.js';
-import {DataStore} from '../../helpers/DataStore.js';
+import {DataAdapterBase} from '../DataAdapterBase.js';
+import {DataStore} from '../DataStore.js';
 
 
 export class LocalFiles extends DataAdapterBase {
