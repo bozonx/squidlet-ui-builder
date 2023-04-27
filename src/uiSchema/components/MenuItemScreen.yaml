@@ -1,9 +1,11 @@
 props:
-  - item:
-      schema: RouteItem
+  test:
+    type: number
+    default: 4
+  #- item:
+  #    schema: RouteItem
 # TODO: add schema
 tmpl: >
   <div>
-    {item.name}
+    menu item {test}
   </div>
-
