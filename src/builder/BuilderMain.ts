@@ -62,6 +62,7 @@ export class BuilderMain {
     await this.output.copyPeripheralStatic()
     await this.output.makePackageJson()
     await this.output.installDeps()
+    await this.output.buildLib()
     await this.buildLibs(this.frameworkBuilder.buildComponent)
     await this.buildEntities(ROOT_DIRS.layouts, this.frameworkBuilder.buildLayout)
     await this.buildEntities(ROOT_DIRS.screens, this.frameworkBuilder.buildScreen)

@@ -9,6 +9,8 @@ export const FILE_NAMES = {
 }
 export const ROOT_DIRS = {
   app: 'app',
+  // system files and libs
+  lib: 'lib',
   screens: 'screens',
   schemas: 'schemas',
   components: 'components',

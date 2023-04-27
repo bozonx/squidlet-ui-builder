@@ -83,6 +83,7 @@ export class Output {
         'cross-env',
       ]
       const cmd = `npm install -D ${packages.join(' ')}`
+
       exec(
         cmd,
         {cwd: this.main.options.outputDir},
@@ -96,6 +97,23 @@ export class Output {
     })
   }
 
+  async buildLib() {
+    const tsConfigPath = path.resolve(__dirname, '../lib/tsconfig.json')
+    const cmd = `tsc --project ${tsConfigPath}`
+
+    await new Promise<void>((resolve, reject) => {
+      exec(
+        cmd,
+        {cwd: this.main.options.outputDir},
+        (error, stdout, stderr) => {
+          if (error) return reject(error)
+
+          console.log(stdout)
+          resolve()
+        }
+      )
+    })
+  }
 
   private async clear() {
     const toDelete = (await fs.readdir(this.main.options.outputDir))
