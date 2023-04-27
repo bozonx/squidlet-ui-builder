@@ -8,9 +8,12 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-esm ./src/index.ts"
+    "dev": "ts-node-esm ./src/index.ts",
+    "local-files-backend": "ts-node-esm ./src/localFilesBackend/index.ts"
   },
   "dependencies": {
+    "@types/koa": "^2.13.6",
+    "koa": "^2.14.2",
     "lodash": "^4.17.21",
     "squidlet-lib": "file:../squidlet-lib",
     "svelte": "^3.58.0",
