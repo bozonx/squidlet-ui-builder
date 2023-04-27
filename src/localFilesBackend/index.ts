@@ -32,11 +32,11 @@ app.use(async (ctx, next) => {
   //   //ctx.is('application/json'),
   // )
 
-  if (ctx.req.method === 'GET' && ctx.request.path === '/loadFile' && ctx.request.query.file) {
+  if (ctx.req.method === 'GET' && ctx.request.path === '/load-file' && ctx.request.query.path) {
     ctx.response.type = 'application/json'
 
     // TODO: лучше ограничить доступ наверх
-    const filePath = path.join(absDirPath, ctx.request.query.file as string)
+    const filePath = path.join(absDirPath, ctx.request.query.path as string)
     let fileContentStr: string
 
     try {
@@ -58,11 +58,11 @@ app.use(async (ctx, next) => {
     })
     ctx.response.status = 200
   }
-  if (ctx.req.method === 'GET' && ctx.request.path === '/loadDir' && ctx.request.query.dir) {
+  else if (ctx.req.method === 'GET' && ctx.request.path === '/load-dir' && ctx.request.query.path) {
     ctx.response.type = 'application/json'
 
     // TODO: лучше ограничить доступ наверх
-    const dirPath = path.join(absDirPath, ctx.request.query.dir as string)
+    const dirPath = path.join(absDirPath, ctx.request.query.path as string)
     let dirs: string[]
 
     try {
@@ -94,4 +94,5 @@ app.use(async (ctx, next) => {
   }
 });
 
-app.listen(3000)
+// TODO: порт из конфига брать лучше
+app.listen(3099)
