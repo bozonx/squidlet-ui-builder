@@ -1,6 +1,5 @@
 adapter: LocalFiles
 method: dataFile
-responseSchema: ScreenItem[]
 config:
   rootPath: ''
 params:

@@ -1,7 +1,8 @@
 
 data:
   - menuScreens:
-      resource: menuScreens
+      resource: localFiles
+      schema: ScreenItem[]
       params:
         path: 'menu/screens.yaml'
       # you cad add some request params here
