@@ -7,6 +7,7 @@ import {applyTemplate} from '../../helpers/common.js';
 import path from 'node:path';
 import {fileURLToPath} from 'url';
 import {ROOT_DIRS, SVELTE_EXT} from '../../types/constants.js';
+import {SchemaItem} from '../../types/SchemaItem.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -26,7 +27,8 @@ export class SvelteBuilder implements FrameworkBuilder {
     return await applyTemplate(
       path.join(__dirname, './svelteComponentTmpl.txt'),
       {
-        CODE: this.makeImportsStr(layout.tmpl) + '\n',
+        CODE: this.makeImportsStr(layout.tmpl) + '\n' +
+          this.makeProps(layout.props) + '\n',
         TEMPLATE: layout.tmpl,
         STYLES: layout.styles,
       }
@@ -40,7 +42,8 @@ export class SvelteBuilder implements FrameworkBuilder {
     return await applyTemplate(
       path.join(__dirname, './svelteComponentTmpl.txt'),
       {
-        CODE: this.makeImportsStr(screen.tmpl) + '\n',
+        CODE: this.makeImportsStr(screen.tmpl) + '\n' +
+          this.makeProps(screen.props) + '\n',
         TEMPLATE: screen.tmpl,
         STYLES: screen.styles,
       }
@@ -51,7 +54,8 @@ export class SvelteBuilder implements FrameworkBuilder {
     return await applyTemplate(
       path.join(__dirname, './svelteComponentTmpl.txt'),
       {
-        CODE: this.makeImportsStr(component.tmpl) + '\n',
+        CODE: this.makeImportsStr(component.tmpl) + '\n' +
+          this.makeProps(component.props) + '\n',
         TEMPLATE: component.tmpl,
         STYLES: component.styles,
       }
@@ -81,6 +85,23 @@ export class SvelteBuilder implements FrameworkBuilder {
     }
 
     return imports
+  }
+
+  private makeProps(props?: Record<string, SchemaItem>): string {
+    if (!props) return ''
+
+    let result = ''
+
+    for (const propName of Object.keys(props)) {
+      if (typeof props[propName].default === 'undefined') {
+        result += `export let ${propName}`
+      }
+      else {
+        result += `export let ${propName} = ${props[propName].default}`
+      }
+    }
+
+    return result
   }
 
 }

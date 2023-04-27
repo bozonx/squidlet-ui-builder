@@ -1,4 +1,5 @@
-export interface LayoutComponent {
-  tmpl: string
-  styles: string
+import {CommonComponent} from './CommonComponent.js';
+
+
+export interface LayoutComponent extends CommonComponent {
 }

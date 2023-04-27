@@ -1,4 +1,5 @@
-export interface ScreenComponent {
-  tmpl: string
-  styles: string
+import {CommonComponent} from './CommonComponent.js';
+
+
+export interface ScreenComponent extends CommonComponent {
 }
