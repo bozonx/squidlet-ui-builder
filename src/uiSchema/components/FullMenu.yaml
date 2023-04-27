@@ -1,7 +1,5 @@
 
 resources:
-  # это будет интерфейс data adapter. Из него можно загружать разные файлы
-  # можно использовать его под другим именем
   localFiles:
     # взять заготовку из /resourcesTmpl
     tmpl: localFiles
@@ -11,11 +9,10 @@ resources:
 # это данные полученные из ресурса
 data:
   menuScreens:
-    # то имя которое указанно в перечислении resourcesTmpl
+    # то имя которое указанно в переменной resources
     resource: localFiles
-    # вызывается ресурс.
     # Можно указать метод, если не указывать то будет тот что указан в ресурсе
-    # method: default
+    # method: methodName
     schema: MenuScreens
     params:
       filePath: 'screens.yaml'
