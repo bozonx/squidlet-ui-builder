@@ -32,7 +32,7 @@ app.use(async (ctx, next) => {
   //   //ctx.is('application/json'),
   // )
 
-  if (ctx.req.method === 'GET' && ctx.request.path === '/load' && ctx.request.query.file) {
+  if (ctx.req.method === 'GET' && ctx.request.path === '/loadFile' && ctx.request.query.file) {
     ctx.response.type = 'application/json'
 
     // TODO: лучше ограничить доступ наверх
@@ -55,6 +55,32 @@ app.use(async (ctx, next) => {
 
     ctx.body = JSON.stringify({
       result: fileContentStr
+    })
+    ctx.response.status = 200
+  }
+  if (ctx.req.method === 'GET' && ctx.request.path === '/loadDir' && ctx.request.query.dir) {
+    ctx.response.type = 'application/json'
+
+    // TODO: лучше ограничить доступ наверх
+    const dirPath = path.join(absDirPath, ctx.request.query.dir as string)
+    let dirs: string[]
+
+    try {
+      dirs = await fs.readdir(dirPath, 'utf8')
+    }
+    catch (e) {
+      ctx.body = JSON.stringify({
+        error: {
+          message: `Can't load a dir: ${e}`
+        }
+      })
+      ctx.response.status = 404
+
+      return
+    }
+
+    ctx.body = JSON.stringify({
+      result: dirs
     })
     ctx.response.status = 200
   }
