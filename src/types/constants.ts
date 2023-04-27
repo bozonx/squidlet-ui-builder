@@ -1,6 +1,8 @@
 export const SVELTE_EXT = '.svelte'
 export const CODE_EXT = '.js'
 export const YAML_EXT = '.yaml'
+// TODO: может в какой-то конфиг сохранить ???
+export const DEFAULT_BUILD_DIR = './_build'
 export const FILE_NAMES = {
   routes: 'routes',
   cfg: 'cfg'

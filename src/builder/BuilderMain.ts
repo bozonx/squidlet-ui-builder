@@ -1,7 +1,15 @@
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import {pathTrimExt, replaceExt} from 'squidlet-lib'
-import {CODE_EXT, FILE_NAMES, Frameworks, ROOT_DIRS, SVELTE_EXT, YAML_EXT} from '../types/constants.js';
+import {
+  CODE_EXT,
+  DEFAULT_BUILD_DIR,
+  FILE_NAMES,
+  Frameworks,
+  ROOT_DIRS,
+  SVELTE_EXT,
+  YAML_EXT
+} from '../types/constants.js';
 import {Output} from './Output.js';
 import {BuilderOptions} from '../types/BuilderOptions.js';
 import {fileExists, loadPrjYamlFile, loadYamlFile} from '../helpers/common.js';
@@ -126,11 +134,10 @@ export class BuilderMain {
   private prepareOptions(options: Partial<BuilderOptions>): BuilderOptions {
     if (!options.prjName) throw new Error(`No prjName`)
     else if (!options.prjDir) throw new Error(`No prjDir`)
-    else if (!options.outputDir) throw new Error(`No outputDir`)
 
     return {
       prjDir: path.join(process.cwd(), options.prjDir),
-      outputDir: path.join(process.cwd(), options.outputDir),
+      outputDir: path.join(process.cwd(), options.outputDir || DEFAULT_BUILD_DIR),
       prjName: options.prjName,
       // svelte by default
       framework: options.framework || 'svelte',
