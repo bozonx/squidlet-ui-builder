@@ -1,6 +1,7 @@
 import yaml from 'yaml'
 import {DataAdapterBase} from '../DataAdapterBase.js';
-import {DataStore} from '../DataStore.js';
+import {ItemStore} from '../../types/ItemStore.js';
+import {makeItemStore} from '../makeItemStore.js';
 
 
 interface LocalFilesConfig {
@@ -20,10 +21,11 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
   }
 
 
-  dataFile(params: {filePath: string}): DataStore {
+  dataFile(params: {filePath: string}): ItemStore {
     const instanceId = this.makeInstanceId()
+    // TODO: use destroy
     const destroyFn = async () => this.destroyInstance(instanceId)
-    const dataStore = new DataStore(destroyFn)
+    const dataStore: ItemStore = makeItemStore(null)
 
     this.registerInstance(instanceId, dataStore)
 

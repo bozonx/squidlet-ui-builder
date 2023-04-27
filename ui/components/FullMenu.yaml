@@ -21,7 +21,7 @@ tmpl: >
   <ul>
     <SLoad pending={!menuScreens.initialized}>
       <li>
-        <MenuItemScreen item={menuScreens.data} />
+        <MenuItemScreen item={$menuScreens.data} />
       </li>
     </SLoad>
   </ul>

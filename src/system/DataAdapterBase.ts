@@ -1,4 +1,6 @@
-import {DataStore} from './DataStore.js';
+import {Readable} from 'svelte/store';
+import {ItemStore} from '../types/ItemStore.js';
+
 
 export class DataAdapterBase<Config = Record<string, any>> {
   protected config: Config
@@ -14,7 +16,7 @@ export class DataAdapterBase<Config = Record<string, any>> {
     return '0'
   }
 
-  protected registerInstance(instanceId: string, dataStore: DataStore) {
+  protected registerInstance(instanceId: string, dataStore: Readable<ItemStore>) {
 
   }
 
