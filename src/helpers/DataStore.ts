@@ -6,7 +6,20 @@ import { readable, Readable } from 'svelte/store';
  */
 export class DataStore<T = any> {
   data: Readable<T | null>
-  setValue!: (data: T | null) => void
+
+  /**
+   * True if the first value was set
+   */
+  get initiated(): boolean {
+    return Boolean(this.updateCount)
+  }
+
+  get updateId(): number {
+    return this.updateCount
+  }
+
+  private setValue!: (data: T | null) => void
+  private updateCount: number = 0
 
 
   constructor() {
@@ -15,5 +28,18 @@ export class DataStore<T = any> {
     })
   }
 
+
+  async destroy() {
+    // TODO: наверное вызвать дестрой который передан в конструктор
+  }
+
+
+  /**
+   * It has to be set only via data adapter on first load or update
+   */
+  $$setValue(data: T) {
+    this.updateCount++
+    this.setValue(data)
+  }
 
 }

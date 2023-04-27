@@ -7,8 +7,13 @@ export class LocalFiles extends DataAdapterBase {
     super()
   }
 
-  async dataFile(): Promise<DataStore> {
+  async dataFile(params: {filePath: string}): Promise<DataStore> {
+    const dataStore = new DataStore()
 
+    // TODO: load file
+    // TODO: put file data to dataStore
+
+    return dataStore
   }
 
 

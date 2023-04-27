@@ -4,7 +4,7 @@ data:
       resource: localFiles
       schema: ScreenItem[]
       params:
-        path: 'menu/screens.yaml'
+        filePath: 'menu/screens.yaml'
       # you cad add some request params here
 
 tmpl: >
