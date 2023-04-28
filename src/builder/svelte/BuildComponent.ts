@@ -1,4 +1,4 @@
-import {mergeDeepObjects} from 'squidlet-lib';
+import {mergeDeepObjects, omitObj} from 'squidlet-lib';
 import {CommonComponent, ComponentData, ComponentResource} from '../../types/CommonComponent.js';
 import {loadPrjYamlFile} from '../buildHelpers.js';
 import {ROOT_DIRS, SVELTE_EXT, YAML_EXT} from '../../types/constants.js';
@@ -144,9 +144,10 @@ export class BuildComponent {
         rawResources[resourceName].tmpl + YAML_EXT
       )
 
-      // TODO: удалить параметр tmpl
-
-      fullRes[resourceName] = mergeDeepObjects(rawResources[resourceName], tmlObj)
+      fullRes[resourceName] = mergeDeepObjects(
+        omitObj(rawResources[resourceName], 'tmpl'),
+        tmlObj
+      )
     }
 
     return fullRes
@@ -161,7 +162,7 @@ export class BuildComponent {
 
       this.registerImport(`import {instantiateAdapter} from "@/${ROOT_DIRS.system}"`)
 
-      result += `  localFiles: instantiateAdapter("${res.adapter}", ${cfg}),\n`
+      result += `  ${resourceName}: instantiateAdapter("${res.adapter}", ${cfg}),\n`
     }
 
     result += '}\n'
