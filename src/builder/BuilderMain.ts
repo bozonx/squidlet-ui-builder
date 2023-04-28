@@ -88,13 +88,13 @@ export class BuilderMain {
     }
   }
 
+  // TODO: review
   private async buildComponentLibs(builder: (obj: any) => Promise<string>) {
     const libsComponentNames: Record<string, string[]> = {}
 
     for (const libPath of this.options.componentLibPaths) {
-      const cfgFileName = FILE_NAMES.cfg + YAML_EXT
-      const libCfgPath = path.join(libPath, cfgFileName)
-      const libCfgObj: LibCfg = await loadYamlFile(libCfgPath)
+      const libCfg: LibCfg = await this.getLibCfg(libPath)
+
       const componentsFileNames = (await fs.readdir(libPath))
         .filter((el) => el !== cfgFileName)
 
@@ -149,6 +149,13 @@ export class BuilderMain {
         path.resolve(__dirname, '../stdComponentsLib')
       ]
     }
+  }
+
+  private async getLibCfg(libPath: string): Promise<LibCfg> {
+    const cfgFileName = FILE_NAMES.cfg + YAML_EXT
+    const libCfgPath = path.join(libPath, cfgFileName)
+
+    return await loadYamlFile(libCfgPath)
   }
 
 }

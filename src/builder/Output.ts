@@ -1,8 +1,7 @@
 import path from 'node:path';
-import {exec} from 'node:child_process';
 import * as fs from 'node:fs/promises';
 import {BuilderMain} from './BuilderMain.js';
-import {mkdirP} from './buildHelpers.js';
+import {mkdirP, simpleExec} from './buildHelpers.js';
 import {fileURLToPath} from 'url';
 import {ROOT_DIRS} from '../types/constants.js';
 
@@ -46,8 +45,8 @@ export class Output {
   }
 
   async copyPeripheralStatic() {
-    const source = path.join(__dirname, '../peripheral/asIs')
-    const dest = path.join(this.main.options.outputDir)
+    const source = path.resolve(__dirname, '../peripheral/asIs')
+    const dest = this.main.options.outputDir
 
     await fs.cp(source, dest,{recursive: true})
   }
@@ -71,31 +70,20 @@ export class Output {
   async installDeps() {
     if (!this.main.options.force && !this.main.isInitialBuild) return
 
-    await new Promise<void>((resolve, reject) => {
-      const packages = [
-        '@sveltejs/vite-plugin-svelte',
-        'svelte',
-        'vite',
-        'prettier',
-        'prettier-plugin-tailwindcss',
-        'vitawind',
-        'svelte-router-spa',
-        // TODO: зачем ???
-        'cross-env',
-      ]
-      const cmd = `npm install -D ${packages.join(' ')}`
+    const packages = [
+      '@sveltejs/vite-plugin-svelte',
+      'svelte',
+      'vite',
+      'prettier',
+      'prettier-plugin-tailwindcss',
+      'vitawind',
+      'svelte-router-spa',
+      // TODO: зачем ???
+      'cross-env',
+    ]
+    const cmd = `npm install -D ${packages.join(' ')}`
 
-      exec(
-        cmd,
-        {cwd: this.main.options.outputDir},
-        (error, stdout, stderr) => {
-          if (error) return reject(error)
-
-          console.log(stdout)
-          resolve()
-        }
-      )
-    })
+    await simpleExec(cmd, this.main.options.outputDir)
   }
 
   async buildSystem() {
@@ -103,18 +91,7 @@ export class Output {
     const outDir = path.resolve(__dirname, `../../_build/src/${ROOT_DIRS.system}`)
     const cmd = `tsc --project ${tsConfigPath} --outDir ${outDir}`
 
-    await new Promise<void>((resolve, reject) => {
-      exec(
-        cmd,
-        {cwd: this.main.options.outputDir},
-        (error, stdout, stderr) => {
-          if (error) return reject(error)
-
-          console.log(stdout)
-          resolve()
-        }
-      )
-    })
+    await simpleExec(cmd, this.main.options.outputDir)
   }
 
   async buildUserLib() {

@@ -1,9 +1,11 @@
 import path from 'node:path';
+import {exec} from 'node:child_process';
 import fs from 'node:fs/promises';
 import yaml from 'yaml';
 import _ from 'lodash';
 import {mkdirPLogic} from 'squidlet-lib'
 import {BuilderMain} from './BuilderMain.js';
+import {ExecOptions} from 'child_process';
 
 
 export async function loadYamlFile(filePath: string): Promise<any> {
@@ -41,4 +43,19 @@ export async function fileExists(pathTo: string): Promise<boolean> {
   catch (e) {
     return false
   }
+}
+
+export async function simpleExec(cmd: string, cwd?: string) {
+  return new Promise<void>((resolve, reject) => {
+    exec(
+      cmd,
+      { cwd },
+      (error, stdout, stderr) => {
+        if (error) return reject(error)
+
+        console.log(stdout)
+        resolve()
+      }
+    )
+  })
 }
