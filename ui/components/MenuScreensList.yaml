@@ -2,7 +2,6 @@ imports:
   - 'import {ROOT_PATHS} from "../lib"'
 
 tmpl: >
-
   <SLocalDataDirContainer let:list={list} path={ROOT_PATHS.screens} spinner={true}>
     <ul>
       {#each fileName of list.data}
@@ -12,18 +11,3 @@ tmpl: >
       {/each}
     </ul>
   </SLocalDataDirContainer>
-
-
-#      <SLoad let:list={list} pending={!$list.initialized}>
-#        {#each fileName of list.data}
-#          <li>
-#
-#            <LocalDataFileContainer path={`${ROOT_PATHS.screens}/${fileName}`}>
-#              <SLoad pending={!$item.initialized}>
-#                <MenuItemScreen item={$item} />
-#              </SLoad>
-#            </LocalDataFileContainer>
-#
-#          </li>
-#        {/each}
-#      </SLoad>
