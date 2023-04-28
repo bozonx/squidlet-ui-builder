@@ -3,4 +3,8 @@ props:
     type: boolean
     required: true
 tmpl: >
-  <slot></slot>
+  {#if pending}
+    <div>...</div>
+  {#else}
+    <slot></slot>
+  {/if}

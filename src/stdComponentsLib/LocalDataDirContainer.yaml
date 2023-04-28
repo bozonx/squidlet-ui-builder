@@ -33,4 +33,3 @@ tmpl: >
   {#else}
     <slot list={$list}></slot>
   {/if}
-
