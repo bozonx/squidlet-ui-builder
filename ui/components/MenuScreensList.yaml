@@ -1,6 +1,12 @@
 imports:
   - 'import {ROOT_PATHS} from "../lib"'
 
+#onInit: >
+#  const a = 'a'
+#
+#combined:
+#  vv: 'a + 1'
+
 tmpl: >
   <ul>
     <SLocalDataDirContainer path={ROOT_PATHS.screens} let:list={list}>

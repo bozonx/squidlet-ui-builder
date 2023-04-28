@@ -30,6 +30,9 @@ export interface CommonComponent {
   state?: Record<string, SchemaItem>
   resources?: Record<string, ComponentResource>
   data?: Record<string, ComponentData>
+  // code inside component script
+  onInit?: string
+  combined?: Record<string, string>
   tmpl?: string
   styles?: string
 }

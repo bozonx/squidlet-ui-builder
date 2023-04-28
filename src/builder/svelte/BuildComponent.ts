@@ -5,6 +5,7 @@ import {ROOT_DIRS, SVELTE_EXT, YAML_EXT} from '../../types/constants.js';
 import {BuilderMain} from '../BuilderMain.js';
 import {SchemaItem} from '../../types/SchemaItem.js';
 import {makeValueCorrespondingType} from '../../system/helpers/common.js';
+import {values} from 'lodash';
 
 
 export class BuildComponent {
@@ -28,6 +29,8 @@ export class BuildComponent {
       this.component.resources,
       this.component.data
     ) + '\n'
+    if (this.component.onInit) result += this.component.onInit + '\n'
+    if (this.component.combined) result += this.makeCombined(this.component.combined) + '\n'
 
     return this.makeExtImports(this.component.imports) + '\n\n' + result
   }
@@ -149,6 +152,11 @@ export class BuildComponent {
     return result
   }
 
+  private makeCombined(combined: Record<string, string>): string {
+    return Object.keys(combined)
+      .map((name: string) => `$: ${name} = ${combined[name]}`)
+      .join('\n')
+  }
 
   private registerImport(importStr: string) {
     this.importStrings.push(importStr)
