@@ -62,8 +62,9 @@ export class BuilderMain {
     await this.output.copyPeripheralStatic()
     await this.output.makePackageJson()
     await this.output.installDeps()
-    await this.output.buildLib()
-    await this.buildLibs(this.frameworkBuilder.buildComponent)
+    await this.output.buildSystem()
+    await this.output.buildUserLib()
+    await this.buildComponentLibs(this.frameworkBuilder.buildComponent)
     await this.buildEntities(ROOT_DIRS.layouts, this.frameworkBuilder.buildLayout)
     await this.buildEntities(ROOT_DIRS.screens, this.frameworkBuilder.buildScreen)
     await this.buildEntities(ROOT_DIRS.components, this.frameworkBuilder.buildComponent)
@@ -87,7 +88,7 @@ export class BuilderMain {
     }
   }
 
-  private async buildLibs(builder: (obj: any) => Promise<string>) {
+  private async buildComponentLibs(builder: (obj: any) => Promise<string>) {
     const libsComponentNames: Record<string, string[]> = {}
 
     for (const libPath of this.options.componentLibPaths) {

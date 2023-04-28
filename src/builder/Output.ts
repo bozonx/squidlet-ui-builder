@@ -98,7 +98,7 @@ export class Output {
     })
   }
 
-  async buildLib() {
+  async buildSystem() {
     const tsConfigPath = path.resolve(__dirname, `../${ROOT_DIRS.system}/tsconfig.json`)
     const outDir = path.resolve(__dirname, `../../_build/src/${ROOT_DIRS.system}`)
     const cmd = `tsc --project ${tsConfigPath} --outDir ${outDir}`
@@ -116,6 +116,15 @@ export class Output {
       )
     })
   }
+
+  async buildUserLib() {
+    const srcDir = path.join(this.main.options.prjDir, ROOT_DIRS.lib)
+    const dstDir = path.join(this.main.options.outputDir, 'src', ROOT_DIRS.lib)
+
+    await mkdirP(srcDir)
+    await fs.cp(srcDir, dstDir, {recursive: true})
+  }
+
 
   private async clear() {
     const toDelete = (await fs.readdir(this.main.options.outputDir))

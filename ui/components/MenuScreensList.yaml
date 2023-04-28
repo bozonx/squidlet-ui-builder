@@ -1,24 +1,23 @@
-state:
-  screensDir:
-    type: string
-    # TODO: use ROOT_PATHS
-    default: 'screens'
+imports:
+  - 'import {ROOT_PATHS} from "../lib"'
 
 tmpl: >
   <ul>
-    <LocalDataDirContainer
-      path={screensDir}
-      component={($list) => <SLoad pending={!$list.initialized}>
-        {#each fileName of $screensList.data}
-          <li>
-            <LocalDataFileContainer
-              path={`${screensDir}/${fileName}`}
-              component={($item) => <SLoad pending={!$item.initialized}>
-                <MenuItemScreen item={$item} />
-              </SLoad>}
-            />
-          </li>
-        {/each}
-      </SLoad>
-    />
+    <SLocalDataDirContainer path={ROOT_PATHS.screens} let:list={list}>
+      <div>{list}</div>
+    </SLocalDataDirContainer>
   </ul>
+
+#      <SLoad let:list={list} pending={!$list.initialized}>
+#        {#each fileName of list.data}
+#          <li>
+#
+#            <LocalDataFileContainer path={`${ROOT_PATHS.screens}/${fileName}`}>
+#              <SLoad pending={!$item.initialized}>
+#                <MenuItemScreen item={$item} />
+#              </SLoad>
+#            </LocalDataFileContainer>
+#
+#          </li>
+#        {/each}
+#      </SLoad>

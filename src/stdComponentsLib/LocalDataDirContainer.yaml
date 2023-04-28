@@ -2,11 +2,11 @@ props:
   path:
     type: string
     required: true
-  component:
-    type: Object
-    required: true
-
+state:
+  list:
+    type: string
+    default: 'some list'
 # TODO: add combined
 
 tmpl: >
-  {$Component}
+  <slot list={list}></slot>
