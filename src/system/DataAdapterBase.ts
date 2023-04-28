@@ -17,7 +17,7 @@ export class DataAdapterBase<Config = Record<string, any>> {
     return '0'
   }
 
-  protected registerInstance(instanceId: string, dataStore: Readable<ItemStore | ListStore>) {
+  protected registerInstance(instanceId: string, dataStore: ItemStore | ListStore) {
 
   }
 

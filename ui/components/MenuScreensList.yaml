@@ -1,18 +1,18 @@
 imports:
   - 'import {ROOT_PATHS} from "../lib"'
 
-#onInit: >
-#  const a = 'a'
-#
-#combined:
-#  vv: 'a + 1'
-
 tmpl: >
-  <ul>
-    <SLocalDataDirContainer let:list={list} path={ROOT_PATHS.screens}>
-      <div>{list}</div>
-    </SLocalDataDirContainer>
-  </ul>
+
+  <SLocalDataDirContainer let:list={list} path={ROOT_PATHS.screens} spinner={true}>
+    <ul>
+      {#each fileName of list.data}
+        <li>
+          <MenuItemScreen name={fileName} />
+        </li>
+      {/each}
+    </ul>
+  </SLocalDataDirContainer>
+
 
 #      <SLoad let:list={list} pending={!$list.initialized}>
 #        {#each fileName of list.data}

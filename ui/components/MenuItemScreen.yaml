@@ -1,18 +1,8 @@
 props:
-  item:
-    type: MenuScreens
-    required: true
-  test:
-    type: number
-    default: 4
-state:
-  localState:
+  name:
     type: string
-    default: 'str'
-  #- item:
-  #    schema: RouteItem
-# TODO: add schema
+    required: true
 tmpl: >
   <div>
-    menu item {test} {localState} {item?.children}
+    {name}
   </div>

@@ -2,6 +2,8 @@ props:
   path:
     type: string
     required: true
+  spinner:
+    type: boolean
 
 resources:
   dirContent:
@@ -24,4 +26,6 @@ data:
       path: 'screens'
 
 tmpl: >
-  <slot list={$list}></slot>
+  <SLoad>
+    <slot list={$list}></slot>
+  </SLoad>
