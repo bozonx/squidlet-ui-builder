@@ -48,11 +48,11 @@ export class MakeRouter {
     let importsString = ''
 
     for (const layoutClassName of layouts) {
-      importsString += `import ${layoutClassName} from '../${ROOT_DIRS.layouts}/${layoutClassName}.svelte'\n`
+      importsString += `import ${layoutClassName} from '@/${ROOT_DIRS.layouts}/${layoutClassName}.svelte'\n`
     }
 
     for (const screenClassName of screens) {
-      importsString += `import ${screenClassName} from '../${ROOT_DIRS.screens}/${screenClassName}.svelte'\n`
+      importsString += `import ${screenClassName} from '@/${ROOT_DIRS.screens}/${screenClassName}.svelte'\n`
     }
 
     return importsString
