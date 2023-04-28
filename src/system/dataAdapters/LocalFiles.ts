@@ -4,6 +4,7 @@ import {DataAdapterBase} from '../DataAdapterBase.js';
 import {makeItemStore} from '../makeItemStore.js';
 import {ItemStore} from '../../types/ItemStore.js';
 import {ListStore} from '../../types/ListStore.js';
+import {makeListStore} from '../makeListStore.js';
 
 
 // TODO: не используется
@@ -22,14 +23,14 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
     const instanceId = this.makeInstanceId()
     // TODO: use destroy
     const destroyFn = async () => this.destroyInstance(instanceId)
-    const dataStore: ItemStore = makeItemStore(null)
+    const dataStore: ListStore = makeListStore([])
 
     this.registerInstance(instanceId, dataStore)
 
     // TODO: use params.filePath
 
     axios({
-      url: `${this.makeBaseUrl()}/load-file?path=${encodeURIComponent('screens/Home.yaml')}`
+      url: `${this.makeBaseUrl()}/load-dir?path=${encodeURIComponent(params.path)}`
     })
       .then((response) => {
         const yamlContent: string = response.data.result
@@ -61,7 +62,7 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
     // TODO: use params.filePath
 
     axios({
-      url: `${this.makeBaseUrl()}/load-file?path=${encodeURIComponent('screens/Home.yaml')}`
+      url: `${this.makeBaseUrl()}/load-file?path=${encodeURIComponent(params.path)}`
     })
       .then((response) => {
         const yamlContent: string = response.data.result
