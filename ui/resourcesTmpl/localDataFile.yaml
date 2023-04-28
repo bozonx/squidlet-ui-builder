@@ -1,2 +1,2 @@
-adapter: LocalFiles
-method: dataFile
+#adapter: LocalFiles
+#method: dataFile

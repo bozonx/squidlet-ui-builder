@@ -5,6 +5,7 @@ import {makeItemStore} from '../makeItemStore.js';
 import axios from 'axios';
 
 
+// TODO: не используется
 interface LocalFilesConfig {
   basePath: string
 }
@@ -16,7 +17,11 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
   }
 
 
-  dataFile(params: {filePath: string}): ItemStore {
+  dirContent(params: {path: string}): ListStore {
+
+  }
+
+  dataFile(params: {path: string}): ItemStore {
     const instanceId = this.makeInstanceId()
     // TODO: use destroy
     const destroyFn = async () => this.destroyInstance(instanceId)

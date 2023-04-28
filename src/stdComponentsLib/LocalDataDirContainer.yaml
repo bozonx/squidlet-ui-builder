@@ -6,27 +6,23 @@ props:
 resources:
   localDataFile:
     # взять заготовку из /resourcesTmpl
-    tmpl: localDataFile
+    #tmpl: localDataFile
+    adapter: LocalFiles
+    method: dirContent
+
     #config:
     #  basePath: 'menu'
 
 # это данные полученные из ресурса
 data:
-  fileItem:
+  list:
     # то имя которое указанно в переменной resources
     resource: localDataFile
     # Можно указать метод, если не указывать то будет тот что указан в ресурсе
     # method: methodName
-    #schema: MenuScreens
-    #params:
-    #  filePath: 'screens.yaml'
-
-#state:
-#  list:
-#    type: string
-#    default: 'some list'
-
-
+    schema: string[]
+    params:
+      path: 'screens'
 
 tmpl: >
-  <slot list={list}></slot>
+  <slot list={$list}></slot>
