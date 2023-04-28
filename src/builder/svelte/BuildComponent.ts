@@ -31,9 +31,17 @@ export class BuildComponent {
     if (this.component.onInit) result += this.component.onInit + '\n'
     if (this.component.combined) result += this.makeCombined(this.component.combined) + '\n'
 
-    const imports = this.makeAllImports(this.component.imports)
+    this.collectUserComponentImports()
+    this.collectCmpLibImports()
 
-    return imports + '\n\n' + result
+    const imports = [
+      // specified in component
+      ...this.component.imports || [],
+      // collected imports
+      ...this.importStrings,
+    ]
+
+    return imports.join('\n') + '\n\n' + result
   }
 
 
@@ -89,41 +97,39 @@ export class BuildComponent {
       .join('\n')
   }
 
-  private makeAllImports(imports?: string[]): string {
-    const allImports = [
-      ...imports || [],
-      ...this.importStrings,
-      ...(this.component.tmpl) ? this.makeImportsStrFromTemplate(this.component.tmpl) : [],
-    ]
+  /**
+   * Collect user's components in template which has to be imported
+   * @private
+   */
+  private collectUserComponentImports() {
+    if (!this.component.tmpl) return
 
-    return allImports.join('\n')
+    for (const cmpName of this.main.prjComponentNames) {
+      // TODO: плохой способ обнаружения - лучеш через hast tree
+      if (this.component.tmpl.indexOf('<' + cmpName) === -1) continue
+
+      this.registerImport(`import ${cmpName} from '@/${ROOT_DIRS.components}/${cmpName}${SVELTE_EXT}'`)
+    }
   }
 
   /**
-   * Make import strings from template
+   * Collect imports from component libs
    */
-  private makeImportsStrFromTemplate(tmpl: string): string[] {
-    let result: string[] = []
-
-    for (const cmpName of this.main.prjComponentNames) {
-      if (tmpl.indexOf('<' + cmpName) === -1) continue
-
-      result.push(`import ${cmpName} from '@/${ROOT_DIRS.components}/${cmpName}${SVELTE_EXT}'`)
-    }
+  private collectCmpLibImports() {
+    if (!this.component.tmpl) return
 
     for (const libPrefix of Object.keys(this.main.libsComponentNames)) {
       for (const cmpName of this.main.libsComponentNames[libPrefix]) {
         const cmpFullName = libPrefix + cmpName
 
-        if (tmpl.indexOf('<' + cmpFullName) === -1) continue
+        // TODO: плохой способ обнаружения - лучеш через hast tree
+        if (this.component.tmpl.indexOf('<' + cmpFullName) === -1) continue
 
         const cmpPath = `@/${ROOT_DIRS.componentLibs}/${libPrefix}/${cmpName}${SVELTE_EXT}`
 
-        result.push(`import ${cmpFullName} from '${cmpPath}'`)
+        this.registerImport(`import ${cmpFullName} from '${cmpPath}'`)
       }
     }
-
-    return result
   }
 
   private registerImport(importStr: string) {
