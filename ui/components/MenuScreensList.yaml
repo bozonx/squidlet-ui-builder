@@ -9,7 +9,7 @@ imports:
 
 tmpl: >
   <ul>
-    <SLocalDataDirContainer path={ROOT_PATHS.screens} let:list={list}>
+    <SLocalDataDirContainer let:list={list} path={ROOT_PATHS.screens}>
       <div>{list}</div>
     </SLocalDataDirContainer>
   </ul>

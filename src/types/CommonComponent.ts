@@ -32,6 +32,7 @@ export interface CommonComponent {
   data?: Record<string, ComponentData>
   // code inside component script
   onInit?: string
+  // obj {vv: 'a + 1'} ===> $: vv: a + 1
   combined?: Record<string, string>
   tmpl?: string
   styles?: string

@@ -1,3 +1,10 @@
+props:
+  path:
+    type: string
+    required: true
+  component:
+    type: Object
+    required: true
 
 resources:
   localDataFile:
@@ -16,16 +23,6 @@ data:
     #schema: MenuScreens
     #params:
     #  filePath: 'screens.yaml'
-
-props:
-  path:
-    type: string
-    required: true
-  component:
-    type: Object
-    required: true
-
-# TODO: add combined
 
 tmpl: >
   {$Component}
