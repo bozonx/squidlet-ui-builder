@@ -5,7 +5,6 @@ import yaml from 'yaml';
 import _ from 'lodash';
 import {mkdirPLogic} from 'squidlet-lib'
 import {BuilderMain} from './BuilderMain.js';
-import {ExecOptions} from 'child_process';
 
 
 export async function loadYamlFile(filePath: string): Promise<any> {

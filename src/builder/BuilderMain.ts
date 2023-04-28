@@ -88,13 +88,13 @@ export class BuilderMain {
     }
   }
 
-  // TODO: review
   private async buildComponentLibs(builder: (obj: any) => Promise<string>) {
     const libsComponentNames: Record<string, string[]> = {}
 
     for (const libPath of this.options.componentLibPaths) {
-      const libCfg: LibCfg = await this.getLibCfg(libPath)
-
+      const cfgFileName = FILE_NAMES.cfg + YAML_EXT
+      const libCfgPath = path.join(libPath, cfgFileName)
+      const libCfgObj: LibCfg = await loadYamlFile(libCfgPath)
       const componentsFileNames = (await fs.readdir(libPath))
         .filter((el) => el !== cfgFileName)
 
@@ -105,7 +105,6 @@ export class BuilderMain {
         const obj: any = await loadYamlFile(path.join(libPath, fileName))
         const content = await builder(obj)
 
-        //console.log(1111, path.join(this.options.outputDir, 'src', ROOT_DIRS.componentLibs, libCfgObj.libPrefix))
         await this.output.createFile(
           path.join(ROOT_DIRS.componentLibs, libCfgObj.libPrefix),
           replaceExt(fileName, SVELTE_EXT),
@@ -116,22 +115,6 @@ export class BuilderMain {
       this.libsComponentNames = libsComponentNames
     }
   }
-
-  // private async makeLibComponentName(): Promise<Record<string, string[]>> {
-  //   const result: Record<string, string[]> = {}
-  //
-  //   for (const libPath of this.options.componentLibPaths) {
-  //     const cfgFileName = FILE_NAMES.cfg + YAML_EXT
-  //     const libCfgPath = path.join(libPath, cfgFileName)
-  //     const libCfgObj: LibCfg = await loadYamlFile(libCfgPath)
-  //
-  //     result[libCfgObj.libPrefix] = (await fs.readdir(libPath))
-  //       .filter((el) => el !== cfgFileName)
-  //       .map((el) => pathTrimExt(el))
-  //   }
-  //
-  //   return result
-  // }
 
   private prepareOptions(options: Partial<BuilderOptions>): BuilderOptions {
     if (!options.prjName) throw new Error(`No prjName`)
@@ -149,13 +132,6 @@ export class BuilderMain {
         path.resolve(__dirname, '../stdComponentsLib')
       ]
     }
-  }
-
-  private async getLibCfg(libPath: string): Promise<LibCfg> {
-    const cfgFileName = FILE_NAMES.cfg + YAML_EXT
-    const libCfgPath = path.join(libPath, cfgFileName)
-
-    return await loadYamlFile(libCfgPath)
   }
 
 }
