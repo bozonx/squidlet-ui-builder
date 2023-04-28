@@ -6,6 +6,9 @@ export interface ListStoreData<Item = any> {
   initialized: boolean
   pending: boolean
   updateId: number
+  totalCount: number
+  hasNext: boolean
+  hasPrev: boolean
 }
 
 export interface ListStore<Item = any> extends Readable<Item[]> {
