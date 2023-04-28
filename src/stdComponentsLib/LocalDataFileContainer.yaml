@@ -2,9 +2,9 @@
 resources:
   localDataFile:
     # взять заготовку из /resourcesTmpl
-    tmpl: localFiles
-    config:
-      basePath: 'menu'
+    tmpl: localDataFile
+    #config:
+    #  basePath: 'menu'
 
 # это данные полученные из ресурса
 data:
@@ -14,8 +14,8 @@ data:
     # Можно указать метод, если не указывать то будет тот что указан в ресурсе
     # method: methodName
     #schema: MenuScreens
-    params:
-      filePath: 'screens.yaml'
+    #params:
+    #  filePath: 'screens.yaml'
 
 props:
   path:

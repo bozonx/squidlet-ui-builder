@@ -1,8 +1,7 @@
-type: item
 adapter: LocalFiles
 method: dataFile
-config:
-  basePath: ''
+#config:
+#  basePath: ''
 #params:
 #  path:
 #    type: string
