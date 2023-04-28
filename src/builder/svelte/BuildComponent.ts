@@ -5,7 +5,6 @@ import {ROOT_DIRS, SVELTE_EXT, YAML_EXT} from '../../types/constants.js';
 import {BuilderMain} from '../BuilderMain.js';
 import {SchemaItem} from '../../types/SchemaItem.js';
 import {makeValueCorrespondingType} from '../../system/helpers/common.js';
-import {values} from 'lodash';
 
 
 export class BuildComponent {
@@ -32,10 +31,74 @@ export class BuildComponent {
     if (this.component.onInit) result += this.component.onInit + '\n'
     if (this.component.combined) result += this.makeCombined(this.component.combined) + '\n'
 
-    return this.makeExtImports(this.component.imports) + '\n\n' + result
+    const imports = this.makeAllImports(this.component.imports)
+
+    return imports + '\n\n' + result
   }
 
-  private makeExtImports(imports?: string[]): string {
+
+  private makeProps(props: Record<string, SchemaItem>): string {
+    let result = ''
+
+    for (const propName of Object.keys(props)) {
+      if (typeof props[propName].default === 'undefined') {
+        result += `export let ${propName}\n`
+      }
+      else {
+        result += `export let ${propName} = ${makeValueCorrespondingType(props[propName].type, props[propName].default)}\n`
+      }
+    }
+
+    return result
+  }
+
+  private makeState(state: Record<string, SchemaItem>): string {
+    let result = ''
+
+    for (const propName of Object.keys(state)) {
+      if (typeof state[propName].default === 'undefined') {
+        result += `let ${propName}\n`
+      }
+      else {
+        result += `let ${propName} = ${makeValueCorrespondingType(state[propName].type, state[propName].default)}\n`
+      }
+    }
+
+    return result
+  }
+
+  // TODO: review
+  private async makeResourcesAndDataCode(
+    resources: Record<string, ComponentResource>,
+    data?: Record<string, ComponentData>
+  ): Promise<string> {
+    let result = ''
+    const fullRes = await this.prepareResource(resources)
+
+    result += this.makeResourcesStr(fullRes)
+
+    if (data) {
+      for (const dataName of Object.keys(data)) {
+        const dt = data[dataName]
+        const method = dt.method || fullRes[dt.resource].method
+        const params = (dt.params) ? JSON.stringify(dt.params) : ''
+
+        if (!method) throw new Error(`Can't resolve method of resource "${dt.resource}"`)
+
+        result += `const ${dataName} = resources.${dt.resource}.${method}(${params})\n`
+      }
+    }
+
+    return result
+  }
+
+  private makeCombined(combined: Record<string, string>): string {
+    return Object.keys(combined)
+      .map((name: string) => `$: ${name} = ${combined[name]}`)
+      .join('\n')
+  }
+
+  private makeAllImports(imports?: string[]): string {
     const allImports = [
       ...imports || [],
       ...this.importStrings,
@@ -72,63 +135,38 @@ export class BuildComponent {
     return result
   }
 
-  private makeProps(props: Record<string, SchemaItem>): string {
-    let result = ''
-
-    for (const propName of Object.keys(props)) {
-      if (typeof props[propName].default === 'undefined') {
-        result += `export let ${propName}\n`
-      }
-      else {
-        result += `export let ${propName} = ${makeValueCorrespondingType(props[propName].type, props[propName].default)}\n`
-      }
-    }
-
-    return result
+  private registerImport(importStr: string) {
+    this.importStrings.push(importStr)
   }
 
-  private makeState(state: Record<string, SchemaItem>): string {
-    let result = ''
-
-    for (const propName of Object.keys(state)) {
-      if (typeof state[propName].default === 'undefined') {
-        result += `let ${propName}\n`
-      }
-      else {
-        result += `let ${propName} = ${makeValueCorrespondingType(state[propName].type, state[propName].default)}\n`
-      }
-    }
-
-    return result
-  }
-
-  private async makeResourcesAndDataCode(
-    resources: Record<string, ComponentResource>,
-    data?: Record<string, ComponentData>
-  ): Promise<string> {
-    let result = ''
-
-    const fullRes: Record<string, ComponentResource> = { ...resources }
-    // load resoutce templates
-    for (const resourceName of Object.keys(resources)) {
-      if (!resources[resourceName].tmpl) continue
+  private async prepareResource(
+    rawResources: Record<string, ComponentResource>
+  ): Promise<Record<string, ComponentResource>> {
+    const fullRes: Record<string, ComponentResource> = { ...rawResources }
+    // load resource templates
+    for (const resourceName of Object.keys(rawResources)) {
+      if (!rawResources[resourceName].tmpl) continue
 
       const tmlObj: ComponentResource = await loadPrjYamlFile(
         this.main,
         ROOT_DIRS.resourcesTmpl,
-        resources[resourceName].tmpl + YAML_EXT
+        rawResources[resourceName].tmpl + YAML_EXT
       )
 
-      fullRes[resourceName] = mergeDeepObjects(resources[resourceName], tmlObj)
+      // TODO: удалить параметр tmpl
+
+      fullRes[resourceName] = mergeDeepObjects(rawResources[resourceName], tmlObj)
     }
 
-    result += `const resources = {\n`
+    return fullRes
+  }
+
+  private makeResourcesStr(fullRes: Record<string, ComponentResource>): string {
+    let result = `const resources = {\n`
 
     for (const resourceName of Object.keys(fullRes)) {
       const res = fullRes[resourceName]
-
       const cfg = (res.config) ? JSON.stringify(res.config) : ''
-      //const resClass = RESOURCE_CLASSES[res.type]
 
       this.registerImport(`import {instantiateAdapter} from "@/${ROOT_DIRS.system}"`)
 
@@ -137,29 +175,7 @@ export class BuildComponent {
 
     result += '}\n\n'
 
-    if (data) {
-      for (const dataName of Object.keys(data)) {
-        const dt = data[dataName]
-        const method = dt.method || fullRes[dt.resource].method
-        const params = (dt.params) ? JSON.stringify(dt.params) : ''
-
-        if (!method) throw new Error(`Can't resolve method of resource "${dt.resource}"`)
-
-        result += `const ${dataName} = resources.${dt.resource}.${method}(${params})\n`
-      }
-    }
-
     return result
-  }
-
-  private makeCombined(combined: Record<string, string>): string {
-    return Object.keys(combined)
-      .map((name: string) => `$: ${name} = ${combined[name]}`)
-      .join('\n')
-  }
-
-  private registerImport(importStr: string) {
-    this.importStrings.push(importStr)
   }
 
 }
