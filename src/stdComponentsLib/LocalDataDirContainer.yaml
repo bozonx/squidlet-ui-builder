@@ -4,12 +4,11 @@ props:
     required: true
 
 resources:
-  localDataFile:
+  dirContent:
     # взять заготовку из /resourcesTmpl
     #tmpl: localDataFile
     adapter: LocalFiles
     method: dirContent
-
     #config:
     #  basePath: 'menu'
 
@@ -17,7 +16,7 @@ resources:
 data:
   list:
     # то имя которое указанно в переменной resources
-    resource: localDataFile
+    resource: dirContent
     # Можно указать метод, если не указывать то будет тот что указан в ресурсе
     # method: methodName
     schema: string[]
