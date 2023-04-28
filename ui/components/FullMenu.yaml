@@ -1,27 +1,8 @@
-
-resources:
-  localFiles:
-    # взять заготовку из /resourcesTmpl
-    tmpl: localFiles
-    config:
-      basePath: 'menu'
-
-# это данные полученные из ресурса
-data:
-  menuScreens:
-    # то имя которое указанно в переменной resources
-    resource: localFiles
-    # Можно указать метод, если не указывать то будет тот что указан в ресурсе
-    # method: methodName
-    schema: MenuScreens
-    params:
-      filePath: 'screens.yaml'
-
 tmpl: >
-  <ul>
-    <SLoad pending={!menuScreens.initialized}>
-      <li>
-        <MenuItemScreen item={$menuScreens.data} />
-      </li>
-    </SLoad>
+  <div>
+    <div>
+      <h3>Screens</h3>
+      <MenuScreensList />
+    </div>
+
   </ul>

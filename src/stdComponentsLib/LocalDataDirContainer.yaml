@@ -1,0 +1,12 @@
+props:
+  path:
+    type: string
+    required: true
+  component:
+    type: Object
+    required: true
+
+# TODO: add combined
+
+tmpl: >
+  {$Component}

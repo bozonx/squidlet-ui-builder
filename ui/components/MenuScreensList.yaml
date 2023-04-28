@@ -1,0 +1,24 @@
+state:
+  screensDir:
+    type: string
+    # TODO: use ROOT_PATHS
+    default: 'screens'
+
+tmpl: >
+  <ul>
+    <LocalDataDirContainer
+      path={screensDir}
+      component={($list) => <SLoad pending={!$list.initialized}>
+        {#each fileName of $screensList.data}
+          <li>
+            <LocalDataFileContainer
+              path={`${screensDir}/${fileName}`}
+              component={($item) => <SLoad pending={!$item.initialized}>
+                <MenuItemScreen item={$item} />
+              </SLoad>}
+            />
+          </li>
+        {/each}
+      </SLoad>
+    />
+  </ul>
