@@ -37,6 +37,8 @@ export class BuilderMain {
   isInitialBuild = true
   prjComponentNames: string[] = []
   libsComponentNames: Record<string, string[]> = {}
+  // {libPrefix: '/path/to/file'}
+  libsPaths: Record<string, string> = {}
 
 
   constructor(options: Partial<BuilderOptions>) {
@@ -51,7 +53,7 @@ export class BuilderMain {
     this.prjComponentNames = (await fs.readdir(path.join(this.options.prjDir, ROOT_DIRS.components)))
       .map((el) => pathTrimExt(el))
 
-    //this.libsComponentNames = await this.makeLibComponentName()
+    await this.collectCmpLibComponentNamesAndPaths()
 
     if (await fileExists(this.output.packageJsonPath)) {
       this.isInitialBuild = false
@@ -89,8 +91,22 @@ export class BuilderMain {
   }
 
   private async buildComponentLibs(builder: (obj: any) => Promise<string>) {
-    const libsComponentNames: Record<string, string[]> = {}
+    for (const libName of Object.keys(this.libsComponentNames)) {
+      for (const cmpName of this.libsComponentNames[libName]) {
+        const obj: any = await loadYamlFile(path.join(this.libsPaths[libName], cmpName + YAML_EXT))
+        const content = await builder(obj)
 
+        await this.output.createFile(
+          path.join(ROOT_DIRS.componentLibs, libName),
+          cmpName + SVELTE_EXT,
+          content
+        )
+      }
+
+    }
+  }
+
+  private async collectCmpLibComponentNamesAndPaths() {
     for (const libPath of this.options.componentLibPaths) {
       const cfgFileName = FILE_NAMES.cfg + YAML_EXT
       const libCfgPath = path.join(libPath, cfgFileName)
@@ -98,21 +114,9 @@ export class BuilderMain {
       const componentsFileNames = (await fs.readdir(libPath))
         .filter((el) => el !== cfgFileName)
 
-      libsComponentNames[libCfgObj.libPrefix] = componentsFileNames
+      this.libsComponentNames[libCfgObj.libPrefix] = componentsFileNames
         .map((el) => pathTrimExt(el))
-
-      for (const fileName of componentsFileNames) {
-        const obj: any = await loadYamlFile(path.join(libPath, fileName))
-        const content = await builder(obj)
-
-        await this.output.createFile(
-          path.join(ROOT_DIRS.componentLibs, libCfgObj.libPrefix),
-          replaceExt(fileName, SVELTE_EXT),
-          content
-        )
-      }
-
-      this.libsComponentNames = libsComponentNames
+      this.libsPaths[libCfgObj.libPrefix] = libPath
     }
   }
 

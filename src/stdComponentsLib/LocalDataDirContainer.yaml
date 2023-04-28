@@ -22,6 +22,7 @@ data:
     # Можно указать метод, если не указывать то будет тот что указан в ресурсе
     # method: methodName
     schema: string[]
+    # TODO: почему это используется ??? долже же props.path
     params:
       path: 'screens'
 
