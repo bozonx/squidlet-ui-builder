@@ -16,6 +16,7 @@ const absDirPath = path.resolve(process.cwd(), relSrcDirPath)
 
 
 app.use(async (ctx, next) => {
+  ctx.set('Access-Control-Allow-Origin', '*')
 
   // console.log(
   //   222,
