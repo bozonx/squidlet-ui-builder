@@ -12,7 +12,7 @@ tmpl: >
       <FullMenu />
     </section>
     <main>
-      <Route {currentRoute}  {params} />
+      <Route {currentRoute} {params} />
     </main>
   </div>
 styles: >
