@@ -67,7 +67,6 @@ export class BuildComponent {
     return result
   }
 
-  // TODO: review
   private async makeResourcesAndDataCode(
     resources: Record<string, ComponentResource>,
     data?: Record<string, ComponentData>
@@ -75,18 +74,10 @@ export class BuildComponent {
     let result = ''
     const fullRes = await this.prepareResource(resources)
 
-    result += this.makeResourcesStr(fullRes)
+    result += this.makeResourcesStr(fullRes) + '\n'
 
     if (data) {
-      for (const dataName of Object.keys(data)) {
-        const dt = data[dataName]
-        const method = dt.method || fullRes[dt.resource].method
-        const params = (dt.params) ? JSON.stringify(dt.params) : ''
-
-        if (!method) throw new Error(`Can't resolve method of resource "${dt.resource}"`)
-
-        result += `const ${dataName} = resources.${dt.resource}.${method}(${params})\n`
-      }
+      result += this.makeDataStr(data, fullRes) + '\n'
     }
 
     return result
@@ -173,7 +164,26 @@ export class BuildComponent {
       result += `  localFiles: instantiateAdapter("${res.adapter}", ${cfg}),\n`
     }
 
-    result += '}\n\n'
+    result += '}\n'
+
+    return result
+  }
+
+  private makeDataStr(
+    data: Record<string, ComponentData>,
+    fullRes: Record<string, ComponentResource>
+  ): string {
+    let result = ''
+
+    for (const dataName of Object.keys(data)) {
+      const dt = data[dataName]
+      const method = dt.method || fullRes[dt.resource].method
+      const params = (dt.params) ? JSON.stringify(dt.params) : ''
+
+      if (!method) throw new Error(`Can't resolve method of resource "${dt.resource}"`)
+
+      result += `const ${dataName} = resources.${dt.resource}.${method}(${params})\n`
+    }
 
     return result
   }
