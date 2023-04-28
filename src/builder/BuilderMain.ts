@@ -98,7 +98,7 @@ export class BuilderMain {
       const componentsFileNames = (await fs.readdir(libPath))
         .filter((el) => el !== cfgFileName)
 
-      libsComponentNames[libCfgObj.libPrefix] = (await fs.readdir(libPath))
+      libsComponentNames[libCfgObj.libPrefix] = componentsFileNames
         .map((el) => pathTrimExt(el))
 
       for (const fileName of componentsFileNames) {
