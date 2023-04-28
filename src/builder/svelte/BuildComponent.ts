@@ -120,18 +120,15 @@ export class BuildComponent {
 
     for (const libPrefix of Object.keys(this.main.libsComponentNames)) {
       for (const cmpName of this.main.libsComponentNames[libPrefix]) {
-        //const cmpFullName = libPrefix + cmpName
-
-
-        console.log(111, libPrefix, cmpName)
-
+        // TODO: наверное не нужен префикс
+        const cmpFullName = libPrefix + cmpName
 
         // TODO: плохой способ обнаружения - лучеш через hast tree
-        if (this.component.tmpl.indexOf('<' + cmpName) === -1) continue
+        if (this.component.tmpl.indexOf('<' + cmpFullName) === -1) continue
 
         const cmpPath = `@/${ROOT_DIRS.componentLibs}/${libPrefix}/${cmpName}${SVELTE_EXT}`
 
-        this.registerImport(`import ${cmpName} from '${cmpPath}'`)
+        this.registerImport(`import ${cmpFullName} from '${cmpPath}'`)
       }
     }
   }
