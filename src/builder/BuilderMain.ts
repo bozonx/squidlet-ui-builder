@@ -146,7 +146,7 @@ export class BuilderMain {
       force: Boolean(options.force),
       componentLibPaths: [
         ...options.componentLibPaths || [],
-        path.resolve(__dirname, '../stdComponentsLib')
+        path.resolve(__dirname, '@/stdComponentsLib')
       ]
     }
   }

@@ -30,6 +30,6 @@ tmpl: >
     <SLoad pending={$list.initialized}>
       <slot list={$list}></slot>
     </SLoad>
-  {#else}
+  {:else}
     <slot list={$list}></slot>
   {/if}

@@ -39,7 +39,7 @@ export class BuildComponent {
     const allImports = [
       ...imports || [],
       ...this.importStrings,
-      ...(this.component.tmpl) ? this.makeImportsStr(this.component.tmpl) : [],
+      ...(this.component.tmpl) ? this.makeImportsStrFromTemplate(this.component.tmpl) : [],
     ]
 
     return allImports.join('\n')
@@ -48,13 +48,13 @@ export class BuildComponent {
   /**
    * Make import strings from template
    */
-  private makeImportsStr(tmpl: string): string[] {
+  private makeImportsStrFromTemplate(tmpl: string): string[] {
     let result: string[] = []
 
     for (const cmpName of this.main.prjComponentNames) {
       if (tmpl.indexOf('<' + cmpName) === -1) continue
 
-      result.push(`import ${cmpName} from '../${ROOT_DIRS.components}/${cmpName}${SVELTE_EXT}'`)
+      result.push(`import ${cmpName} from '@/${ROOT_DIRS.components}/${cmpName}${SVELTE_EXT}'`)
     }
 
     for (const libPrefix of Object.keys(this.main.libsComponentNames)) {
@@ -63,7 +63,7 @@ export class BuildComponent {
 
         if (tmpl.indexOf('<' + cmpFullName) === -1) continue
 
-        const cmpPath = `../${ROOT_DIRS.componentLibs}/${libPrefix}/${cmpName}${SVELTE_EXT}`
+        const cmpPath = `@/${ROOT_DIRS.componentLibs}/${libPrefix}/${cmpName}${SVELTE_EXT}`
 
         result.push(`import ${cmpFullName} from '${cmpPath}'`)
       }
@@ -130,7 +130,7 @@ export class BuildComponent {
       const cfg = (res.config) ? JSON.stringify(res.config) : ''
       //const resClass = RESOURCE_CLASSES[res.type]
 
-      this.registerImport(`import {instantiateAdapter} from "../${ROOT_DIRS.system}"`)
+      this.registerImport(`import {instantiateAdapter} from "@/${ROOT_DIRS.system}"`)
 
       result += `  localFiles: instantiateAdapter("${res.adapter}", ${cfg}),\n`
     }

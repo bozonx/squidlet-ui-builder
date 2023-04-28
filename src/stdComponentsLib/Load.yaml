@@ -5,6 +5,6 @@ props:
 tmpl: >
   {#if pending}
     <div>...</div>
-  {#else}
+  {:else}
     <slot></slot>
   {/if}
