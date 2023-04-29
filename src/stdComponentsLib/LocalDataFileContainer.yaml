@@ -2,27 +2,23 @@ props:
   path:
     type: string
     required: true
-#  component:
-#    type: Object
-#    required: true
-#
-#resources:
-#  localDataFile:
-#    # взять заготовку из /resourcesTmpl
-#    tmpl: localDataFile
-#    #config:
-#    #  basePath: 'menu'
-#
-## это данные полученные из ресурса
-#data:
-#  fileItem:
-#    # то имя которое указанно в переменной resources
-#    resource: localDataFile
-#    # Можно указать метод, если не указывать то будет тот что указан в ресурсе
-#    # method: methodName
-#    #schema: MenuScreens
-#    #params:
-#    #  filePath: 'screens.yaml'
-#
+  spinner:
+    type: boolean
+resources:
+  file:
+    adapter: LocalFiles
+    method: dataFile
+data:
+  fileData:
+    resource: file
+    schema: string
+    params:
+      path: 'js: path'
 tmpl: >
-  <slot></slot>
+  {#if spinner}
+    <SLoad pending={!$fileData.initialized}>
+      <slot data={$fileData}></slot>
+    </SLoad>
+  {:else}
+    <slot data={$fileData}></slot>
+  {/if}

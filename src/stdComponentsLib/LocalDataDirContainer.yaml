@@ -27,7 +27,7 @@ data:
 
 tmpl: >
   {#if spinner}
-    <SLoad pending={$list.initialized}>
+    <SLoad pending={!$list.initialized}>
       <slot list={$list}></slot>
     </SLoad>
   {:else}
