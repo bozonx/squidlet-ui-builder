@@ -29,14 +29,23 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
 
     // TODO: use params.filePath
 
+
+
+    const url = `${this.makeBaseUrl()}/load-dir?path=${encodeURIComponent(params.path)}`
+
     axios({
-      url: `${this.makeBaseUrl()}/load-dir?path=${encodeURIComponent(params.path)}`
+      url,
+      method: 'GET',
+      responseType: 'json',
+      responseEncoding: 'utf8',
+      onDownloadProgress: () => {
+
+      },
     })
       .then((response) => {
-        const yamlContent: string = response.data.result
-        const dataObj = yaml.parse(yamlContent)
+        const result: string[] = response.data.result
 
-        dataStore.$$setValue(dataObj)
+        dataStore.$$setValue(result)
       })
       .catch((e) => {
         // TODO: what to do on error???
