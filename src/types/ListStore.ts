@@ -13,5 +13,5 @@ export interface ListStoreData<Item = any> {
 
 export interface ListStore<Item = any> extends Readable<Item[]> {
   $$setPending(pending: boolean): void
-  $$setValue(value: Item[]): void
+  $$setValue(value: Item[], hasNext: boolean, hasPrev: boolean, totalCount: number): void
 }

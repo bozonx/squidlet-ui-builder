@@ -8,12 +8,9 @@ export function makeListStore (initialValue: any[]): ListStore<any> {
     initialized: false,
     pending: true,
     updateId: 0,
-    // TODO: set value
-    totalCount: 0,
-    // TODO: set value
     hasNext: false,
-    // TODO: set value
     hasPrev: false,
+    totalCount: 0,
   }
   let setValue: (data: ListStoreData) => void
 
@@ -24,17 +21,17 @@ export function makeListStore (initialValue: any[]): ListStore<any> {
   return {
     subscribe: store.subscribe,
     $$setPending(pending: boolean) {
-      setValue({
-        ...data,
-        pending,
-      })
+      setValue({ ...data, pending })
     },
-    $$setValue(value: any[]) {
+    $$setValue(value: any[], hasNext: boolean, hasPrev: boolean, totalCount: number) {
       const newDate: ListStoreData = {
         ...data,
         data: value,
         initialized: true,
         updateId: data.updateId + 1,
+        hasNext,
+        hasPrev,
+        totalCount,
       }
 
       if (!data.initialized) newDate.pending = false

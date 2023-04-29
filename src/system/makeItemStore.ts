@@ -18,10 +18,7 @@ export function makeItemStore (initialValue: any): ItemStore {
   return {
     subscribe: store.subscribe,
     $$setPending(pending: boolean) {
-      setValue({
-        ...data,
-        pending,
-      })
+      setValue({ ...data, pending })
     },
     $$setValue(value: any) {
       const newDate: ItemStoreData = {

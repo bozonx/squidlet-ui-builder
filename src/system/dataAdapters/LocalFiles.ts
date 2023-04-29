@@ -23,11 +23,16 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
     const instanceId = this.makeInstanceId()
     // TODO: use destroy
     const destroyFn = async () => this.destroyInstance(instanceId)
+    // TODO: если уже есть этот стор то просто брать его
     const dataStore: ListStore = makeListStore([])
 
     this.registerInstance(instanceId, dataStore)
     this.makeRequest<{result: string[]}>(`load-dir?path=${encodeURIComponent(params.path)}`)
-      .then((response) => dataStore.$$setValue(response.data.result))
+      .then((response) => {
+        const result = response.data.result
+
+        dataStore.$$setValue(result, false, false, result.length)
+      })
       .catch(this.handleRequestError)
 
     // TODO: listen file updates and update value of dataStore
