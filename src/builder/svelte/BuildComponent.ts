@@ -1,6 +1,6 @@
 import {mergeDeepObjects, omitObj} from 'squidlet-lib';
 import {CommonComponent, ComponentData, ComponentResource} from '../../types/CommonComponent.js';
-import {loadPrjYamlFile} from '../buildHelpers.js';
+import {loadPrjYamlFile, makeJsObjectString} from '../buildHelpers.js';
 import {ROOT_DIRS, SVELTE_EXT, YAML_EXT} from '../../types/constants.js';
 import {BuilderMain} from '../BuilderMain.js';
 import {SchemaItem} from '../../types/SchemaItem.js';
@@ -186,7 +186,7 @@ export class BuildComponent {
     for (const dataName of Object.keys(data)) {
       const dt = data[dataName]
       const method = dt.method || fullRes[dt.resource].method
-      const params = (dt.params) ? JSON.stringify(dt.params) : ''
+      const params = (dt.params) ? makeJsObjectString(dt.params) : ''
 
       if (!method) throw new Error(`Can't resolve method of resource "${dt.resource}"`)
 

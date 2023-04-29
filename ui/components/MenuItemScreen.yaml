@@ -3,6 +3,8 @@ props:
     type: string
     required: true
 tmpl: >
-  <div>
-    {name}
-  </div>
+  <a href="/screens/{name}">{name}</a>
+styles: >
+  a {
+    display: block
+  }

@@ -58,3 +58,23 @@ export async function simpleExec(cmd: string, cwd?: string) {
     )
   })
 }
+
+/**
+ * See https://github.com/bonjs/stringify-parse/blob/master/index.js
+ */
+export function makeJsObjectString(jsObj: any): string {
+  const marker = 'js: '
+  const newMarker = '!JS!'
+
+  const json = JSON.stringify(jsObj, function (key, value) {
+    if (typeof value === 'string' && value.indexOf(marker) === 0) {
+      return newMarker + value.split(marker)[1] + newMarker
+    }
+
+    return value
+  })
+
+  const regExp = new RegExp('"' + newMarker + '(.+)' + newMarker + '"', 'g')
+
+  return json.replace(regExp, '$1')
+}
