@@ -5,6 +5,8 @@ tmpl: >
 
   <div>
     <h2>Home</h2>
+
+    <FullMenu />
   </div>
 
 styles: >

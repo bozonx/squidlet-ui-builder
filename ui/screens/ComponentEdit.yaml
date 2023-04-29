@@ -1,0 +1,10 @@
+tmpl: >
+  <svelte:head>
+    <title>Edit component</title>
+  </svelte:head>
+
+  <div>
+    <h2>Edit component</h2>
+  </div>
+
+#styles: >

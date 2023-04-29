@@ -8,7 +8,14 @@ state:
     type: object
 tmpl: >
   <div class="app">
+    <section>
+      <FullMenu />
+    </section>
     <main>
       <Route {currentRoute} {params} />
     </main>
   </div>
+styles: >
+  .app {
+    display: flex;
+  }

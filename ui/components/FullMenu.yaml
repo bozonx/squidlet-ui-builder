@@ -1,6 +1,10 @@
 tmpl: >
   <div>
     <div>
+      <a href="/router">Router</a>
+    </div>
+
+    <div>
       <h3>Screens</h3>
       <MenuScreensList />
     </div>

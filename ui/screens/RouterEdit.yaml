@@ -1,0 +1,10 @@
+tmpl: >
+  <svelte:head>
+    <title>Edit router</title>
+  </svelte:head>
+
+  <div>
+    <h2>Edit router</h2>
+  </div>
+
+#styles: >

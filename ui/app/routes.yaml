@@ -2,3 +2,12 @@ routes:
   - name: '/'
     layout: MainLayout
     component: Home
+  - name: '/screen'
+    layout: EditLayout
+    component: ScreenEdit
+  - name: '/component'
+    layout: EditLayout
+    component: ComponentEdit
+  - name: '/router'
+    layout: EditLayout
+    component: RouterEdit
