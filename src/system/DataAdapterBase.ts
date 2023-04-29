@@ -1,4 +1,3 @@
-import {Readable} from 'svelte/store';
 import {ItemStore} from '../types/ItemStore.js';
 import {ListStore} from '../types/ListStore.js';
 
@@ -13,11 +12,6 @@ export class DataAdapterBase<Config = Record<string, any>> {
   }
 
 
-  protected makeInstanceId(): string {
-    // TODO: make it
-    return '0'
-  }
-
   /**
    * Register new store in there isn't any registered.
    * If it is already registered then just return it
@@ -28,9 +22,9 @@ export class DataAdapterBase<Config = Record<string, any>> {
     instatiate: () => T,
     onDestoroy: () => void
   ): T {
-    const instanceId = this.makeInstanceId()
+    if (this.stores[storeId]) return this.stores[storeId] as T
+
     // TODO: use destroy
-    const destroyFn = async () => this.destroyInstance(instanceId)
 
     this.registerInstance(instanceId, dataStore)
 
@@ -38,10 +32,6 @@ export class DataAdapterBase<Config = Record<string, any>> {
   }
 
   protected registerInstance(instanceId: string, dataStore: ItemStore | ListStore) {
-
-  }
-
-  protected destroyInstance(instanceId: string) {
 
   }
 

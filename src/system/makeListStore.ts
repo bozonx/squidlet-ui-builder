@@ -38,5 +38,8 @@ export function makeListStore (initialValue: any[]): ListStore<any> {
 
       setValue(newDate)
     },
+    destroy() {
+      // TODO: add
+    }
   }
 }

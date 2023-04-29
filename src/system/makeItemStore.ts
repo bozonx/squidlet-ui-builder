@@ -32,5 +32,8 @@ export function makeItemStore (initialValue: any): ItemStore {
 
       setValue(newDate)
     },
+    destroy() {
+      // TODO: add
+    }
   }
 }
