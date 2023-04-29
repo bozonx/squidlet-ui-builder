@@ -25,7 +25,8 @@ export class DataAdapterBase<Config = Record<string, any>> {
    */
   protected registerOrGetStore<T = ItemStore | ListStore>(
     storeId: string,
-    instatiate: () => T
+    instatiate: () => T,
+    onDestoroy: () => void
   ): T {
     const instanceId = this.makeInstanceId()
     // TODO: use destroy

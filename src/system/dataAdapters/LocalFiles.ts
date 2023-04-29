@@ -23,7 +23,13 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
     const storeId = this.makeFullFilePath(params.path)
     const store = this.registerOrGetStore<ListStore>(
       storeId,
-      () => makeListStore([])
+      () => {
+        // TODO: listen file updates and update value of dataStore
+        return makeListStore([])
+      },
+      () => {
+        // TODO: destroy listener
+      }
     )
 
     this.makeRequest<{result: string[]}>(`load-dir?path=${encodeURIComponent(params.path)}`)
@@ -34,8 +40,6 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
       })
       .catch(this.handleRequestError)
 
-    // TODO: listen file updates and update value of dataStore
-
     return store
   }
 
@@ -43,7 +47,13 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
     const storeId = this.makeFullFilePath(params.path)
     const store = this.registerOrGetStore<ItemStore>(
       storeId,
-      () => makeItemStore(null)
+      () => {
+        // TODO: listen file updates and update value of dataStore
+        return makeItemStore(null)
+      },
+      () => {
+        // TODO: destroy listener
+      }
     )
 
     this.makeRequest<{result: string}>(`load-file?path=${encodeURIComponent(params.path)}`)
