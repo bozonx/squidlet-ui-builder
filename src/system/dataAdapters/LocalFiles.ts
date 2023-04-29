@@ -1,5 +1,5 @@
 import yaml from 'yaml'
-import axios from 'axios';
+import axios, {AxiosProgressEvent} from 'axios';
 import {DataAdapterBase} from '../DataAdapterBase.js';
 import {makeItemStore} from '../makeItemStore.js';
 import {ItemStore} from '../../types/ItemStore.js';
@@ -26,35 +26,10 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
     const dataStore: ListStore = makeListStore([])
 
     this.registerInstance(instanceId, dataStore)
+    this.makeRequest<{result: string[]}>(`load-dir?path=${encodeURIComponent(params.path)}`)
+      .then((data) => dataStore.$$setValue(data.result))
+      .catch(this.handleRequestError)
 
-    // TODO: use params.filePath
-
-
-
-    const url = `${this.makeBaseUrl()}/load-dir?path=${encodeURIComponent(params.path)}`
-
-    axios({
-      url,
-      method: 'GET',
-      responseType: 'json',
-      responseEncoding: 'utf8',
-      onDownloadProgress: () => {
-
-      },
-    })
-      .then((response) => {
-        const result: string[] = response.data.result
-
-        dataStore.$$setValue(result)
-      })
-      .catch((e) => {
-        // TODO: what to do on error???
-
-        console.error(e)
-      })
-
-    // TODO: load file
-    // TODO: put file data to dataStore
     // TODO: listen file updates and update value of dataStore
 
     return dataStore
@@ -67,26 +42,14 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
     const dataStore: ItemStore = makeItemStore(null)
 
     this.registerInstance(instanceId, dataStore)
-
-    // TODO: use params.filePath
-
-    axios({
-      url: `${this.makeBaseUrl()}/load-file?path=${encodeURIComponent(params.path)}`
-    })
-      .then((response) => {
-        const yamlContent: string = response.data.result
-        const dataObj = yaml.parse(yamlContent)
+    this.makeRequest<{result: string}>(`load-file?path=${encodeURIComponent(params.path)}`)
+      .then((data) => {
+        const dataObj = yaml.parse(data.result)
 
         dataStore.$$setValue(dataObj)
       })
-      .catch((e) => {
-        // TODO: what to do on error???
+      .catch(this.handleRequestError)
 
-        console.error(e)
-      })
-
-    // TODO: load file
-    // TODO: put file data to dataStore
     // TODO: listen file updates and update value of dataStore
 
     return dataStore
@@ -104,6 +67,26 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
   private makeBaseUrl(): string {
     // TODO: взять из параметров
     return `http://localhost:3099`
+  }
+
+  private async makeRequest<T = any>(urlPath: string): Promise<T> {
+    const url = `${this.makeBaseUrl()}/${urlPath}`
+
+    return axios({
+      url,
+      method: 'GET',
+      responseType: 'json',
+      responseEncoding: 'utf8',
+      onDownloadProgress: (progressEvent: AxiosProgressEvent) => {
+        // TODO: add
+      },
+    })
+  }
+
+  private handleRequestError = (e: Error) => {
+    console.log(e)
+
+    // TODO: handle error
   }
 
 }
