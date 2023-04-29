@@ -33,10 +33,17 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
     super(config)
   }
 
+  // TODO: запустить инит
+  // TODO: при этом экземпляр Local files должен быть один
+  // TODO: слушать обновления с сервера
+  async init() {
+
+  }
 
   dirContent(params: {path: string}): ListStore {
     const storeId = this.makeFullFilePath(params.path)
     let updateHandlerIndex: number
+    let listStore: ListStore
     const trueStore = this.registerOrGetStore(
       storeId,
       () => {
@@ -49,13 +56,12 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
             }
           }
         )
-        // TODO: listen file updates and update value of dataStore
       },
       () => {
         this.updateEvent.removeListener(updateHandlerIndex)
       }
     )
-    const listStore = makeListStore(trueStore, [])
+    listStore = makeListStore(trueStore, [])
 
     this.makeRequest<{result: string[]}>(`load-dir?path=${encodeURIComponent(params.path)}`)
       .then((response) => {
@@ -71,6 +77,7 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
   dataFile(params: {path: string}): ItemStore {
     const storeId = this.makeFullFilePath(params.path)
     let updateHandlerIndex: number
+    let itemStore: ItemStore
     const trueStore = this.registerOrGetStore(
       storeId,
       () => {
@@ -94,7 +101,7 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
         this.updateEvent.removeListener(updateHandlerIndex)
       }
     )
-    const itemStore = makeItemStore(trueStore, null)
+    itemStore = makeItemStore(trueStore, null)
 
     this.makeRequest<{result: string}>(`load-file?path=${encodeURIComponent(params.path)}`)
       .then((response) => {
