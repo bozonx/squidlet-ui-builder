@@ -1,5 +1,5 @@
 import yaml from 'yaml'
-import axios, {AxiosProgressEvent} from 'axios';
+import axios, {AxiosProgressEvent, AxiosResponse} from 'axios';
 import {DataAdapterBase} from '../DataAdapterBase.js';
 import {makeItemStore} from '../makeItemStore.js';
 import {ItemStore} from '../../types/ItemStore.js';
@@ -27,7 +27,7 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
 
     this.registerInstance(instanceId, dataStore)
     this.makeRequest<{result: string[]}>(`load-dir?path=${encodeURIComponent(params.path)}`)
-      .then((data) => dataStore.$$setValue(data.result))
+      .then((response) => dataStore.$$setValue(response.data.result))
       .catch(this.handleRequestError)
 
     // TODO: listen file updates and update value of dataStore
@@ -43,8 +43,8 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
 
     this.registerInstance(instanceId, dataStore)
     this.makeRequest<{result: string}>(`load-file?path=${encodeURIComponent(params.path)}`)
-      .then((data) => {
-        const dataObj = yaml.parse(data.result)
+      .then((response) => {
+        const dataObj = yaml.parse(response.data.result)
 
         dataStore.$$setValue(dataObj)
       })
@@ -69,7 +69,7 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
     return `http://localhost:3099`
   }
 
-  private async makeRequest<T = any>(urlPath: string): Promise<T> {
+  private async makeRequest<T = any>(urlPath: string): Promise<AxiosResponse<T>> {
     const url = `${this.makeBaseUrl()}/${urlPath}`
 
     return axios({

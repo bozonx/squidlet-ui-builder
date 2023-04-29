@@ -3,11 +3,14 @@ imports:
 
 tmpl: >
   <SLocalDataDirContainer let:list={list} path={ROOT_PATHS.screens} spinner={true}>
-    <ul>
-      {#each list.data as fileName}
-        <li>
-          <MenuItemScreen name={fileName} />
-        </li>
-      {/each}
-    </ul>
+    {#if list.initialized}
+      <ul>
+        {#each list.data as fileName}
+          <li>
+            <MenuItemScreen name={fileName} />
+          </li>
+        {/each}
+      </ul>
+    {/if}
   </SLocalDataDirContainer>
+

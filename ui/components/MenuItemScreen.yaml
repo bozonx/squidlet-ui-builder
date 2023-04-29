@@ -3,7 +3,7 @@ props:
     type: string
     required: true
 tmpl: >
-  <a href="/screens/{name}">{name}</a>
+  <a href="/screen?file={name}">{name}</a>
 styles: >
   a {
     display: block
