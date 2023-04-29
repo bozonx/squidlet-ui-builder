@@ -1,9 +1,9 @@
-import {readable} from 'svelte/store';
 import {ListStore, ListStoreData} from '../types/ListStore.js';
+import {TrueStore} from './makeTrueStore.js';
 
 
-export function makeListStore (initialValue: any[]): ListStore<any> {
-  let data: ListStoreData = {
+export function makeListStore (trueStore: TrueStore, initialValue: any[]): ListStore<any> {
+  const destroyInstance = trueStore.init({
     data: initialValue,
     initialized: false,
     pending: true,
@@ -11,35 +11,30 @@ export function makeListStore (initialValue: any[]): ListStore<any> {
     hasNext: false,
     hasPrev: false,
     totalCount: 0,
-  }
-  let setValue: (data: ListStoreData) => void
-
-  const store = readable<any>(data, (set) => {
-    setValue = set
-  })
+  } as ListStoreData)
 
   return {
-    subscribe: store.subscribe,
+    subscribe: trueStore.subscribe,
     $$setPending(pending: boolean) {
-      setValue({ ...data, pending })
+      trueStore.setData({ ...trueStore.getData(), pending })
     },
     $$setValue(value: any[], hasNext: boolean, hasPrev: boolean, totalCount: number) {
-      const newDate: ListStoreData = {
-        ...data,
+      const newData: ListStoreData = {
+        ...trueStore.getData(),
         data: value,
         initialized: true,
-        updateId: data.updateId + 1,
+        updateId: trueStore.getData().updateId + 1,
         hasNext,
         hasPrev,
         totalCount,
       }
 
-      if (!data.initialized) newDate.pending = false
+      if (!trueStore.getData().initialized) newData.pending = false
 
-      setValue(newDate)
+      trueStore.setData(newData)
     },
     destroy() {
-      // TODO: add
+      destroyInstance()
     }
   }
 }

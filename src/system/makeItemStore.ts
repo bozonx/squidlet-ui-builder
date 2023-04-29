@@ -1,39 +1,34 @@
-import {readable} from 'svelte/store';
 import {ItemStore, ItemStoreData} from '../types/ItemStore.js';
+import {TrueStore} from './makeTrueStore.js';
 
 
-export function makeItemStore (initialValue: any): ItemStore {
-  let data: ItemStoreData = {
+export function makeItemStore (trueStore: TrueStore, initialValue: any): ItemStore {
+  const destroyInstance = trueStore.init({
     data: initialValue,
     initialized: false,
     pending: true,
     updateId: 0,
-  }
-  let setValue: (data: ItemStoreData) => void
-
-  const store = readable(data, (set) => {
-    setValue = set
-  })
+  } as ItemStoreData)
 
   return {
-    subscribe: store.subscribe,
+    subscribe: trueStore.subscribe,
     $$setPending(pending: boolean) {
-      setValue({ ...data, pending })
+      trueStore.setData({ ...trueStore.getData(), pending })
     },
     $$setValue(value: any) {
-      const newDate: ItemStoreData = {
-        ...data,
+      const newData: ItemStoreData = {
+        ...trueStore.getData(),
         data: value,
         initialized: true,
-        updateId: data.updateId + 1,
+        updateId: trueStore.getData().updateId + 1,
       }
 
-      if (!data.initialized) newDate.pending = false
+      if (!trueStore.getData().initialized) newData.pending = false
 
-      setValue(newDate)
+      trueStore.setData(newData)
     },
     destroy() {
-      // TODO: add
+      destroyInstance()
     }
   }
 }

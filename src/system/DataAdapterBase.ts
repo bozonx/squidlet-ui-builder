@@ -1,10 +1,11 @@
 import {ItemStore} from '../types/ItemStore.js';
 import {ListStore} from '../types/ListStore.js';
+import {TrueStore} from './makeTrueStore.js';
 
 
 export class DataAdapterBase<Config = Record<string, any>> {
   protected config: Config
-  private stores: Record<string, (ListStore | ItemStore)> = {}
+  private stores: Record<string, TrueStore> = {}
 
 
   constructor(config: Config) {
@@ -17,9 +18,9 @@ export class DataAdapterBase<Config = Record<string, any>> {
    * If it is already registered then just return it
    * @param storeId - has to be some unique id like file path
    */
-  protected registerOrGetStore<T = ItemStore | ListStore>(
+  protected registerOrGetStore(
     storeId: string,
-    instatiate: () => T,
+    instatiate: () => TrueStore,
     onDestoroy: () => void
   ): T {
     if (this.stores[storeId]) return this.stores[storeId] as T
