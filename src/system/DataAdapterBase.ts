@@ -17,12 +17,14 @@ export class DataAdapterBase<Config = Record<string, any>> {
    * Register new store in there isn't any registered.
    * If it is already registered then just return it
    * @param storeId - has to be some unique id like file path
+   * @param onInit - start listening for updates here
+   * @param onDestroy - stop listening of updates
    */
   protected registerOrGetStore(
     storeId: string,
-    instatiate: () => TrueStore,
-    onDestoroy: () => void
-  ): T {
+    onInit: () => void,
+    onDestroy: () => void
+  ): TrueStore {
     if (this.stores[storeId]) return this.stores[storeId] as T
 
     // TODO: use destroy
