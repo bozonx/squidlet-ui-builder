@@ -1,4 +1,4 @@
-import {Readable, readable} from 'svelte/store';
+import {Readable, readable} from 'svelte/store'
 
 
 export interface TrueStore extends Readable<any> {
@@ -12,8 +12,9 @@ export interface TrueStore extends Readable<any> {
 
 export function makeTrueStore(): TrueStore {
   let lastInstanceId: number = -1
-  const instances: Record<string, number> = {}
+  let instances: Record<string, number> = {}
   let initialized = false
+  let instanceCountChangeCb: ((instanceCount: number) => void) | undefined
   // TODO: а можно ли использовать undefined???
   let data: any = null
   let setValue: (data: any) => void
@@ -30,13 +31,11 @@ export function makeTrueStore(): TrueStore {
       const instanceId = lastInstanceId
 
       instances[instanceId] = instanceId
-
+      // it has to be called on instance destroy
       const destroyInstance = () => {
         delete instances[instanceId]
 
-        if (Object.keys(instances).length === 0) {
-          // TODO: поднять свой дестрой
-        }
+        if (instanceCountChangeCb) instanceCountChangeCb(Object.keys(instances).length)
       }
 
       if (initialized) return destroyInstance
@@ -57,10 +56,16 @@ export function makeTrueStore(): TrueStore {
       setValue(newData)
     },
     $$destroyStore: () => {
-      // TODO: add destroy full store
+      lastInstanceId = -1
+      instances = {}
+      initialized = false
+      instanceCountChangeCb = undefined
+      data = null
+
+      setValue(null)
     },
     $$onStoreInstancesChange: (cb: (instanceCount: number) => void) => {
-      // TODO: call each time on add or remove instance
+      instanceCountChangeCb = cb
     }
   }
 }
