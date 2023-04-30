@@ -11,6 +11,8 @@ export interface TrueStore extends Readable<any> {
 
 
 export function makeTrueStore(): TrueStore {
+  let lastInstanceId: number = -1
+  const instances: Record<string, number> = {}
   let initialized = false
   // TODO: а можно ли использовать undefined???
   let data: any = null
@@ -23,14 +25,26 @@ export function makeTrueStore(): TrueStore {
   return {
     subscribe: store.subscribe,
     init: (initialData: any) => {
+      lastInstanceId++
+
+      const instanceId = lastInstanceId
+
+      instances[instanceId] = instanceId
+
       const destroyInstance = () => {
-        // TODO: add
+        delete instances[instanceId]
+
+        if (Object.keys(instances).length === 0) {
+          // TODO: поднять свой дестрой
+        }
       }
 
       if (initialized) return destroyInstance
 
-      data = initialData
       initialized = true
+      data = initialData
+
+      setValue(data)
 
       return destroyInstance
     },
@@ -38,6 +52,8 @@ export function makeTrueStore(): TrueStore {
       return data
     },
     setData: (newData: any) => {
+      data = newData
+
       setValue(newData)
     },
     $$destroyStore: () => {
