@@ -9,7 +9,13 @@ import {makeListStore} from '../makeListStore.js';
 
 
 interface LocalFilesConfig {
-  basePath: string
+  basePath?: string
+  // like http://localhost:3099
+  baseUrl: string
+}
+
+const DEFAULT_CONFIG = {
+  baseUrl: `http://localhost:3099`
 }
 
 enum UpdateEvent {
@@ -27,19 +33,22 @@ type UpdateHandler = (action: UpdateEvent, pathTo: string) => void
  * This is singleton adapter which is only one for runtime
  */
 class LocalFilesAdapterSingleton extends DataAdapterBase<UpdateHandler> {
-  init() {
-    super.init()
+  get config(): LocalFilesConfig {
+    return this.cfg as LocalFilesConfig
+  }
+
+
+  init(config: Partial<LocalFilesConfig>) {
+    super.init({ ...DEFAULT_CONFIG, config })
 
     if (this.isInitialized) return
 
     // TODO: слушать обновления с сервера
-    // TODO: см конфиг для получения имени хоста и порта
-
   }
 
 
   async makeRequest<T = any>(urlPath: string): Promise<AxiosResponse<T>> {
-    const url = `${this.makeBaseUrl()}/${urlPath}`
+    const url = `${this.config.baseUrl}/${urlPath}`
 
     return axios({
       url,
@@ -52,9 +61,12 @@ class LocalFilesAdapterSingleton extends DataAdapterBase<UpdateHandler> {
     })
   }
 
-  makeBaseUrl(): string {
-    // TODO: взять из параметров
-    return `http://localhost:3099`
+  makeFullFilePath(paramPath: string): string {
+    if (this.config?.basePath) {
+      return pathJoin(this.config.basePath, paramPath)
+    }
+
+    return paramPath
   }
 
 }
@@ -67,16 +79,15 @@ const adapter = new LocalFilesAdapterSingleton()
  * This is per component instance
  */
 export class LocalFiles {
-  private config: LocalFilesConfig
 
 
   constructor(config: LocalFilesConfig) {
-    this.config = config
+    adapter.init(config)
   }
 
 
   dirContent(params: {path: string}): ListStore {
-    const fullFilePath = this.makeFullFilePath(params.path)
+    const fullFilePath = adapter.makeFullFilePath(params.path)
     let updateHandlerIndex: number = -1
     let listStore: ListStore
     const trueStore = adapter.registerOrGetStore(
@@ -120,7 +131,7 @@ export class LocalFiles {
   }
 
   dataFile(params: {path: string}): ItemStore {
-    const fullFilePath = this.makeFullFilePath(params.path)
+    const fullFilePath = adapter.makeFullFilePath(params.path)
     let updateHandlerIndex: number = -1
     let itemStore: ItemStore
     const trueStore = this.registerOrGetStore(
@@ -169,14 +180,6 @@ export class LocalFiles {
     console.log(e)
 
     // TODO: handle error
-  }
-
-  private makeFullFilePath(paramPath: string): string {
-    if (this.config?.basePath) {
-      return pathJoin(this.config.basePath, paramPath)
-    }
-
-    return paramPath
   }
 
 }

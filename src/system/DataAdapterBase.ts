@@ -1,10 +1,11 @@
 import {makeTrueStore, TrueStore} from './makeTrueStore.js';
-import {IndexedEvents} from 'squidlet-lib'
+import {AnyHandler, IndexedEvents} from 'squidlet-lib'
 
 
-export class DataAdapterBase<UpdateHandler> {
+export class DataAdapterBase<UpdateHandler extends AnyHandler> {
   updateEvent = new IndexedEvents<UpdateHandler>()
 
+  protected cfg?: Record<string, any>
   private initialized: boolean = false
   private stores: Record<string, TrueStore> = {}
 
@@ -12,9 +13,14 @@ export class DataAdapterBase<UpdateHandler> {
     return this.initialized
   }
 
+  get config(): Record<string, any> | undefined {
+    return this.cfg
+  }
 
-  init() {
+
+  init(cfg?: Record<string, any>) {
     this.initialized = true
+    this.cfg = cfg
   }
 
 
