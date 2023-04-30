@@ -18,7 +18,6 @@ export function makeItemStore (trueStore: TrueStore, initialValue: any = null): 
 
   return {
     subscribe: trueStore.subscribe,
-    // TODO: а это вообще нужно здесть ? ведь можно делать через true store
     // this is called only by adapter
     $$setPending(pending: boolean) {
       trueStore.setData({ ...trueStore.getData(), pending })

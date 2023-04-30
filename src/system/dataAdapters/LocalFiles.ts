@@ -6,6 +6,7 @@ import {makeItemStore} from '../makeItemStore.js';
 import {ItemStore} from '../../types/ItemStore.js';
 import {ListStore} from '../../types/ListStore.js';
 import {makeListStore} from '../makeListStore.js';
+import {TrueStore} from '../makeTrueStore.js';
 
 
 interface LocalFilesConfig {
@@ -69,6 +70,50 @@ class LocalFilesAdapterSingleton extends DataAdapterBase<UpdateHandler> {
     return paramPath
   }
 
+  makeTrueStore(
+    urlPath: string,
+    fullFilePath: string,
+    onSuccessRequest: (data: {result: any}) => void,
+    onUpdate: (action: UpdateEvent) => void
+  ): TrueStore {
+    let updateHandlerIndex: number = -1
+
+    const onStoreInit = () => {
+      const startListener = () => {
+        updateHandlerIndex = adapter.updateEvent.addListener(
+          (action: UpdateEvent, pathTo: string) => {
+            // TODO: проверить что правильные пути относительно корня
+            if (fullFilePath !== pathTo) return
+
+            onUpdate(action)
+          }
+        )
+      }
+      // make request at first time
+      adapter.makeRequest<{result: string[]}>(urlPath)
+        .then((response) => {
+          onSuccessRequest(response.data)
+        })
+        .catch(this.handleRequestError)
+        .finally(startListener)
+    }
+
+    return adapter.registerOrGetStore(
+      fullFilePath,
+      onStoreInit,
+      () => {
+        adapter.updateEvent.removeListener(updateHandlerIndex)
+      }
+    )
+  }
+
+
+  private handleRequestError = (e: Error) => {
+    console.log(e)
+
+    // TODO: handle error
+  }
+
 }
 
 
@@ -80,51 +125,31 @@ const adapter = new LocalFilesAdapterSingleton()
  */
 export class LocalFiles {
 
-
   constructor(config: LocalFilesConfig) {
     adapter.init(config)
   }
 
   dirContent(params: {path: string}): ListStore {
     const fullFilePath = adapter.makeFullFilePath(params.path)
-    let updateHandlerIndex: number = -1
     let listStore: ListStore
 
-    const onStoreInit = () => {
-      const startListener = () => {
-        updateHandlerIndex = adapter.updateEvent.addListener(
-          (action: UpdateEvent, pathTo: string) => {
-            // TODO: проверить что правильные пути относительно корня
-            if (fullFilePath !== pathTo) return
-
-            if (action === UpdateEvent.dirUpdated) {
-              // TODO: сделать запрос обновления
-              //listStore.$$setValue(newData, false, false, newData.length)
-            }
-            else if (action === UpdateEvent.dirRemoved) {
-              listStore.$$setRemoved(true)
-            }
-          }
-        )
-      }
-      // make request at first time
-      adapter.makeRequest<{result: string[]}>(`load-dir?path=${encodeURIComponent(params.path)}`)
-        .then((response) => {
-          const result = response.data.result
-
-          listStore.$$setValue(result, false, false, result.length)
-        })
-        .catch(this.handleRequestError)
-        .finally(startListener)
-    }
-
-    const trueStore = adapter.registerOrGetStore(
+    const trueStore = adapter.makeTrueStore(
+      `load-dir?path=${encodeURIComponent(params.path)}`,
       fullFilePath,
-      onStoreInit,
-      () => {
-        adapter.updateEvent.removeListener(updateHandlerIndex)
+      (data: {result: string[]}) => {
+        listStore.$$setValue(data.result, false, false, data.result..length)
+      },
+      (action: UpdateEvent) => {
+        if (action === UpdateEvent.dirUpdated) {
+          // TODO: сделать запрос обновления
+          //listStore.$$setValue(newData, false, false, newData.length)
+        }
+        else if (action === UpdateEvent.dirRemoved) {
+          listStore.$$setRemoved(true)
+        }
       }
     )
+
     listStore = makeListStore(trueStore, [])
 
     return listStore
@@ -175,11 +200,5 @@ export class LocalFiles {
     return itemStore
   }
 
-
-  private handleRequestError = (e: Error) => {
-    console.log(e)
-
-    // TODO: handle error
-  }
 
 }
