@@ -85,6 +85,10 @@ export class LocalFiles {
     adapter.init(config)
   }
 
+  onInitStore() {
+
+  }
+
 
   dirContent(params: {path: string}): ListStore {
     const fullFilePath = adapter.makeFullFilePath(params.path)
@@ -114,12 +118,9 @@ export class LocalFiles {
             const result = response.data.result
 
             listStore.$$setValue(result, false, false, result.length)
-            startListener()
           })
-          .catch((e) => {
-            this.handleRequestError(e)
-            startListener()
-          })
+          .catch(this.handleRequestError)
+          .finally(startListener)
       },
       () => {
         adapter.updateEvent.removeListener(updateHandlerIndex)
@@ -152,19 +153,15 @@ export class LocalFiles {
             }
           )
         }
-
         // make request at first time
         adapter.makeRequest<{result: string}>(`load-file?path=${encodeURIComponent(params.path)}`)
           .then((response) => {
             const dataObj = yaml.parse(response.data.result)
 
             itemStore.$$setValue(dataObj)
-            startListener()
           })
-          .catch((e) => {
-            this.handleRequestError(e)
-            startListener()
-          })
+          .catch(this.handleRequestError)
+          .finally(startListener)
       },
       () => {
         adapter.updateEvent.removeListener(updateHandlerIndex)
