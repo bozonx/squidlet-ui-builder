@@ -38,11 +38,13 @@ export class DataAdapterBase<UpdateHandler extends AnyHandler> {
   ): TrueStore {
     // if store exists just return it
     if (this.stores[storeId]) return this.stores[storeId]
-    // else means a new store
+    // else means a new store. Code below is run only once
     this.stores[storeId] = makeTrueStore()
 
-    this.stores[storeId].$$onStoreInstancesChange(() => {
-      // TODO: если не осталось инстансов то запустить дестрой с задержкой
+    this.stores[storeId].$$onStoreInstancesChange((instanceCount: number) => {
+      if (instanceCount !== 0) return
+      // TODO: добавить задержку - не удалять в течении некоторого времени
+      //       если за это время появился новый инстанс - то отменить удаление
       onDestroy()
       this.stores[storeId].$$destroyStore()
     })
