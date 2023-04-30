@@ -40,9 +40,9 @@ class LocalFilesAdapterSingleton extends DataAdapterBase<UpdateHandler> {
 
 
   init(config: Partial<LocalFilesConfig>) {
-    super.init({ ...DEFAULT_CONFIG, config })
-
     if (this.isInitialized) return
+
+    super.init({ ...DEFAULT_CONFIG, config })
 
     // TODO: слушать обновления с сервера
   }
@@ -90,10 +90,8 @@ class LocalFilesAdapterSingleton extends DataAdapterBase<UpdateHandler> {
         )
       }
       // make request at first time
-      adapter.makeRequest<{result: string[]}>(urlPath)
-        .then((response) => {
-          onSuccessRequest(response.data)
-        })
+      adapter.makeRequest(urlPath)
+        .then((response) => onSuccessRequest(response.data))
         .catch(this.handleRequestError)
         .finally(startListener)
     }
@@ -137,7 +135,7 @@ export class LocalFiles {
       `load-dir?path=${encodeURIComponent(params.path)}`,
       fullFilePath,
       (data: {result: string[]}) => {
-        listStore.$$setValue(data.result, false, false, data.result..length)
+        listStore.$$setValue(data.result, false, false, data.result.length)
       },
       (action: UpdateEvent) => {
         if (action === UpdateEvent.dirUpdated) {
@@ -150,55 +148,37 @@ export class LocalFiles {
       }
     )
 
-    listStore = makeListStore(trueStore, [])
+    listStore = makeListStore(trueStore)
 
     return listStore
   }
 
   dataFile(params: {path: string}): ItemStore {
     const fullFilePath = adapter.makeFullFilePath(params.path)
-    let updateHandlerIndex: number = -1
     let itemStore: ItemStore
 
-    const onStoreInit = () => {
-      const startListener = () => {
-        updateHandlerIndex = adapter.updateEvent.addListener(
-          (action: UpdateEvent, pathTo: string) => {
-            // TODO: проверить что правильные пути относительно корня
-            if (fullFilePath !== pathTo) return
-
-            if (action === UpdateEvent.fileUpdated) {
-              // TODO: сделать запрос обновления
-              //itemStore.$$setValue(newData)
-            }
-            else if (action === UpdateEvent.fileRemoved) {
-              itemStore.$$setRemoved(true)
-            }
-          }
-        )
-      }
-      // make request at first time
-      adapter.makeRequest<{result: string}>(`load-file?path=${encodeURIComponent(params.path)}`)
-        .then((response) => {
-          const dataObj = yaml.parse(response.data.result)
-
-          itemStore.$$setValue(dataObj)
-        })
-        .catch(this.handleRequestError)
-        .finally(startListener)
-    }
-
-    const trueStore = adapter.registerOrGetStore(
+    const trueStore = adapter.makeTrueStore(
+      `load-file?path=${encodeURIComponent(params.path)}`,
       fullFilePath,
-      onStoreInit,
-      () => {
-        adapter.updateEvent.removeListener(updateHandlerIndex)
+      (data: {result: string}) => {
+        const dataObj = yaml.parse(data.result)
+
+        itemStore.$$setValue(dataObj)
+      },
+      (action: UpdateEvent) => {
+        if (action === UpdateEvent.fileUpdated) {
+          // TODO: сделать запрос обновления
+          //itemStore.$$setValue(newData)
+        }
+        else if (action === UpdateEvent.fileRemoved) {
+          itemStore.$$setRemoved(true)
+        }
       }
     )
-    itemStore = makeItemStore(trueStore, null)
+
+    itemStore = makeItemStore(trueStore)
 
     return itemStore
   }
-
 
 }
