@@ -1,24 +1,31 @@
 import {makeTrueStore, TrueStore} from './makeTrueStore.js';
+import {IndexedEvents} from 'squidlet-lib'
 
 
-export class DataAdapterBase<Config = Record<string, any>> {
-  protected config: Config
+export class DataAdapterBase<UpdateHandler> {
+  updateEvent = new IndexedEvents<UpdateHandler>()
+
+  private initialized: boolean = false
   private stores: Record<string, TrueStore> = {}
 
+  get isInitialized(): boolean {
+    return this.initialized
+  }
 
-  constructor(config: Config) {
-    this.config = config
+
+  init() {
+    this.initialized = true
   }
 
 
   /**
-   * Register new store in there isn't any registered.
+   * Register new store if there isn't any registered.
    * If it is already registered then just return it
    * @param storeId - has to be some unique id like file path
    * @param onInit - start listening for updates here
    * @param onDestroy - stop listening of updates
    */
-  protected registerOrGetStore(
+  registerOrGetStore(
     storeId: string,
     onInit: () => void,
     onDestroy: () => void

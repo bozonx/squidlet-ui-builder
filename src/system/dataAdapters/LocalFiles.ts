@@ -1,6 +1,6 @@
 import yaml from 'yaml'
 import axios, {AxiosProgressEvent, AxiosResponse} from 'axios';
-import {IndexedEvents, pathJoin} from 'squidlet-lib';
+import {pathJoin} from 'squidlet-lib';
 import {DataAdapterBase} from '../DataAdapterBase.js';
 import {makeItemStore} from '../makeItemStore.js';
 import {ItemStore} from '../../types/ItemStore.js';
@@ -19,39 +19,71 @@ enum UpdateEvent {
   dirUpdated,
   dirRemoved,
 }
-// TODO: правильно не получать весь файл при событии, а запрашивать файл по наступлению события
-type CreatedFileHandler = (action: UpdateEvent.fileCreated, pathTo: string, newData: string) => void
-type UpdatedFileHandler = (action: UpdateEvent.fileUpdated, pathTo: string, newData: string) => void
-type RemovedFileHandler = (action: UpdateEvent.fileRemoved, pathTo: string) => void
-type UpdatedDirHandler = (action: UpdateEvent.dirUpdated, pathTo: string, newData: string []) => void
-type RemovedDirHandler = (action: UpdateEvent.dirUpdated, pathTo: string) => void
-type UpdateHandler = CreatedFileHandler | UpdatedFileHandler | RemovedFileHandler | UpdatedDirHandler | RemovedDirHandler
+
+type UpdateHandler = (action: UpdateEvent, pathTo: string) => void
 
 
-export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
-  updateEvent = new IndexedEvents<UpdateHandler>()
+/**
+ * This is singleton adapter which is only one for runtime
+ */
+class LocalFilesAdapterSingleton extends DataAdapterBase<UpdateHandler> {
+  init() {
+    super.init()
+
+    if (this.isInitialized) return
+
+    // TODO: слушать обновления с сервера
+    // TODO: см конфиг для получения имени хоста и порта
+
+  }
+
+
+  async makeRequest<T = any>(urlPath: string): Promise<AxiosResponse<T>> {
+    const url = `${this.makeBaseUrl()}/${urlPath}`
+
+    return axios({
+      url,
+      method: 'GET',
+      responseType: 'json',
+      responseEncoding: 'utf8',
+      onDownloadProgress: (progressEvent: AxiosProgressEvent) => {
+        // TODO: add
+      },
+    })
+  }
+
+  makeBaseUrl(): string {
+    // TODO: взять из параметров
+    return `http://localhost:3099`
+  }
+
+}
+
+
+const adapter = new LocalFilesAdapterSingleton()
+
+
+/**
+ * This is per component instance
+ */
+export class LocalFiles {
+  private config: LocalFilesConfig
 
 
   constructor(config: LocalFilesConfig) {
-    super(config)
+    this.config = config
   }
 
-  // TODO: запустить инит
-  // TODO: при этом экземпляр Local files должен быть один
-  // TODO: слушать обновления с сервера
-  async init() {
-
-  }
 
   dirContent(params: {path: string}): ListStore {
     const fullFilePath = this.makeFullFilePath(params.path)
     let updateHandlerIndex: number = -1
     let listStore: ListStore
-    const trueStore = this.registerOrGetStore(
+    const trueStore = adapter.registerOrGetStore(
       fullFilePath,
       () => {
         const startListener = () => {
-          updateHandlerIndex = this.updateEvent.addListener(
+          updateHandlerIndex = adapter.updateEvent.addListener(
             (action: UpdateEvent, pathTo: string, newData: string[]) => {
               // TODO: проверить что правильные пути относительно корня
               if (fullFilePath !== pathTo) return
@@ -66,7 +98,7 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
           )
         }
         // make request at first time
-        this.makeRequest<{result: string[]}>(`load-dir?path=${encodeURIComponent(params.path)}`)
+        adapter.makeRequest<{result: string[]}>(`load-dir?path=${encodeURIComponent(params.path)}`)
           .then((response) => {
             const result = response.data.result
 
@@ -79,7 +111,7 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
           })
       },
       () => {
-        this.updateEvent.removeListener(updateHandlerIndex)
+        adapter.updateEvent.removeListener(updateHandlerIndex)
       }
     )
     listStore = makeListStore(trueStore, [])
@@ -111,7 +143,7 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
         }
 
         // make request at first time
-        this.makeRequest<{result: string}>(`load-file?path=${encodeURIComponent(params.path)}`)
+        adapter.makeRequest<{result: string}>(`load-file?path=${encodeURIComponent(params.path)}`)
           .then((response) => {
             const dataObj = yaml.parse(response.data.result)
 
@@ -124,7 +156,7 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
           })
       },
       () => {
-        this.updateEvent.removeListener(updateHandlerIndex)
+        adapter.updateEvent.removeListener(updateHandlerIndex)
       }
     )
     itemStore = makeItemStore(trueStore, null)
@@ -132,25 +164,6 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
     return itemStore
   }
 
-
-  private makeBaseUrl(): string {
-    // TODO: взять из параметров
-    return `http://localhost:3099`
-  }
-
-  private async makeRequest<T = any>(urlPath: string): Promise<AxiosResponse<T>> {
-    const url = `${this.makeBaseUrl()}/${urlPath}`
-
-    return axios({
-      url,
-      method: 'GET',
-      responseType: 'json',
-      responseEncoding: 'utf8',
-      onDownloadProgress: (progressEvent: AxiosProgressEvent) => {
-        // TODO: add
-      },
-    })
-  }
 
   private handleRequestError = (e: Error) => {
     console.log(e)
