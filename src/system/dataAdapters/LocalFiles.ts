@@ -41,21 +41,35 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
   }
 
   dirContent(params: {path: string}): ListStore {
-    const storeId = this.makeFullFilePath(params.path)
-    let updateHandlerIndex: number
+    const fullFilePath = this.makeFullFilePath(params.path)
+    let updateHandlerIndex: number = -1
     let listStore: ListStore
     const trueStore = this.registerOrGetStore(
-      storeId,
+      fullFilePath,
       () => {
-        updateHandlerIndex = this.updateEvent.addListener(
-          (action: UpdateEvent, pathTo: string, newData: string[]) => {
-            if (action !== UpdateEvent.dirUpdated) return
-            // TODO: проверить что правильные пути относительно корня
-            if (storeId === pathTo) {
+        const startListener = () => {
+          updateHandlerIndex = this.updateEvent.addListener(
+            (action: UpdateEvent, pathTo: string, newData: string[]) => {
+              if (action !== UpdateEvent.dirUpdated) return
+              // TODO: проверить что правильные пути относительно корня
+              if (fullFilePath !== pathTo) return
+
               listStore.$$setValue(newData, false, false, newData.length)
             }
-          }
-        )
+          )
+        }
+        // make request at first time
+        this.makeRequest<{result: string[]}>(`load-dir?path=${encodeURIComponent(params.path)}`)
+          .then((response) => {
+            const result = response.data.result
+
+            listStore.$$setValue(result, false, false, result.length)
+            startListener()
+          })
+          .catch((e) => {
+            this.handleRequestError(e)
+            startListener()
+          })
       },
       () => {
         this.updateEvent.removeListener(updateHandlerIndex)
@@ -63,55 +77,52 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
     )
     listStore = makeListStore(trueStore, [])
 
-    this.makeRequest<{result: string[]}>(`load-dir?path=${encodeURIComponent(params.path)}`)
-      .then((response) => {
-        const result = response.data.result
-
-        listStore.$$setValue(result, false, false, result.length)
-      })
-      .catch(this.handleRequestError)
-
     return listStore
   }
 
   dataFile(params: {path: string}): ItemStore {
-    const storeId = this.makeFullFilePath(params.path)
-    let updateHandlerIndex: number
+    const fullFilePath = this.makeFullFilePath(params.path)
+    let updateHandlerIndex: number - 1
     let itemStore: ItemStore
     const trueStore = this.registerOrGetStore(
-      storeId,
+      fullFilePath,
       () => {
-        updateHandlerIndex = this.updateEvent.addListener(
-          (action: UpdateEvent, pathTo: string, newData: string) => {
-            // TODO: проверить что правильные пути относительно корня
-            if (storeId !== pathTo) return
+        const startListener = () => {
+          updateHandlerIndex = this.updateEvent.addListener(
+            (action: UpdateEvent, pathTo: string, newData: string) => {
+              // TODO: проверить что правильные пути относительно корня
+              if (fullFilePath !== pathTo) return
 
-            switch (action) {
-              case UpdateEvent.fileUpdated:
-                itemStore.$$setValue(newData)
-                break;
-              case UpdateEvent.fileRemoved:
-                // TODO: что делать если файл удалён ???
-                break;
+              switch (action) {
+                case UpdateEvent.fileUpdated:
+                  itemStore.$$setValue(newData)
+                  break;
+                case UpdateEvent.fileRemoved:
+                  // TODO: что делать если файл удалён ???
+                  break;
+              }
             }
-          }
-        )
+          )
+        }
+
+        // make request at first time
+        this.makeRequest<{result: string}>(`load-file?path=${encodeURIComponent(params.path)}`)
+          .then((response) => {
+            const dataObj = yaml.parse(response.data.result)
+
+            itemStore.$$setValue(dataObj)
+            startListener()
+          })
+          .catch((e) => {
+            this.handleRequestError(e)
+            startListener()
+          })
       },
       () => {
         this.updateEvent.removeListener(updateHandlerIndex)
       }
     )
     itemStore = makeItemStore(trueStore, null)
-
-    this.makeRequest<{result: string}>(`load-file?path=${encodeURIComponent(params.path)}`)
-      .then((response) => {
-        const dataObj = yaml.parse(response.data.result)
-
-        itemStore.$$setValue(dataObj)
-      })
-      .catch(this.handleRequestError)
-
-    // TODO: listen file updates and update value of dataStore
 
     return itemStore
   }
