@@ -25,11 +25,15 @@ data:
     params:
       path: 'js: path'
 
+# TODO: получается что в самом начале $list = null
+
 tmpl: >
   {#if spinner}
-    <SLoad pending={!$list.initialized}>
-      <slot list={$list}></slot>
-    </SLoad>
+    {#if $list}
+      <SLoad pending={!$list.initialized}>
+        <slot list={$list}></slot>
+      </SLoad>
+    {/if}
   {:else}
     <slot list={$list}></slot>
   {/if}

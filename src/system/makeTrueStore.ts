@@ -10,6 +10,10 @@ export interface TrueStore extends Readable<any> {
 }
 
 
+/**
+ * This is store for use with several stores of components.
+ * It's lifecycle while it has any instances witch is used it
+ */
 export function makeTrueStore(): TrueStore {
   let lastInstanceId: number = -1
   let instances: Record<string, number> = {}
@@ -43,7 +47,10 @@ export function makeTrueStore(): TrueStore {
       initialized = true
       data = initialData
 
-      setValue(data)
+      // TODO: получается что в самом начале $list = null
+      setTimeout(() => {
+        setValue(data)
+      })
 
       return destroyInstance
     },
