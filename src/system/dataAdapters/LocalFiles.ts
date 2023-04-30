@@ -89,7 +89,6 @@ export class LocalFiles {
 
   }
 
-
   dirContent(params: {path: string}): ListStore {
     const fullFilePath = adapter.makeFullFilePath(params.path)
     let updateHandlerIndex: number = -1
@@ -99,7 +98,7 @@ export class LocalFiles {
       () => {
         const startListener = () => {
           updateHandlerIndex = adapter.updateEvent.addListener(
-            (action: UpdateEvent, pathTo: string, newData: string[]) => {
+            (action: UpdateEvent, pathTo: string) => {
               // TODO: проверить что правильные пути относительно корня
               if (fullFilePath !== pathTo) return
 
@@ -135,12 +134,12 @@ export class LocalFiles {
     const fullFilePath = adapter.makeFullFilePath(params.path)
     let updateHandlerIndex: number = -1
     let itemStore: ItemStore
-    const trueStore = this.registerOrGetStore(
+    const trueStore = adapter.registerOrGetStore(
       fullFilePath,
       () => {
         const startListener = () => {
-          updateHandlerIndex = this.updateEvent.addListener(
-            (action: UpdateEvent, pathTo: string, newData: string) => {
+          updateHandlerIndex = adapter.updateEvent.addListener(
+            (action: UpdateEvent, pathTo: string) => {
               // TODO: проверить что правильные пути относительно корня
               if (fullFilePath !== pathTo) return
 
