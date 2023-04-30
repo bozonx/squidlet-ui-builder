@@ -85,42 +85,42 @@ export class LocalFiles {
     adapter.init(config)
   }
 
-  onInitStore() {
-
-  }
-
   dirContent(params: {path: string}): ListStore {
     const fullFilePath = adapter.makeFullFilePath(params.path)
     let updateHandlerIndex: number = -1
     let listStore: ListStore
+
+    const onStoreInit = () => {
+      const startListener = () => {
+        updateHandlerIndex = adapter.updateEvent.addListener(
+          (action: UpdateEvent, pathTo: string) => {
+            // TODO: проверить что правильные пути относительно корня
+            if (fullFilePath !== pathTo) return
+
+            if (action === UpdateEvent.dirUpdated) {
+              // TODO: сделать запрос обновления
+              //listStore.$$setValue(newData, false, false, newData.length)
+            }
+            else if (action === UpdateEvent.dirRemoved) {
+              listStore.$$setRemoved(true)
+            }
+          }
+        )
+      }
+      // make request at first time
+      adapter.makeRequest<{result: string[]}>(`load-dir?path=${encodeURIComponent(params.path)}`)
+        .then((response) => {
+          const result = response.data.result
+
+          listStore.$$setValue(result, false, false, result.length)
+        })
+        .catch(this.handleRequestError)
+        .finally(startListener)
+    }
+
     const trueStore = adapter.registerOrGetStore(
       fullFilePath,
-      () => {
-        const startListener = () => {
-          updateHandlerIndex = adapter.updateEvent.addListener(
-            (action: UpdateEvent, pathTo: string) => {
-              // TODO: проверить что правильные пути относительно корня
-              if (fullFilePath !== pathTo) return
-
-              if (action === UpdateEvent.dirUpdated) {
-                listStore.$$setValue(newData, false, false, newData.length)
-              }
-              else if (action === UpdateEvent.dirRemoved) {
-                listStore.$$setRemoved(true)
-              }
-            }
-          )
-        }
-        // make request at first time
-        adapter.makeRequest<{result: string[]}>(`load-dir?path=${encodeURIComponent(params.path)}`)
-          .then((response) => {
-            const result = response.data.result
-
-            listStore.$$setValue(result, false, false, result.length)
-          })
-          .catch(this.handleRequestError)
-          .finally(startListener)
-      },
+      onStoreInit,
       () => {
         adapter.updateEvent.removeListener(updateHandlerIndex)
       }
@@ -134,34 +134,38 @@ export class LocalFiles {
     const fullFilePath = adapter.makeFullFilePath(params.path)
     let updateHandlerIndex: number = -1
     let itemStore: ItemStore
+
+    const onStoreInit = () => {
+      const startListener = () => {
+        updateHandlerIndex = adapter.updateEvent.addListener(
+          (action: UpdateEvent, pathTo: string) => {
+            // TODO: проверить что правильные пути относительно корня
+            if (fullFilePath !== pathTo) return
+
+            if (action === UpdateEvent.fileUpdated) {
+              // TODO: сделать запрос обновления
+              //itemStore.$$setValue(newData)
+            }
+            else if (action === UpdateEvent.fileRemoved) {
+              itemStore.$$setRemoved(true)
+            }
+          }
+        )
+      }
+      // make request at first time
+      adapter.makeRequest<{result: string}>(`load-file?path=${encodeURIComponent(params.path)}`)
+        .then((response) => {
+          const dataObj = yaml.parse(response.data.result)
+
+          itemStore.$$setValue(dataObj)
+        })
+        .catch(this.handleRequestError)
+        .finally(startListener)
+    }
+
     const trueStore = adapter.registerOrGetStore(
       fullFilePath,
-      () => {
-        const startListener = () => {
-          updateHandlerIndex = adapter.updateEvent.addListener(
-            (action: UpdateEvent, pathTo: string) => {
-              // TODO: проверить что правильные пути относительно корня
-              if (fullFilePath !== pathTo) return
-
-              if (action === UpdateEvent.fileUpdated) {
-                itemStore.$$setValue(newData)
-              }
-              else if (action === UpdateEvent.fileRemoved) {
-                itemStore.$$setRemoved(true)
-              }
-            }
-          )
-        }
-        // make request at first time
-        adapter.makeRequest<{result: string}>(`load-file?path=${encodeURIComponent(params.path)}`)
-          .then((response) => {
-            const dataObj = yaml.parse(response.data.result)
-
-            itemStore.$$setValue(dataObj)
-          })
-          .catch(this.handleRequestError)
-          .finally(startListener)
-      },
+      onStoreInit,
       () => {
         adapter.updateEvent.removeListener(updateHandlerIndex)
       }
