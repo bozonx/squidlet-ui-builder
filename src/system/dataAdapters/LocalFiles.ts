@@ -17,12 +17,14 @@ enum UpdateEvent {
   fileUpdated,
   fileRemoved,
   dirUpdated,
+  dirRemoved,
 }
 type CreatedFileHandler = (action: UpdateEvent.fileCreated, pathTo: string, newData: string) => void
 type UpdatedFileHandler = (action: UpdateEvent.fileUpdated, pathTo: string, newData: string) => void
 type RemovedFileHandler = (action: UpdateEvent.fileRemoved, pathTo: string) => void
 type UpdatedDirHandler = (action: UpdateEvent.dirUpdated, pathTo: string, newData: string []) => void
-type UpdateHandler = CreatedFileHandler | UpdatedFileHandler | RemovedFileHandler | UpdatedDirHandler
+type RemovedDirHandler = (action: UpdateEvent.dirUpdated, pathTo: string) => void
+type UpdateHandler = CreatedFileHandler | UpdatedFileHandler | RemovedFileHandler | UpdatedDirHandler | RemovedDirHandler
 
 
 export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
@@ -50,11 +52,15 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
         const startListener = () => {
           updateHandlerIndex = this.updateEvent.addListener(
             (action: UpdateEvent, pathTo: string, newData: string[]) => {
-              if (action !== UpdateEvent.dirUpdated) return
               // TODO: проверить что правильные пути относительно корня
               if (fullFilePath !== pathTo) return
 
-              listStore.$$setValue(newData, false, false, newData.length)
+              if (action === UpdateEvent.dirUpdated) {
+                listStore.$$setValue(newData, false, false, newData.length)
+              }
+              else if (action === UpdateEvent.dirRemoved) {
+                listStore.$$setRemoved(true)
+              }
             }
           )
         }
@@ -82,7 +88,7 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
 
   dataFile(params: {path: string}): ItemStore {
     const fullFilePath = this.makeFullFilePath(params.path)
-    let updateHandlerIndex: number - 1
+    let updateHandlerIndex: number = -1
     let itemStore: ItemStore
     const trueStore = this.registerOrGetStore(
       fullFilePath,
@@ -93,13 +99,11 @@ export class LocalFiles extends DataAdapterBase<LocalFilesConfig> {
               // TODO: проверить что правильные пути относительно корня
               if (fullFilePath !== pathTo) return
 
-              switch (action) {
-                case UpdateEvent.fileUpdated:
-                  itemStore.$$setValue(newData)
-                  break;
-                case UpdateEvent.fileRemoved:
-                  // TODO: что делать если файл удалён ???
-                  break;
+              if (action === UpdateEvent.fileUpdated) {
+                itemStore.$$setValue(newData)
+              }
+              else if (action === UpdateEvent.fileRemoved) {
+                itemStore.$$setRemoved(true)
               }
             }
           )

@@ -7,6 +7,7 @@ export function makeItemStore (trueStore: TrueStore, initialValue: any): ItemSto
     data: initialValue,
     initialized: false,
     pending: true,
+    removed: false,
     updateId: 0,
   } as ItemStoreData)
 
@@ -14,6 +15,9 @@ export function makeItemStore (trueStore: TrueStore, initialValue: any): ItemSto
     subscribe: trueStore.subscribe,
     $$setPending(pending: boolean) {
       trueStore.setData({ ...trueStore.getData(), pending })
+    },
+    $$setRemoved(removed: boolean) {
+      trueStore.setData({ ...trueStore.getData(), removed })
     },
     $$setValue(value: any) {
       const newData: ItemStoreData = {

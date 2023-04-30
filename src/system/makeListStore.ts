@@ -7,6 +7,7 @@ export function makeListStore (trueStore: TrueStore, initialValue: any[]): ListS
     data: initialValue,
     initialized: false,
     pending: true,
+    removed: false,
     updateId: 0,
     hasNext: false,
     hasPrev: false,
@@ -17,6 +18,9 @@ export function makeListStore (trueStore: TrueStore, initialValue: any[]): ListS
     subscribe: trueStore.subscribe,
     $$setPending(pending: boolean) {
       trueStore.setData({ ...trueStore.getData(), pending })
+    },
+    $$setRemoved(removed: boolean) {
+      trueStore.setData({ ...trueStore.getData(), removed })
     },
     $$setValue(value: any[], hasNext: boolean, hasPrev: boolean, totalCount: number) {
       const newData: ListStoreData = {
