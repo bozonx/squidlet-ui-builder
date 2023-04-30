@@ -6,12 +6,14 @@ export interface TrueStore extends Readable<any> {
   getData: () => any
   setData: (newData: any) => void
   $$destroyStore: () => void
+  $$onStoreInstancesChange: (cb: (instanceCount: number) => void) => void
 }
 
 
 export function makeTrueStore(): TrueStore {
   let initialized = false
-  let data: any
+  // TODO: а можно ли использовать undefined???
+  let data: any = null
   let setValue: (data: any) => void
 
   const store = readable(data, (set) => {
@@ -38,8 +40,11 @@ export function makeTrueStore(): TrueStore {
     setData: (newData: any) => {
       setValue(newData)
     },
-    $$destroyStore: () => void {
+    $$destroyStore: () => {
       // TODO: add destroy full store
+    },
+    $$onStoreInstancesChange: (cb: (instanceCount: number) => void) => {
+      // TODO: call each time on add or remove instance
     }
   }
 }

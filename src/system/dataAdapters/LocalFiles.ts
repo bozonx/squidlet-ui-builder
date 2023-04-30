@@ -19,6 +19,7 @@ enum UpdateEvent {
   dirUpdated,
   dirRemoved,
 }
+// TODO: правильно не получать весь файл при событии, а запрашивать файл по наступлению события
 type CreatedFileHandler = (action: UpdateEvent.fileCreated, pathTo: string, newData: string) => void
 type UpdatedFileHandler = (action: UpdateEvent.fileUpdated, pathTo: string, newData: string) => void
 type RemovedFileHandler = (action: UpdateEvent.fileRemoved, pathTo: string) => void

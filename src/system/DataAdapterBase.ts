@@ -1,6 +1,4 @@
-import {ItemStore} from '../types/ItemStore.js';
-import {ListStore} from '../types/ListStore.js';
-import {TrueStore} from './makeTrueStore.js';
+import {makeTrueStore, TrueStore} from './makeTrueStore.js';
 
 
 export class DataAdapterBase<Config = Record<string, any>> {
@@ -25,17 +23,20 @@ export class DataAdapterBase<Config = Record<string, any>> {
     onInit: () => void,
     onDestroy: () => void
   ): TrueStore {
-    if (this.stores[storeId]) return this.stores[storeId] as T
+    // if store exists just return it
+    if (this.stores[storeId]) return this.stores[storeId]
+    // else means a new store
+    this.stores[storeId] = makeTrueStore()
 
-    // TODO: use destroy
+    this.stores[storeId].$$onStoreInstancesChange(() => {
+      // TODO: если не осталось инстансов то запустить дестрой с задержкой
+      onDestroy()
+      this.stores[storeId].$$destroyStore()
+    })
 
-    this.registerInstance(instanceId, dataStore)
+    onInit()
 
-    return instatiate()
-  }
-
-  protected registerInstance(instanceId: string, dataStore: ItemStore | ListStore) {
-
+    return this.stores[storeId]
   }
 
 }
