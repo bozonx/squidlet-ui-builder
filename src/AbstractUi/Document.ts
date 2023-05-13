@@ -11,6 +11,17 @@ export interface DocumentDefinition extends UiElementDefinitionBase {
 export type DocumentEventHandler = (elementPath: string, eventName: string, data: any) => void
 
 
+
+const DOCUMENT_COMPONENT = `
+props:
+  children:
+    type: array
+tmpl:
+  component: Fragment
+  children: {children}
+`
+
+
 export class Document extends Component {
   readonly events = new IndexedEvents<DocumentEventHandler>()
   readonly elements: AnyElement[] = []
