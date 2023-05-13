@@ -25,6 +25,7 @@ export class Document extends Component {
 
   async init() {
 
+    console.log(1111, this)
   }
 
   async destroy() {

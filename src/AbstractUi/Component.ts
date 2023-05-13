@@ -1,4 +1,3 @@
-import {AnyElementDefinition} from './interfaces/AnyElementDefinition.js';
 import {UiElementDefinitionBase} from './interfaces/UiElementDefinitionBase.js';
 import {ELEMENT_TYPES} from './ElementTypes.js';
 import {AnyElement} from './interfaces/AnyElement.js';
@@ -6,7 +5,7 @@ import {UiElement} from './interfaces/UiElement.js';
 
 
 export interface ComponentDefinition {
-  tmpl: AnyElementDefinition
+  tmpl: UiElementDefinitionBase
 }
 
 
