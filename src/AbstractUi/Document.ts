@@ -1,6 +1,7 @@
 import {IndexedEvents} from 'squidlet-lib'
 import {AnyElement} from './interfaces/AnyElement.js'
 import {UiElementDefinitionBase} from './interfaces/UiElementDefinitionBase.js'
+import {UiElement} from './interfaces/UiElement.js';
 
 
 export interface DocumentDefinition extends UiElementDefinitionBase {
@@ -10,7 +11,7 @@ export interface DocumentDefinition extends UiElementDefinitionBase {
 export type DocumentEventHandler = (elementPath: string, eventName: string, data: any) => void
 
 
-export class Document {
+export class Document implements UiElement {
   readonly events = new IndexedEvents<DocumentEventHandler>()
   readonly elements: AnyElement[] = []
 
