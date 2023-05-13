@@ -1,5 +1,5 @@
-import {AnyElement} from './AnyElement.js';
+import {AnyElementDefinition} from './AnyElementDefinition.js';
 
 export interface ComponentDefinition {
-  tmpl: AnyElement
+  tmpl: AnyElementDefinition
 }
