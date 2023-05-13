@@ -1,8 +1,9 @@
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
-import {render} from './render.js';
 import {fileURLToPath} from 'url';
 import {Main} from './Main.js';
+import {Component, ComponentDefinition} from './Component.js';
+import yaml from 'yaml';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -16,9 +17,13 @@ const __dirname = path.dirname(__filename);
   )
 
   const main = new Main()
+  const rootComponentDefinition: ComponentDefinition = yaml.parse(fileContent)
+  const rootComponent = new Component(main, rootComponentDefinition)
 
-  await render(main, fileContent, async (fileName: string) => {
-    // TODO: add root path
-    return fs.readFile(fileName, 'utf8')
-  })
+  await rootComponent.init()
+
+  // await render(main, fileContent, async (fileName: string) => {
+  //   // TODO: add root path
+  //   return fs.readFile(fileName, 'utf8')
+  // })
 })()
