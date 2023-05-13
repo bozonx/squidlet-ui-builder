@@ -1,6 +1,5 @@
-import {Fragment} from '../elements/Fragment';
-
+import {AnyElement} from './AnyElement.js';
 
 export interface ComponentDefinition {
-  template: Fragment
+  tmpl: AnyElement
 }

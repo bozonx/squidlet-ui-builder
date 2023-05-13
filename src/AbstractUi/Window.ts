@@ -7,6 +7,9 @@ import {AnyElement} from './interfaces/AnyElement';
 import {UI_EVENTS} from './interfaces/UiEvents';
 
 
+// TODO: не нужно поидее. Вместо него будет документ
+
+
 export enum WINDOW_EVENTS {
   attached,
   detached,
