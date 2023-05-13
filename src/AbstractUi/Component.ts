@@ -24,6 +24,11 @@ export class Component {
   private readonly childrenComponents: Component[] = []
 
 
+  get children(): Component[] {
+    return this.childrenComponents
+  }
+
+
   constructor(
     main: Main,
     componentDefinition: ComponentDefinition,
@@ -32,13 +37,12 @@ export class Component {
     this.main = main
     this.componentDefinition = componentDefinition
     this.props = props
+
+    this.instantiateChildren()
   }
 
 
   async init() {
-    // TODO: может это должно быть в конструкторе???
-    this.instantiateChildren()
-
     for (const component of this.childrenComponents) {
       await component.init()
     }

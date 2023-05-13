@@ -1,16 +1,16 @@
+import {pathDirname} from 'squidlet-lib';
 import * as fs from 'node:fs/promises';
-import path from 'node:path';
 import {fileURLToPath} from 'url';
 import {Main} from './Main.js';
-
-
-const __filename: string = fileURLToPath(import.meta.url)
-const __dirname: string = path.dirname(__filename)
+import path from 'node:path';
 
 
 (async () => {
+  const filename: string = fileURLToPath(import.meta.url)
+  const dirname: string = pathDirname(filename)
+
   const rootComponentDefinitionStr: string = await fs.readFile(
-    path.resolve(__dirname, '../../../sls-publish-bot/src/ui/root.yaml'),
+    path.resolve(dirname, '../../../sls-publish-bot/src/ui/root.yaml'),
     'utf8'
   )
 
