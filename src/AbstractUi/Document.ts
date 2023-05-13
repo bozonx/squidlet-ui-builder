@@ -17,8 +17,7 @@ props:
   children:
     type: array
 tmpl:
-  component: Fragment
-  children: {children}
+  {children}
 `
 
 

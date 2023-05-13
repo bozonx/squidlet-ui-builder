@@ -15,6 +15,8 @@ export class ComponentsPool {
     if (this.parsedDefinitions[componentName]) return this.parsedDefinitions[componentName]
 
     const definitionStr = STD_COMPONENTS[componentName]
+    
+    console.log(111, componentName, definitionStr)
 
     this.parsedDefinitions[componentName] = yaml.parse(definitionStr)
 
