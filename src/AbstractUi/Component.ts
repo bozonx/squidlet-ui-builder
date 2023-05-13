@@ -12,7 +12,8 @@ export interface ComponentDefinition {
 
   // TODO: add data, props etc
 
-  tmpl: UiElementDefinitionBase
+  tmpl?: UiElementDefinitionBase
+  tmplExp?: string
 }
 
 
@@ -56,20 +57,27 @@ export class Component {
 
 
   private instantiateChildren() {
-    const tmpl: UiElementDefinitionBase = this.componentDefinition.tmpl
-    const children: UiElementDefinitionBase[] = (typeof tmpl === 'object')
-      ? [tmpl]
-      : tmpl
-    //const tmplRootComponentName = rootTmplElement.component
+    if (this.componentDefinition.tmplExp) {
 
-    for (const child of children) {
-      const definition = this.main.componentPool.getComponentDefinition(child.component)
+      // TODO: выполнить выражение
 
-      this.childrenComponents.push(
-        new Component(this.main, definition, omitObj(child, 'component'))
-      )
+      return
     }
+    else if (this.componentDefinition.tmpl) {
+      const tmpl: UiElementDefinitionBase = this.componentDefinition.tmpl
+      const children: UiElementDefinitionBase[] = (typeof tmpl === 'object')
+        ? [tmpl]
+        : tmpl
+      //const tmplRootComponentName = rootTmplElement.component
 
+      for (const child of children) {
+        const definition = this.main.componentPool.getComponentDefinition(child.component)
+
+        this.childrenComponents.push(
+          new Component(this.main, definition, omitObj(child, 'component'))
+        )
+      }
+    }
   }
 
 }

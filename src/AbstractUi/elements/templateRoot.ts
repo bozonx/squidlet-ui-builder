@@ -1,7 +1,7 @@
 
 // TODO: а это нужно ???
 
-import {Fragment, fragment, FRAGMENT_TYPE} from './Fragment';
+import {Fragment, fragment, FRAGMENT_TYPE} from '../../../__useless/Fragment.js';
 import {AnyElement} from '../interfaces/AnyElement';
 
 

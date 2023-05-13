@@ -18,8 +18,8 @@ props:
     type: array
 tmpl:
   component: ForEach
-  src: {children}
-  as: 'child'
+  src: {this.children}
+  as: child
   item:
     component: RenderComponent
     definition: {child}
