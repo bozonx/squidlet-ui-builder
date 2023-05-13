@@ -2,6 +2,7 @@ import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import {render} from './render.js';
 import {fileURLToPath} from 'url';
+import {Main} from './Main.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -14,7 +15,9 @@ const __dirname = path.dirname(__filename);
     'utf8'
   )
 
-  await render(fileContent, async (fileName: string) => {
+  const main = new Main()
+
+  await render(main, fileContent, async (fileName: string) => {
     // TODO: add root path
     return fs.readFile(fileName, 'utf8')
   })

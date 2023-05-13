@@ -15,8 +15,3 @@ export class ComponentsPool {
     return yaml.parse(definitionStr)
   }
 }
-
-
-// TODO: лучше сделать через синглтон
-
-export const componentPool = new ComponentsPool()

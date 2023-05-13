@@ -1,8 +1,6 @@
-import yaml from 'yaml';
 import {omitObj} from 'squidlet-lib';
 import {UiElementDefinitionBase} from './interfaces/UiElementDefinitionBase.js';
-import {STD_COMPONENTS} from './StdComponents.js';
-import {componentPool} from './ComponentsPool.js';
+import {Main} from './Main.js';
 
 
 export interface ComponentProp {
@@ -19,6 +17,7 @@ export interface ComponentDefinition {
 
 
 export class Component {
+  private readonly main: Main
   private readonly componentDefinition: ComponentDefinition
   // TODO: сделать реактивными - добавить subscribe()
   private readonly props: Record<string, ComponentProp>
@@ -26,9 +25,11 @@ export class Component {
 
 
   constructor(
+    main: Main,
     componentDefinition: ComponentDefinition,
     props: Record<string, ComponentProp> = {}
   ) {
+    this.main = main
     this.componentDefinition = componentDefinition
     this.props = props
   }
@@ -58,10 +59,10 @@ export class Component {
     //const tmplRootComponentName = rootTmplElement.component
 
     for (const child of children) {
-      const definition = componentPool.getComponentDefinition(child.component)
+      const definition = this.main.componentPool.getComponentDefinition(child.component)
 
       this.childrenComponents.push(
-        new Component(definition, omitObj(child, 'component'))
+        new Component(this.main, definition, omitObj(child, 'component'))
       )
     }
 
