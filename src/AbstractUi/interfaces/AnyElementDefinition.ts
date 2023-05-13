@@ -6,4 +6,4 @@ export interface AnyElementDefinitions {
 }
 
 // TODO: just get values of AnyElementDefinitions
-export type AnyElementDefinition = DocumentDefinition
+//export type AnyElementDefinition = DocumentDefinition

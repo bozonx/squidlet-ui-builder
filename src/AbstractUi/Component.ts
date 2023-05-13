@@ -2,6 +2,7 @@ import {AnyElementDefinition} from './interfaces/AnyElementDefinition.js';
 import {UiElementDefinitionBase} from './interfaces/UiElementDefinitionBase.js';
 import {ELEMENT_TYPES} from './ElementTypes.js';
 import {AnyElement} from './interfaces/AnyElement.js';
+import {UiElement} from './interfaces/UiElement.js';
 
 
 export interface ComponentDefinition {
@@ -9,7 +10,7 @@ export interface ComponentDefinition {
 }
 
 
-export class Component {
+export class Component implements UiElement {
   private readonly componentDefinition: ComponentDefinition
   private readonly uiRoot: AnyElement
 
@@ -18,14 +19,18 @@ export class Component {
     this.componentDefinition = componentDefinition
 
     const rootTmplElement: UiElementDefinitionBase = this.componentDefinition.tmpl
-    const tmplRootElType = rootTmplElement.type
+    const tmplRootComponentName = rootTmplElement.component
 
-    this.uiRoot = new ELEMENT_TYPES[tmplRootElType](rootTmplElement)
+    this.uiRoot = new ELEMENT_TYPES[tmplRootComponentName](rootTmplElement)
   }
 
 
   async init() {
     await this.uiRoot.init()
+  }
+
+  async destroy() {
+    await this.uiRoot.destroy()
   }
 
 }
