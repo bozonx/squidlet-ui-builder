@@ -1,9 +1,8 @@
 import yaml from 'yaml';
 import {omitObj} from 'squidlet-lib';
 import {UiElementDefinitionBase} from './interfaces/UiElementDefinitionBase.js';
-import {UI_COMPONENT_CLASSES} from './UiComponentsClasses.js';
-import {AnyElement} from './interfaces/AnyElement.js';
 import {STD_COMPONENTS} from './StdComponents.js';
+import {componentPool} from './ComponentsPool.js';
 
 
 export interface ComponentProp {
@@ -21,6 +20,7 @@ export interface ComponentDefinition {
 
 export class Component {
   private readonly componentDefinition: ComponentDefinition
+  // TODO: сделать реактивными - добавить subscribe()
   private readonly props: Record<string, ComponentProp>
   private readonly childrenComponents: Component[] = []
 
@@ -35,20 +35,8 @@ export class Component {
 
 
   async init() {
-    const tmpl: UiElementDefinitionBase = this.componentDefinition.tmpl
-    const children: UiElementDefinitionBase[] = (typeof tmpl === 'object')
-      ? [tmpl]
-      : tmpl
-    //const tmplRootComponentName = rootTmplElement.component
-
-    for (const child of children) {
-      const definitionStr = STD_COMPONENTS[child.component]
-      const definition = yaml.parse(definitionStr)
-
-      this.childrenComponents.push(
-        new Component(definition, omitObj(child, 'component'))
-      )
-    }
+    // TODO: может это должно быть в конструкторе???
+    this.instantiateChildren()
 
     for (const component of this.childrenComponents) {
       await component.init()
@@ -59,6 +47,24 @@ export class Component {
     for (const component of this.childrenComponents) {
       await component.destroy()
     }
+  }
+
+
+  private instantiateChildren() {
+    const tmpl: UiElementDefinitionBase = this.componentDefinition.tmpl
+    const children: UiElementDefinitionBase[] = (typeof tmpl === 'object')
+      ? [tmpl]
+      : tmpl
+    //const tmplRootComponentName = rootTmplElement.component
+
+    for (const child of children) {
+      const definition = componentPool.getComponentDefinition(child.component)
+
+      this.childrenComponents.push(
+        new Component(definition, omitObj(child, 'component'))
+      )
+    }
+
   }
 
 }
