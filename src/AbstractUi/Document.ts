@@ -12,7 +12,7 @@ export type DocumentEventHandler = (elementPath: string, eventName: string, data
 
 
 
-const DOCUMENT_COMPONENT = `
+export const DOCUMENT_COMPONENT = `
 props:
   children:
     type: array

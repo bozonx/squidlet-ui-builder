@@ -1,7 +1,15 @@
+import yaml from 'yaml';
+import {omitObj} from 'squidlet-lib';
 import {UiElementDefinitionBase} from './interfaces/UiElementDefinitionBase.js';
 import {UI_COMPONENT_CLASSES} from './UiComponentsClasses.js';
 import {AnyElement} from './interfaces/AnyElement.js';
+import {STD_COMPONENTS} from './StdComponents.js';
 
+
+export interface ComponentProp {
+  // TODO: get normal props
+  type: string | number
+}
 
 export interface ComponentDefinition {
 
@@ -13,14 +21,20 @@ export interface ComponentDefinition {
 
 export class Component {
   private readonly componentDefinition: ComponentDefinition
+  private readonly props: Record<string, ComponentProp>
   private readonly childrenComponents: Component[] = []
-  //private readonly uiRoot: AnyElement
 
 
-
-  constructor(componentDefinition: ComponentDefinition) {
+  constructor(
+    componentDefinition: ComponentDefinition,
+    props: Record<string, ComponentProp> = {}
+  ) {
     this.componentDefinition = componentDefinition
+    this.props = props
+  }
 
+
+  async init() {
     const tmpl: UiElementDefinitionBase = this.componentDefinition.tmpl
     const children: UiElementDefinitionBase[] = (typeof tmpl === 'object')
       ? [tmpl]
@@ -28,21 +42,23 @@ export class Component {
     //const tmplRootComponentName = rootTmplElement.component
 
     for (const child of children) {
-      childrenComponents.push(new Component(child))
+      const definitionStr = STD_COMPONENTS[child.component]
+      const definition = yaml.parse(definitionStr)
+
+      this.childrenComponents.push(
+        new Component(definition, omitObj(child, 'component'))
+      )
     }
 
-    // TODO: поидее тут должен быть ComponentDefinition
-
-    //this.uiRoot = new UI_COMPONENT_CLASSES[tmplRootComponentName](rootTmplElement)
-  }
-
-
-  async init() {
-    //await this.uiRoot.init()
+    for (const component of this.childrenComponents) {
+      await component.init()
+    }
   }
 
   async destroy() {
-    await this.uiRoot.destroy()
+    for (const component of this.childrenComponents) {
+      await component.destroy()
+    }
   }
 
 }
