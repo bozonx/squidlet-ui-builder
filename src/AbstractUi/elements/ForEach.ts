@@ -8,7 +8,5 @@ props:
   item:
     type: object
 
-tmpl:
-  component: Expression
-  exp: 'for (const item of src) this.main.newComponentFromTmpl(item)'
+tmplExp: 'for (const item of src) this.main.newComponentFromTmpl(item)'
 `
