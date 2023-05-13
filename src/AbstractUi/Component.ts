@@ -1,10 +1,13 @@
 import {UiElementDefinitionBase} from './interfaces/UiElementDefinitionBase.js';
-import {ELEMENT_TYPES} from './ElementTypes.js';
+import {UI_COMPONENT_CLASSES} from './UiComponentsClasses.js';
 import {AnyElement} from './interfaces/AnyElement.js';
 import {UiElement} from './interfaces/UiElement.js';
 
 
 export interface ComponentDefinition {
+
+  // TODO: add data, props etc
+
   tmpl: UiElementDefinitionBase
 }
 
@@ -20,7 +23,9 @@ export class Component implements UiElement {
     const rootTmplElement: UiElementDefinitionBase = this.componentDefinition.tmpl
     const tmplRootComponentName = rootTmplElement.component
 
-    this.uiRoot = new ELEMENT_TYPES[tmplRootComponentName](rootTmplElement)
+    // TODO: поидее тут должен быть ComponentDefinition
+
+    this.uiRoot = new UI_COMPONENT_CLASSES[tmplRootComponentName](rootTmplElement)
   }
 
 
