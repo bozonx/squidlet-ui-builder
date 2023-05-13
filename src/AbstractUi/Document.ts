@@ -17,7 +17,12 @@ props:
   children:
     type: array
 tmpl:
-  {children}
+  component: ForEach
+  src: {children}
+  as: 'child'
+  item:
+    component: RenderComponent
+    definition: {child}
 `
 
 
