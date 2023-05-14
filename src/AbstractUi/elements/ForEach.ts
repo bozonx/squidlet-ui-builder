@@ -3,20 +3,21 @@ name: ForEach
 props:
   src:
     type: any[]
-  as:
-    type: string
+#  as:
+#    type: string
   item:
     type: Component
 tmpl:
   - $exp: forEach
-    arr:
+    src:
       $exp: getProp
       path: src
     as:
       $exp: getProp
       path: as
     do:
-      $exp: func
-      ???
+      $exp: superFunc
+      lines:
+        -
 #tmplExp: 'for (const item of src) this.main.newComponentFromTmpl(item)'
 `
