@@ -1,7 +1,5 @@
 import {Document} from './elements/Document.js';
 import {Window} from './Window';
-import {UiState} from '../sprog/UiState.js';
-import {ScreenDefinition} from './interfaces/ScreenDefinition';
 
 
 export class Screen {

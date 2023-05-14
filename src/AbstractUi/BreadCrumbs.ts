@@ -1,5 +1,4 @@
 import {IndexedEvents} from 'squidlet-lib'
-import {UiState} from '../sprog/UiState.js';
 
 
 export const BREADCRUMBS_DELIMITER = '/'

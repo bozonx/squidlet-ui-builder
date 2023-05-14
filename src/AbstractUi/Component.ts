@@ -4,8 +4,6 @@ import {COMPONENT_EVENT_PREFIX, Main} from './Main.js';
 import {IncomeEvents, OutcomeEvents} from './interfaces/DomEvents.js';
 import {COMPONENT_ID_BYTES_NUM, ELEMENT_ID_BYTES_NUM} from './interfaces/constants.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
-import {PropDefinition, UiProps} from '../sprog/UiProps.js';
-import {StateDefinition, UiState} from '../sprog/UiState.js';
 
 
 // TODO: поддержка перемещения элементов
