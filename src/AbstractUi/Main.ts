@@ -1,5 +1,5 @@
 import yaml from 'yaml';
-import {IndexedEvents} from 'squidlet-lib'
+import {IndexedEvents, IndexedEventEmitter} from 'squidlet-lib'
 import {ComponentsPool} from './ComponentsPool.js';
 import {Component, ComponentDefinition} from './Component.js';
 import {UiElementDefinition} from './interfaces/UiElementDefinitionBase.js';
@@ -7,19 +7,14 @@ import {OutcomeEvents, IncomeEvents} from './interfaces/DomEvents.js';
 
 
 type OutcomeEventHandler = (event: OutcomeEvents, rootElId: string, childPosition: number, tmpl?: UiElementDefinition) => void
-type IncomeEventHandler = (
-  event: IncomeEvents,
-  componentId: string,
-  elementId: string,
-  ...data: any[]
-) => void
 
-const EVENT_DELIMITER = '|'
+
+export const COMPONENT_EVENT_PREFIX = 'C|'
 
 
 export class Main {
   readonly outcomeEvents = new IndexedEvents<OutcomeEventHandler>()
-  readonly incomeEvents = new IndexedEvents<IncomeEventHandler>()
+  readonly incomeEvents = new IndexedEventEmitter()
   componentPool: ComponentsPool
   rootComponent: Component
 
@@ -30,8 +25,6 @@ export class Main {
     const rootComponentDefinition: ComponentDefinition = yaml.parse(rootComponentDefinitionStr)
 
     this.rootComponent = new Component(this, rootComponentDefinition)
-
-    //this.incomeEvents.addListener(this.handleIncomeEvent)
   }
 
   async init() {
@@ -64,12 +57,11 @@ export class Main {
   /**
    * Call it from outside code
    */
-  emitIncomeEvent(event: IncomeEvents, elementId: string, ...data: any[]) {
-    this.incomeEvents.emit(event, elementId, ...data)
+  emitIncomeEvent(event: IncomeEvents, componentId: string, elementId: string, ...data: any[]) {
+    // emit ordinary event
+    this.incomeEvents.emit(event, componentId, elementId, ...data)
+    // emit component specific event
+    this.incomeEvents.emit(COMPONENT_EVENT_PREFIX + componentId, event, elementId, ...data)
   }
-
-
-  // private handleIncomeEvent = (event: IncomeEvents, elementId: string, ...data: any[]) => {
-  // }
 
 }

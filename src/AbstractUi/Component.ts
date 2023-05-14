@@ -1,6 +1,6 @@
 import {omitObj, makeUniqId} from 'squidlet-lib';
 import {UiElementDefinitionBase} from './interfaces/UiElementDefinitionBase.js';
-import {Main} from './Main.js';
+import {COMPONENT_EVENT_PREFIX, Main} from './Main.js';
 import {IncomeEvents} from './interfaces/DomEvents.js';
 
 
@@ -48,7 +48,11 @@ export class Component {
 
 
   async init() {
-    this.incomeEventListenerIndex = this.main.incomeEvents.addListener(this.handleIncomeEvent)
+    this.incomeEventListenerIndex = this.main.incomeEvents.addListener(
+      COMPONENT_EVENT_PREFIX + this.id,
+      this.handleIncomeEvent
+    )
+
     // TODO: run on init event
 
     await this.instantiateChildren()
@@ -89,11 +93,13 @@ export class Component {
 
 
   private handleIncomeEvent = (event: IncomeEvents, elementId: string, ...data: any[]) => {
-
-    // TODO: лучше слушать только свои события а не все сразу
-
     switch (event) {
       case IncomeEvents.click:
+
+        console.log(11111, 'click')
+
+        // TODO: what to do ???
+
         break;
     }
   }
