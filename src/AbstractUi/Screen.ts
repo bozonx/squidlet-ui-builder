@@ -1,4 +1,4 @@
-import {Document} from './Document';
+import {Document} from './elements/Document.js';
 import {Window} from './Window';
 import {UiState} from './UiState';
 import {ScreenDefinition} from './interfaces/ScreenDefinition';

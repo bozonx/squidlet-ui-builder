@@ -29,7 +29,7 @@
 // import {Text} from '../elements/Text.js'
 // import {ButtonGroup} from '../elements/ButtonGroup.js'
 // import {Fragment} from '../elements/Fragment.js'
-import {Document} from '../Document.js';
+import {Document} from '../elements/Document.js';
 
 
 export type AnyElement = Document

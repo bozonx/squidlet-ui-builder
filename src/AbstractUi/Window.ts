@@ -1,5 +1,5 @@
 import {IndexedEventEmitter} from 'squidlet-lib';
-import {Document} from './Document';
+import {Document} from './elements/Document.js';
 import {Router} from './Router';
 import {UiState} from './UiState';
 import {WindowConfig} from './interfaces/WindowConfig';

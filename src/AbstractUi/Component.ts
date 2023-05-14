@@ -19,6 +19,7 @@ export interface ComponentDefinition {
 
   // TODO: add others component parameters
 
+  name: string
   props: ComponentProp
   tmpl?: UiElementDefinitionBase
   tmplExp?: string

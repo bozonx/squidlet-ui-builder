@@ -1,4 +1,4 @@
-import {DocumentDefinition} from '../Document.js';
+import {DocumentDefinition} from '../elements/Document.js';
 
 
 export interface AnyElementDefinitions {
