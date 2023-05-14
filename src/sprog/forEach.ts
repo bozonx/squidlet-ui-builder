@@ -12,14 +12,19 @@ import {Spromise} from './lib/Spromise.js';
  *       - $exp: jsCall
  */
 
+// TODO: add setIterator - установить значение I
+// TODO: add isFirst
+// TODO: add isLast
+// TODO: add skipNext()
+// TODO: add skip(num) - пропусть заданое количество шагов
+// TODO: add reverse - в обратном порядке
+
 interface ForEachParams {
   src: any[] | Record<string, any>
   // default is 'item'
   //as?: string
   do: (p: {item: any, index: string | number}) => Spromise<void>
 }
-
-//export const FOR_EACH_DEFAULT_AS_NAME = 'item'
 
 
 export function forEach(scope: Record<string, any> = {}) {

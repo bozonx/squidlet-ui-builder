@@ -2,6 +2,7 @@ import {getJsValue, newJsVar, setJsValue} from './jsValue.js';
 import {jsCall} from './jsCall.js';
 import {superFunc} from './superFunc.js';
 import {jsFunc} from './jsFunc.js';
+import {forEach} from './forEach.js';
 
 
 /*
@@ -17,5 +18,6 @@ export const sprog = {
   jsFunc,
 
   // SUPER
+  forEach,
   superFunc,
 }

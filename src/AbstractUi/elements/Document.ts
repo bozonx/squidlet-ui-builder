@@ -18,14 +18,13 @@ props:
   children:
     type: Component[]
 tmpl:
-  - component: ForEach
+  - $exp: forEach
     src:
       $exp: getProp
       path: children
-    as: child
-    item:
+    do:
       $exp: getJsValue
-      path: child
+      path: item
 `
 
 
