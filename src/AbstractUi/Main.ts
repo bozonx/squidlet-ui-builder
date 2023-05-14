@@ -7,7 +7,12 @@ import {OutcomeEvents, IncomeEvents} from './interfaces/DomEvents.js';
 
 
 type OutcomeEventHandler = (event: OutcomeEvents, rootElId: string, childPosition: number, tmpl?: UiElementDefinition) => void
-type IncomeEventHandler = (event: IncomeEvents, elementId: string, ...data: any[]) => void
+type IncomeEventHandler = (
+  event: IncomeEvents,
+  componentId: string,
+  elementId: string,
+  ...data: any[]
+) => void
 
 
 export class Main {
