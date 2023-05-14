@@ -46,15 +46,12 @@ export class Component {
 
 
   async init() {
-    this.incomeEventListenerIndex = this.main.incomeEvents.addListener(
-      COMPONENT_EVENT_PREFIX + this.id,
-      this.handleIncomeEvent
-    )
 
-    // TODO: run on init event
+
+    // TODO: run onInit callback
 
     await this.instantiateChildren()
-    // init all the component
+    // init all the children components
     for (const component of this.children) {
       await component.init()
     }
@@ -69,13 +66,32 @@ export class Component {
   }
 
 
+  /**
+   * Mount rendered elements and it's children and start listening income events
+   */
   async mount(rootElId: string, childPosition: number) {
+
+    // TODO: корень разве здесь должен устанавливаться???
+
+    // start listening income events
+    this.incomeEventListenerIndex = this.main.incomeEvents.addListener(
+      COMPONENT_EVENT_PREFIX + this.id,
+      this.handleIncomeEvent
+    )
+
     // TODO: call onMount component's callback
 
     this.main.outcomeEvents.emit(OutcomeEvents.mount, this.makeRenderedEl())
   }
 
+  /**
+   * Unmount rendered elements and it's children and stop listening incoming events.
+   * But the component won't be destroyed
+   */
   async unmount() {
+    // stop listening income events
+    this.main.incomeEvents.removeListener(this.incomeEventListenerIndex)
+
     // TODO: run onUnmount callback
 
     this.main.outcomeEvents.emit(OutcomeEvents.unMount, this.makeRenderedEl())

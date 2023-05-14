@@ -3,7 +3,7 @@ export interface RenderedElement {
   parentElId: string
   parentChildPosition: number
   componentId: string
-  // params for rendered element
+  // unified params for rendered element
   params?: Record<string, any>
   children?: RenderedElement[]
 }

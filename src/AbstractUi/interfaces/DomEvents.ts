@@ -1,6 +1,9 @@
 export enum OutcomeEvents {
+  // mount UI element and it's children
   mount,
+  // unmount UI element and it's children
   unMount,
+  // update only UI element params or children add/remove/move
   update,
 }
 
