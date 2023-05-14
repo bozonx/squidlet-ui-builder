@@ -31,6 +31,7 @@ export class Component {
   private readonly main: Main
   // initial component definition
   private readonly componentDefinition: ComponentDefinition
+  private incomeEventListenerIndex?: number
 
 
   constructor(
@@ -47,7 +48,7 @@ export class Component {
 
 
   async init() {
-    this.main.incomeEvents.addListener(this.handleIncomeEvent)
+    this.incomeEventListenerIndex = this.main.incomeEvents.addListener(this.handleIncomeEvent)
     // TODO: run on init event
 
     await this.instantiateChildren()
@@ -58,6 +59,8 @@ export class Component {
   }
 
   async destroy() {
+    this.main.incomeEvents.removeListener(this.incomeEventListenerIndex)
+
     for (const component of this.children) {
       await component.destroy()
     }

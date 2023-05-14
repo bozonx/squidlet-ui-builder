@@ -14,6 +14,8 @@ type IncomeEventHandler = (
   ...data: any[]
 ) => void
 
+const EVENT_DELIMITER = '|'
+
 
 export class Main {
   readonly outcomeEvents = new IndexedEvents<OutcomeEventHandler>()
