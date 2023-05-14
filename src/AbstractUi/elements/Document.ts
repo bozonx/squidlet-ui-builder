@@ -24,7 +24,7 @@ tmpl:
       path: children
     as: child
     item:
-      $exp: getScopeValue
+      $exp: getJsValue
       path: child
 `
 
