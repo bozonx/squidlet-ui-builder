@@ -15,15 +15,15 @@ import {Spromise} from './lib/Spromise.js';
 interface ForEachParams {
   src: any[] | Record<string, any>
   // default is 'item'
-  as?: string
+  //as?: string
   do: (p: {item: any, index: string | number}) => Spromise<void>
 }
 
-export const FOR_EACH_DEFAULT_AS_NAME = 'item'
+//export const FOR_EACH_DEFAULT_AS_NAME = 'item'
 
 
 export function forEach(scope: Record<string, any> = {}) {
-  return ({as = FOR_EACH_DEFAULT_AS_NAME, ...p}: ForEachParams) => {
+  return (p: ForEachParams) => {
     if (Array.isArray(p.src)) {
       for (const indexStr in p.src) {
         const index = Number(indexStr)
@@ -37,6 +37,8 @@ export function forEach(scope: Record<string, any> = {}) {
     else if (typeof p.src === 'object') {
       for (const index of Object.keys(p.src)) {
         const item = p.src[index]
+
+        // TODO: await
 
         p.do({item, index})
       }
