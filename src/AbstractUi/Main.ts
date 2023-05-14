@@ -1,13 +1,18 @@
 import yaml from 'yaml';
-import {IndexedEventEmitter} from 'squidlet-lib'
+import {IndexedEvents} from 'squidlet-lib'
 import {ComponentsPool} from './ComponentsPool.js';
 import {Component, ComponentDefinition} from './Component.js';
-import {UiElementDefinition, UiElementDefinitionBase} from './interfaces/UiElementDefinitionBase.js';
+import {UiElementDefinition} from './interfaces/UiElementDefinitionBase.js';
+import {OutcomeEvents, IncomeEvents} from './interfaces/DomEvents.js';
 
+
+type OutcomeEventHandler = (event: OutcomeEvents, rootElId: string, childPosition: number, tmpl?: UiElementDefinition) => void
+type IncomeEventHandler = (event: IncomeEvents, elementId: string, ...data: any[]) => void
 
 
 export class Main {
-  readonly events = new IndexedEventEmitter()
+  readonly outcomeEvents = new IndexedEvents<OutcomeEventHandler>()
+  readonly incomeEvents = new IndexedEvents<IncomeEventHandler>()
   componentPool: ComponentsPool
   rootComponent: Component
 
@@ -18,24 +23,46 @@ export class Main {
     const rootComponentDefinition: ComponentDefinition = yaml.parse(rootComponentDefinitionStr)
 
     this.rootComponent = new Component(this, rootComponentDefinition)
-  }
 
+    //this.incomeEvents.addListener(this.handleIncomeEvent)
+  }
 
   async init() {
-
-    // TODO: должны создаться все инстансы, которые в данный момент изображены
-    // TODO: должно подняться событие на отрисовку, чтобы тг бот отрисовал меню
-    //         * говорится корень откуда отрисовывать и дерево элементов с параметрами
-    // TODO: должны начать слушаться события извне - из телеграм бота
-
     await this.rootComponent.init()
-    // mount root component
-    await this.rootComponent.render('/', 0)
+    // render root component
+    await this.rootComponent.mount('/', 0)
+  }
+
+  async destroy() {
+    // TODO: послать событие на unmount корня
+    // TODO: дестрой всех компонентов
+
+    this.outcomeEvents.destroy()
+    this.incomeEvents.destroy()
   }
 
 
-  emitRender(rootElId: string, childPosition: number, tmpl: UiElementDefinition) {
-
+  emitMount(rootElId: string, childPosition: number, tmpl: UiElementDefinition) {
+    this.outcomeEvents.emit(OutcomeEvents.mount, rootElId, childPosition, tmpl)
   }
+
+  emitUnmount(rootElId: string, childPosition: number) {
+    this.outcomeEvents.emit(OutcomeEvents.unMount, rootElId, childPosition)
+  }
+
+  emitUpdate(rootElId: string, childPosition: number, tmpl: UiElementDefinition) {
+    this.outcomeEvents.emit(OutcomeEvents.update, rootElId, childPosition, tmpl)
+  }
+
+  /**
+   * Call it from outside code
+   */
+  emitIncomeEvent(event: IncomeEvents, elementId: string, ...data: any[]) {
+    this.incomeEvents.emit(event, elementId, ...data)
+  }
+
+
+  // private handleIncomeEvent = (event: IncomeEvents, elementId: string, ...data: any[]) => {
+  // }
 
 }

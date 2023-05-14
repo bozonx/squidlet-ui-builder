@@ -1,6 +1,7 @@
 import {omitObj} from 'squidlet-lib';
 import {UiElementDefinitionBase} from './interfaces/UiElementDefinitionBase.js';
 import {Main} from './Main.js';
+import {IncomeEvents} from './interfaces/DomEvents.js';
 
 
 export interface ComponentProp {
@@ -46,7 +47,7 @@ export class Component {
 
 
   async init() {
-
+    this.main.incomeEvents.addListener(this.handleIncomeEvent)
     // TODO: run on init event
 
     await this.instantiateChildren()
@@ -63,7 +64,7 @@ export class Component {
   }
 
 
-  async render(rootElId: string, childPosition: number) {
+  async mount(rootElId: string, childPosition: number) {
     // TODO: run onMount event
     // TODO: mount
     // TODO: наверное надо поднять событие монтирования
@@ -71,7 +72,7 @@ export class Component {
     // TODO: resurse пройтись по потомкам и запросить у них tmpl.
     // TODO: но если они уже примонтированны и у них нет изменений то не рендерить их
 
-    this.main.emitRender(rootElId, childPosition)
+    this.main.emitMount(rootElId, childPosition)
   }
 
   async unmount() {
@@ -79,6 +80,20 @@ export class Component {
     // TODO: unmount
   }
 
+  async update() {
+
+  }
+
+
+  private handleIncomeEvent = (event: IncomeEvents, elementId: string, ...data: any[]) => {
+
+    // TODO: лучше слушать только свои события а не все сразу
+
+    switch (event) {
+      case IncomeEvents.click:
+        break;
+    }
+  }
 
   private async instantiateChildren() {
     if (this.componentDefinition.tmplExp) {
