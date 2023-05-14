@@ -2,6 +2,7 @@ import {IndexedEvents} from 'squidlet-lib';
 
 
 // TODO: use proxy
+// TODO: можно добавить ф-ю генерирующую значение из других данных
 
 export interface StateDefinition {
   // TODO: add other params

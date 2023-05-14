@@ -9,6 +9,8 @@ import {StateDefinition, UiState} from './UiState.js';
 
 
 // TODO: поддержка перемещения элементов
+// TODO: use <PropsDef = Record<string, any>> ???
+// TODO: use StateDef ???
 
 
 export interface ComponentDefinition {
@@ -25,7 +27,7 @@ export interface ComponentDefinition {
 }
 
 
-export class Component<PropsDef = Record<string, any>> {
+export class Component {
   // componentId
   readonly id: string
   // id of UI element which is represents this component
@@ -34,7 +36,7 @@ export class Component<PropsDef = Record<string, any>> {
   // like {componentId: Component}
   readonly children: Record<string, Component> = {}
   // props set in template of parent component
-  readonly props: UiProps<PropsDef>
+  readonly props: UiProps
 
   private readonly main: Main
   // initial component definition with its children
@@ -70,10 +72,10 @@ export class Component<PropsDef = Record<string, any>> {
 
 
   async init() {
+    await this.instantiateChildren()
 
     // TODO: run onInit callback
 
-    await this.instantiateChildren()
     // init all the children components
     for (const componentId of Object.keys(this.children)) {
       await this.children[componentId].init()
@@ -82,6 +84,8 @@ export class Component<PropsDef = Record<string, any>> {
 
   async destroy() {
     this.main.incomeEvents.removeListener(this.incomeEventListenerIndex)
+    this.props.destroy()
+    this.state.destroy()
 
     for (const componentId of Object.keys(this.children)) {
       await this.children[componentId].destroy()
@@ -112,7 +116,13 @@ export class Component<PropsDef = Record<string, any>> {
 
     // TODO: call onMount component's callback
 
-    this.main.outcomeEvents.emit(OutcomeEvents.mount, this.makeRenderedEl())
+    const el: RenderedElement = {
+      ...this.makeRenderedEl(),
+      params: this.getUiParams(),
+      children: this.getChildrenUiEls(),
+    }
+
+    this.main.outcomeEvents.emit(OutcomeEvents.mount, el)
   }
 
   /**
@@ -123,6 +133,8 @@ export class Component<PropsDef = Record<string, any>> {
     // stop listening income events
     this.main.incomeEvents.removeListener(this.incomeEventListenerIndex)
 
+    // TODO: запустить unmount на потомках чтобы они описались от событий
+    //       но при этом не нужно уже вызывать из emit unMount event
     // TODO: run onUnmount callback
 
     this.main.outcomeEvents.emit(OutcomeEvents.unMount, this.makeRenderedEl())
@@ -131,7 +143,12 @@ export class Component<PropsDef = Record<string, any>> {
   async update() {
     // TODO: run onUpdate callback
 
-    this.main.outcomeEvents.emit(OutcomeEvents.update, this.makeRenderedEl())
+    const el: RenderedElement = {
+      ...this.makeRenderedEl(),
+      params: this.getUiParams(),
+    }
+
+    this.main.outcomeEvents.emit(OutcomeEvents.update, el)
   }
 
 
@@ -147,6 +164,7 @@ export class Component<PropsDef = Record<string, any>> {
     }
   }
 
+  // TODO: review
   private async instantiateChildren() {
     if (this.componentDefinition.tmplExp) {
 
@@ -177,27 +195,30 @@ export class Component<PropsDef = Record<string, any>> {
   }
 
   private makeRenderedEl(): RenderedElement {
-
-    // TODO: resurse пройтись по потомкам и запросить у них tmpl. - только на mount
-
-    const el = {
-
-      // TODO: make params
-
+    return {
       elId: this.uiElId,
       elName: this.name,
       parentElId: this.parent.uiElId,
       parentChildPosition: this.parent.getPositionOfChildrenEl(this.uiElId),
       componentId: this.id,
+    }
+  }
 
-      // TODO: add
-      // // params for rendered element
-      // params?: Record<string, any>
-      // TODO: add
-      // children?: RenderedElement[]
+  private getChildrenUiEls(): RenderedElement[] | undefined {
+    const res: RenderedElement[] = []
+
+    for (const childComponentId of this.uiChildrenPositions) {
+      // TODO: resurse пройтись по потомкам и запросить у них tmpl. - только на mount
+
     }
 
-    return el
+    if (!res.length) return
+
+    return res
+  }
+
+  private getUiParams(): Record<string, any> | undefined {
+
   }
 
 }
