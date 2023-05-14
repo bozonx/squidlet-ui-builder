@@ -1,8 +1,9 @@
 
 /*
  * vars - top level vars or functions of function scope
- * lines - any code execution
- * as - rename some params
+ * as - rename some income params
+ * lines - any code execution include set vars
+ * return - value to return
  */
 
 

@@ -29,6 +29,9 @@ interface ForEachParams {
 
 export function forEach(scope: Record<string, any> = {}) {
   return (p: ForEachParams) => {
+
+    // TODO: проверить чтобы do было superFunc а не обычной
+
     if (Array.isArray(p.src)) {
       for (const indexStr in p.src) {
         const index = Number(indexStr)

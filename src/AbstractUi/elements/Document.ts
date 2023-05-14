@@ -23,8 +23,12 @@ tmpl:
       $exp: getProp
       path: children
     do:
-      $exp: getJsValue
-      path: item
+      $exp: superFunc
+      lines:
+        - $exp: funcReturn
+          value:
+            $exp: getJsValue
+            path: item
 `
 
 

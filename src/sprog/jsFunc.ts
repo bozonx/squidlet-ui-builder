@@ -6,3 +6,7 @@ export function jsFunc (scope: Record<string, any> = {}) {
 
   }
 }
+
+export function funcReturn(scope: Record<string, any> = {}) {
+
+}
