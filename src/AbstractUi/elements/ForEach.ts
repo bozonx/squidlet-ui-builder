@@ -5,7 +5,6 @@ props:
     type: array
   as:
     type: string
-  # it is props of component
   item:
     type: object
 

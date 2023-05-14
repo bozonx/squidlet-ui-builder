@@ -32,7 +32,8 @@ export class Component {
   readonly id: string
   // id of UI element which is represents this component
   readonly uiElId: string
-  readonly parent: Component
+  // undefined means root
+  readonly parent?: Component
   // like {componentId: Component}
   readonly children: Record<string, Component> = {}
   // props set in template of parent component
@@ -57,7 +58,7 @@ export class Component {
 
   constructor(
     main: Main,
-    parent: Component,
+    parent: Component | undefined,
     componentDefinition: ComponentDefinition,
     propsValues?: Record<string, any>
   ) {
@@ -207,8 +208,8 @@ export class Component {
     return {
       elId: this.uiElId,
       elName: this.name,
-      parentElId: this.parent.uiElId,
-      parentChildPosition: this.parent.getPositionOfChildrenEl(this.uiElId),
+      parentElId: this.parent?.uiElId,
+      parentChildPosition: this.parent?.getPositionOfChildrenEl(this.uiElId),
       componentId: this.id,
     }
   }

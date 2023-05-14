@@ -3,8 +3,10 @@ export interface RenderedElement {
   elId: string
   // means component name
   elName: string
-  parentElId: string
-  parentChildPosition: number
+  // undefined means root
+  parentElId?: string
+  // undefined means root
+  parentChildPosition?: number
   // id of component in component tree which is handle this element
   componentId: string
   // unified params for rendered element

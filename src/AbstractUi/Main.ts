@@ -24,9 +24,7 @@ export class Main {
 
     const rootComponentDefinition: ComponentDefinition = yaml.parse(rootComponentDefinitionStr)
 
-    // TODO: создать root component
-
-    this.rootComponent = new Component(this, rootComponentDefinition)
+    this.rootComponent = new Component(this, undefined, rootComponentDefinition)
   }
 
   async init() {
