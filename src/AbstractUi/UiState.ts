@@ -1,13 +1,22 @@
 import {IndexedEvents} from 'squidlet-lib';
 
 
-export class UiState {
+// TODO: use proxy
+
+export interface StateDefinition {
+  // TODO: add other params
+  type: string | number
+}
+
+
+
+export class UiState<S = Record<string, StateDefinition>> {
   changeEvent = new IndexedEvents()
 
-  state: Record<string, any> = {}
+  state: S = {} as S
 
 
-  constructor(initialState: Record<string, any> = {}) {
+  constructor(stateDefinition: Record<string, StateDefinition> = {}) {
 
   }
 

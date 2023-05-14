@@ -4,29 +4,28 @@ import {COMPONENT_EVENT_PREFIX, Main} from './Main.js';
 import {IncomeEvents, OutcomeEvents} from './interfaces/DomEvents.js';
 import {COMPONENT_ID_BYTES_NUM, ELEMENT_ID_BYTES_NUM} from './interfaces/constants.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
+import {PropDefinition, UiProps} from './UiProps.js';
+import {StateDefinition, UiState} from './UiState.js';
 
 
 // TODO: поддержка перемещения элементов
 
-
-export interface ComponentProp {
-  // TODO: get normal props
-  // TODO: сделать реактивными - добавить subscribe()
-  type: string | number
-}
 
 export interface ComponentDefinition {
 
   // TODO: add others component parameters
 
   name: string
-  props: ComponentProp
+  // props which are controlled by outer component
+  props: Record<string, PropDefinition>
+  // local state
+  state: StateDefinition
   tmpl?: UiElementDefinitionBase
   tmplExp?: string
 }
 
 
-export class Component {
+export class Component<PropsDef = Record<string, any>> {
   // componentId
   readonly id: string
   // id of UI element which is represents this component
@@ -34,7 +33,8 @@ export class Component {
   readonly parent: Component
   // like {componentId: Component}
   readonly children: Record<string, Component> = {}
-  readonly props: Record<string, ComponentProp>
+  // props set in template of parent component
+  readonly props: UiProps<PropsDef>
 
   private readonly main: Main
   // initial component definition with its children
@@ -42,6 +42,7 @@ export class Component {
   private incomeEventListenerIndex?: number
   // position of UI children elements. Like [componentId, ...]
   private uiChildrenPositions: string[] = []
+  private state = new UiState<Record<any, any>>()
 
 
   /**
@@ -56,14 +57,14 @@ export class Component {
     main: Main,
     parent: Component,
     componentDefinition: ComponentDefinition,
-    props: Record<string, ComponentProp> = {}
+    propsDefinition?: Record<string, PropDefinition>
   ) {
     this.id = makeUniqId(COMPONENT_ID_BYTES_NUM)
     this.uiElId = makeUniqId(ELEMENT_ID_BYTES_NUM)
     this.main = main
     this.parent = parent
     this.componentDefinition = componentDefinition
-    this.props = props
+    this.props = new UiProps(propsDefinition || {})
   }
 
 
