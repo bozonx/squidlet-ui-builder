@@ -1,4 +1,4 @@
-import {omitObj} from 'squidlet-lib';
+import {omitObj, makeUniqId} from 'squidlet-lib';
 import {UiElementDefinitionBase} from './interfaces/UiElementDefinitionBase.js';
 import {Main} from './Main.js';
 import {IncomeEvents} from './interfaces/DomEvents.js';
@@ -24,15 +24,13 @@ export interface ComponentDefinition {
 
 
 export class Component {
+  readonly id: string
+  readonly children: Component[] = []
+  readonly props: Record<string, ComponentProp>
+
   private readonly main: Main
+  // initial component definition
   private readonly componentDefinition: ComponentDefinition
-  private readonly props: Record<string, ComponentProp>
-  private readonly childrenComponents: Component[] = []
-
-
-  get children(): Component[] {
-    return this.childrenComponents
-  }
 
 
   constructor(
@@ -40,6 +38,8 @@ export class Component {
     componentDefinition: ComponentDefinition,
     props: Record<string, ComponentProp> = {}
   ) {
+    // TODO: указать количество символом
+    this.id = makeUniqId()
     this.main = main
     this.componentDefinition = componentDefinition
     this.props = props
@@ -52,13 +52,13 @@ export class Component {
 
     await this.instantiateChildren()
     // init all the component
-    for (const component of this.childrenComponents) {
+    for (const component of this.children) {
       await component.init()
     }
   }
 
   async destroy() {
-    for (const component of this.childrenComponents) {
+    for (const component of this.children) {
       await component.destroy()
     }
   }
@@ -113,7 +113,7 @@ export class Component {
         const definition = await this.main.componentPool
           .getComponentDefinition(child.component)
 
-        this.childrenComponents.push(
+        this.children.push(
           new Component(this.main, definition, omitObj(child, 'component'))
         )
       }
