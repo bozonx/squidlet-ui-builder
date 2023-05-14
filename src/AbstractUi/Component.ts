@@ -19,7 +19,7 @@ export interface ComponentDefinition {
   // props which are controlled by outer component
   props: Record<string, PropDefinition>
   // local state
-  state: StateDefinition
+  state: Record<string, StateDefinition>
   tmpl?: UiElementDefinitionBase
   tmplExp?: string
 }
@@ -42,7 +42,7 @@ export class Component<PropsDef = Record<string, any>> {
   private incomeEventListenerIndex?: number
   // position of UI children elements. Like [componentId, ...]
   private uiChildrenPositions: string[] = []
-  private state = new UiState<Record<any, any>>()
+  private state: UiState
 
 
   /**
@@ -57,14 +57,15 @@ export class Component<PropsDef = Record<string, any>> {
     main: Main,
     parent: Component,
     componentDefinition: ComponentDefinition,
-    propsDefinition?: Record<string, PropDefinition>
+    propsValues?: Record<string, any>
   ) {
     this.id = makeUniqId(COMPONENT_ID_BYTES_NUM)
     this.uiElId = makeUniqId(ELEMENT_ID_BYTES_NUM)
     this.main = main
     this.parent = parent
     this.componentDefinition = componentDefinition
-    this.props = new UiProps(propsDefinition || {})
+    this.props = new UiProps(componentDefinition.props || {}, propsValues)
+    this.state = new UiState(componentDefinition.state || {})
   }
 
 

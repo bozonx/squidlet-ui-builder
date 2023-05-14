@@ -11,13 +11,13 @@ export interface PropDefinition {
 }
 
 
-export class UiProps<P = Record<string, PropDefinition>> {
+export class UiProps<P = Record<string, any>> {
   changeEvent = new IndexedEvents()
 
   props: P = {} as P
 
 
-  constructor(propsDefinition: Record<string, PropDefinition>) {
+  constructor(propsDefinition: Record<string, PropDefinition>, initialValues?: P) {
 
   }
 

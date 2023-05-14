@@ -16,7 +16,7 @@ export class UiState<S = Record<string, StateDefinition>> {
   state: S = {} as S
 
 
-  constructor(stateDefinition: Record<string, StateDefinition> = {}) {
+  constructor(stateDefinition: Record<string, StateDefinition> = {}, initialValues?: S) {
 
   }
 
