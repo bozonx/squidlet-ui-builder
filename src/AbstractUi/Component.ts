@@ -1,5 +1,5 @@
 import {omitObj, makeUniqId} from 'squidlet-lib';
-import {UiElementDefinitionBase} from './interfaces/UiElementDefinitionBase.js';
+import {UiElementDefinition} from './interfaces/UiElementDefinitionBase.js';
 import {COMPONENT_EVENT_PREFIX, Main} from './Main.js';
 import {IncomeEvents, OutcomeEvents} from './interfaces/DomEvents.js';
 import {COMPONENT_ID_BYTES_NUM, ELEMENT_ID_BYTES_NUM} from './interfaces/constants.js';
@@ -22,7 +22,7 @@ export interface ComponentDefinition {
   props: Record<string, PropDefinition>
   // local state
   state: Record<string, StateDefinition>
-  tmpl?: UiElementDefinitionBase
+  tmpl?: UiElementDefinition[]
   tmplExp?: string
 }
 
@@ -185,17 +185,17 @@ export class Component {
       return
     }
     else if (this.componentDefinition.tmpl) {
-      const tmpl: UiElementDefinitionBase = this.componentDefinition.tmpl
-      const children: UiElementDefinitionBase[] = (typeof tmpl === 'object')
-        ? [tmpl]
-        : tmpl
-      //const tmplRootComponentName = rootTmplElement.component
-
+      const children: UiElementDefinition[] = this.componentDefinition.tmpl
 
       for (const child of children) {
         const definition = await this.main.componentPool
           .getComponentDefinition(child.component)
-        const childComponent = new Component(this.main, this, definition, omitObj(child, 'component'))
+        const childComponent = new Component(
+          this.main,
+          this,
+          definition,
+          omitObj(child, 'component')
+        )
 
         this.children[childComponent.id] = childComponent
         // set initial position

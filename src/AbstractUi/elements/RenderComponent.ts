@@ -1,4 +1,4 @@
-export const RENDER_COMPONENT_COMPONENT = `
+export const RenderComponent = `
 name: RenderComponent
 props:
   definition:

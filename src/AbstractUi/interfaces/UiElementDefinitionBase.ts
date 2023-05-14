@@ -5,7 +5,7 @@ export interface UiElementDefinitionBase {
   component: keyof AnyElementDefinitions
 }
 
-// export interface UiElementDefinition extends UiElementDefinitionBase {
-//   // props
-//   [index: string]: any
-// }
+export interface UiElementDefinition extends UiElementDefinitionBase {
+  // props
+  [index: string]: any
+}

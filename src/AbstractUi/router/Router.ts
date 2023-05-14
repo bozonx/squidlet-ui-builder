@@ -1,11 +1,15 @@
-import BreadCrumbs, {BREADCRUMBS_DELIMITER} from './BreadCrumbs';
-import {Window} from './Window';
-import {Route} from './interfaces/Route';
-import {Screen} from './Screen';
-import {UiState} from './UiState';
+import BreadCrumbs, {BREADCRUMBS_DELIMITER} from '../BreadCrumbs.js';
+import {Window} from '../Window.js';
+import {Route} from '../interfaces/Route.js';
+import {Screen} from '../Screen.js';
+import {UiState} from '../UiState.js';
 
 
-export class Router {
+export const Router = `
+`
+
+
+export class RouterClass {
   breadCrumbs = new BreadCrumbs()
 
   private window: Window
@@ -89,11 +93,11 @@ export class Router {
         await this.currentScreenInstance.destroy()
       }
 
-      // TODO: нужно же брать уже готовый инстанс
-      // TODO: что ещё ему передать??
-      this.currentScreenInstance = new Screen(this.window)
-
-      await this.currentScreenInstance.init()
+      // // TODO: нужно же брать уже готовый инстанс
+      // // TODO: что ещё ему передать??
+      // this.currentScreenInstance = new Screen(this.window)
+      //
+      // await this.currentScreenInstance.init()
     })()
       .catch((e) => {
         throw e

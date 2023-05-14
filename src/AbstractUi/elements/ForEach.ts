@@ -1,4 +1,4 @@
-export const FOR_EACH_COMPONENT = `
+export const ForEach = `
 name: ForEach
 props:
   src:

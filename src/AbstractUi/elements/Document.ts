@@ -12,18 +12,18 @@ export type DocumentEventHandler = (elementPath: string, eventName: string, data
 
 
 
-export const DOCUMENT_COMPONENT = `
+export const Document = `
 name: Document
 props:
   children:
     type: array
 tmpl:
-  component: ForEach
-  src: {this.children}
-  as: child
-  item:
-    component: RenderComponent
-    definition: {child}
+  - component: ForEach
+    src: {this.children}
+    as: child
+    item:
+      component: RenderComponent
+      definition: {child}
 `
 
 

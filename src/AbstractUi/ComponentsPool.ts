@@ -20,7 +20,7 @@ export class ComponentsPool {
 
     const definitionStr = STD_COMPONENTS[componentName]
 
-    console.log(111, componentName, definitionStr)
+    console.log(111, 'got comp def - ', componentName)
 
     this.parsedDefinitions[componentName] = yaml.parse(definitionStr)
 
