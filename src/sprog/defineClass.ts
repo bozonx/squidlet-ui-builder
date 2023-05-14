@@ -1,0 +1,3 @@
+/**
+ * Define js class
+ */
