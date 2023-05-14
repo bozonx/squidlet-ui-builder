@@ -2,12 +2,11 @@ import yaml from 'yaml';
 import {IndexedEvents, IndexedEventEmitter} from 'squidlet-lib'
 import {ComponentsPool} from './ComponentsPool.js';
 import {Component, ComponentDefinition} from './Component.js';
-import {UiElementDefinition} from './interfaces/UiElementDefinitionBase.js';
 import {OutcomeEvents, IncomeEvents} from './interfaces/DomEvents.js';
-import {RenderElement} from './interfaces/RenderElement.js';
+import {RenderedElement} from './interfaces/RenderedElement.js';
 
 
-type OutcomeEventHandler = (event: OutcomeEvents, rootElId: string, childPosition: number, tmpl?: RenderElement) => void
+type OutcomeEventHandler = (event: OutcomeEvents, el: RenderedElement) => void
 
 
 export const COMPONENT_EVENT_PREFIX = 'C|'
@@ -43,16 +42,16 @@ export class Main {
   }
 
 
-  emitMount(rootElId: string, childPosition: number, tmpl: UiElementDefinition) {
-    this.outcomeEvents.emit(OutcomeEvents.mount, rootElId, childPosition, tmpl)
+  emitMount(el: RenderedElement) {
+    this.outcomeEvents.emit(OutcomeEvents.mount, el)
   }
 
-  emitUnmount(rootElId: string, childPosition: number) {
-    this.outcomeEvents.emit(OutcomeEvents.unMount, rootElId, childPosition)
+  emitUnmount(el: RenderedElement) {
+    this.outcomeEvents.emit(OutcomeEvents.unMount, el)
   }
 
-  emitUpdate(rootElId: string, childPosition: number, tmpl: UiElementDefinition) {
-    this.outcomeEvents.emit(OutcomeEvents.update, rootElId, childPosition, tmpl)
+  emitUpdate(el: RenderedElement) {
+    this.outcomeEvents.emit(OutcomeEvents.update, el)
   }
 
   /**
