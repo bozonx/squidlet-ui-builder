@@ -1,4 +1,5 @@
 export const FOR_EACH_COMPONENT = `
+name: ForEach
 props:
   src:
     type: array

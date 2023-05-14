@@ -1,4 +1,5 @@
 export const RENDER_COMPONENT_COMPONENT = `
+name: RenderComponent
 props:
   definition:
     type: Component

@@ -13,6 +13,7 @@ export type DocumentEventHandler = (elementPath: string, eventName: string, data
 
 
 export const DOCUMENT_COMPONENT = `
+name: Document
 props:
   children:
     type: array
