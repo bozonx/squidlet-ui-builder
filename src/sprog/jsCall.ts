@@ -9,6 +9,7 @@ import {objGet} from 'squidlet-lib'
  *   async: true
  *   args:
  *     - 1
+ *     - 'some value'
  */
 
 export function jsCall(scope: Record<string, any> = {}) {
