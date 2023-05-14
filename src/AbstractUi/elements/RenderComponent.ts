@@ -1,3 +1,6 @@
+
+// TODO: review
+
 export const RenderComponent = `
 name: RenderComponent
 props:
