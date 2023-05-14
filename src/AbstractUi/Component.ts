@@ -143,6 +143,8 @@ export class Component {
       // params?: Record<string, any>
       // children?: RenderedElement[]
     }
+
+    return el
   }
 
 }
