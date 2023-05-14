@@ -24,6 +24,8 @@ export class Main {
 
     const rootComponentDefinition: ComponentDefinition = yaml.parse(rootComponentDefinitionStr)
 
+    // TODO: создать root component
+
     this.rootComponent = new Component(this, rootComponentDefinition)
   }
 

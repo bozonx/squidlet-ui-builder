@@ -2,8 +2,11 @@ import {omitObj, makeUniqId} from 'squidlet-lib';
 import {UiElementDefinitionBase} from './interfaces/UiElementDefinitionBase.js';
 import {COMPONENT_EVENT_PREFIX, Main} from './Main.js';
 import {IncomeEvents, OutcomeEvents} from './interfaces/DomEvents.js';
-import {COMPONENT_ID_BYTES_NUM} from './interfaces/constants.js';
+import {COMPONENT_ID_BYTES_NUM, ELEMENT_ID_BYTES_NUM} from './interfaces/constants.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
+
+
+// TODO: поддержка перемещения элементов
 
 
 export interface ComponentProp {
@@ -23,7 +26,14 @@ export interface ComponentDefinition {
 
 
 export class Component {
+  // componentId
   readonly id: string
+  // id of UI element which is represents this component
+  readonly uiElId: string
+  // component name. The same as in template and component class
+  readonly name: string
+  readonly parent: Component
+  // TODO: наверное лучше сделать {componentId: Component} для быстрого доступа
   readonly children: Component[] = []
   readonly props: Record<string, ComponentProp>
 
@@ -31,22 +41,25 @@ export class Component {
   // initial component definition
   private readonly componentDefinition: ComponentDefinition
   private incomeEventListenerIndex?: number
+  private childrenPositions: string[] = []
 
 
   constructor(
     main: Main,
+    parent: Component,
     componentDefinition: ComponentDefinition,
     props: Record<string, ComponentProp> = {}
   ) {
     this.id = makeUniqId(COMPONENT_ID_BYTES_NUM)
+    this.uiElId = makeUniqId(ELEMENT_ID_BYTES_NUM)
     this.main = main
+    this.parent = parent
     this.componentDefinition = componentDefinition
     this.props = props
   }
 
 
   async init() {
-
 
     // TODO: run onInit callback
 
@@ -55,6 +68,8 @@ export class Component {
     for (const component of this.children) {
       await component.init()
     }
+    // fill initial elements' positions
+    this.childrenPositions = this.children.map((component) => component.uiElId)
   }
 
   async destroy() {
@@ -65,6 +80,14 @@ export class Component {
     }
   }
 
+
+  /**
+   * Get position of child by it's UI el id.
+   * -1 means - can't find child
+   */
+  getPositionOfChildrenEl(childrenElId: string): number {
+    return this.childrenPositions.indexOf(childrenElId)
+  }
 
   /**
    * Mount rendered elements and it's children and start listening income events
@@ -137,7 +160,7 @@ export class Component {
           .getComponentDefinition(child.component)
 
         this.children.push(
-          new Component(this.main, definition, omitObj(child, 'component'))
+          new Component(this.main, this, definition, omitObj(child, 'component'))
         )
       }
     }
@@ -151,12 +174,16 @@ export class Component {
 
       // TODO: make params
 
-      // elId: string
-      // parentElId: string
-      // parentChildPosition: number
+      elId: this.uiElId,
+      elName: this.name,
+      parentElId: this.parent.uiElId,
+      parentChildPosition: this.parent.getPositionOfChildrenEl(this.uiElId),
       componentId: this.id,
+
+      // TODO: add
       // // params for rendered element
       // params?: Record<string, any>
+      // TODO: add
       // children?: RenderedElement[]
     }
 
