@@ -42,18 +42,6 @@ export class Main {
   }
 
 
-  emitMount(el: RenderedElement) {
-    this.outcomeEvents.emit(OutcomeEvents.mount, el)
-  }
-
-  emitUnmount(el: RenderedElement) {
-    this.outcomeEvents.emit(OutcomeEvents.unMount, el)
-  }
-
-  emitUpdate(el: RenderedElement) {
-    this.outcomeEvents.emit(OutcomeEvents.update, el)
-  }
-
   /**
    * Call it from outside code
    */

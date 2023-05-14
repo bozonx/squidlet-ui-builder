@@ -79,7 +79,11 @@ export class Component {
     // TODO: resurse пройтись по потомкам и запросить у них tmpl.
     // TODO: но если они уже примонтированны и у них нет изменений то не рендерить их
 
-    this.main.emitMount(rootElId, childPosition)
+    const el = {
+
+    }
+
+    this.main.outcomeEvents.emit(OutcomeEvents.mount, el)
   }
 
   async unmount() {
