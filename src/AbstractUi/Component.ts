@@ -116,13 +116,7 @@ export class Component {
 
     // TODO: call onMount component's callback
 
-    const el: RenderedElement = {
-      ...this.makeRenderedEl(),
-      params: this.getUiParams(),
-      children: this.getChildrenUiEls(),
-    }
-
-    this.main.outcomeEvents.emit(OutcomeEvents.mount, el)
+    this.main.outcomeEvents.emit(OutcomeEvents.mount, this.render())
   }
 
   /**
@@ -143,12 +137,27 @@ export class Component {
   async update() {
     // TODO: run onUpdate callback
 
-    const el: RenderedElement = {
+    this.main.outcomeEvents.emit(OutcomeEvents.update, this.renderSelf())
+  }
+
+  /**
+   * Make render element only for itself without children
+   */
+  renderSelf(): RenderedElement {
+    return {
       ...this.makeRenderedEl(),
       params: this.getUiParams(),
     }
+  }
 
-    this.main.outcomeEvents.emit(OutcomeEvents.update, el)
+  /**
+   * Make full render element with children
+   */
+  render(): RenderedElement {
+    return {
+      ...this.renderSelf(),
+      children: this.getChildrenUiEls(),
+    }
   }
 
 
@@ -208,8 +217,7 @@ export class Component {
     const res: RenderedElement[] = []
 
     for (const childComponentId of this.uiChildrenPositions) {
-      // TODO: resurse пройтись по потомкам и запросить у них tmpl. - только на mount
-
+      res.push(this.children[childComponentId].render())
     }
 
     if (!res.length) return
@@ -218,7 +226,9 @@ export class Component {
   }
 
   private getUiParams(): Record<string, any> | undefined {
-
+    // TODO: нужно получить унифицированные параметры для элемента ????
+    // TODO: или это props просто? но не всё а только то что нужно для рендера
+    return
   }
 
 }
