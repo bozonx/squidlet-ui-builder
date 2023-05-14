@@ -32,15 +32,16 @@ export class Component {
   // id of UI element which is represents this component
   readonly uiElId: string
   readonly parent: Component
-  // TODO: наверное лучше сделать {componentId: Component} для быстрого доступа
-  readonly children: Component[] = []
+  // like {componentId: Component}
+  readonly children: Record<string, Component> = {}
   readonly props: Record<string, ComponentProp>
 
   private readonly main: Main
-  // initial component definition
+  // initial component definition with its children
   private readonly componentDefinition: ComponentDefinition
   private incomeEventListenerIndex?: number
-  private childrenPositions: string[] = []
+  // position of UI children elements. Like [componentId, ...]
+  private uiChildrenPositions: string[] = []
 
 
   /**
@@ -72,28 +73,26 @@ export class Component {
 
     await this.instantiateChildren()
     // init all the children components
-    for (const component of this.children) {
-      await component.init()
+    for (const componentId of Object.keys(this.children)) {
+      await this.children[componentId].init()
     }
-    // fill initial elements' positions
-    this.childrenPositions = this.children.map((component) => component.uiElId)
   }
 
   async destroy() {
     this.main.incomeEvents.removeListener(this.incomeEventListenerIndex)
 
-    for (const component of this.children) {
-      await component.destroy()
+    for (const componentId of Object.keys(this.children)) {
+      await this.children[componentId].destroy()
     }
   }
 
 
   /**
-   * Get position of child by it's UI el id.
+   * Get position of child by its UI el id.
    * -1 means - can't find child
    */
   getPositionOfChildrenEl(childrenElId: string): number {
-    return this.childrenPositions.indexOf(childrenElId)
+    return this.uiChildrenPositions.indexOf(childrenElId)
   }
 
   /**
@@ -162,13 +161,15 @@ export class Component {
         : tmpl
       //const tmplRootComponentName = rootTmplElement.component
 
+
       for (const child of children) {
         const definition = await this.main.componentPool
           .getComponentDefinition(child.component)
+        const childComponent = new Component(this.main, this, definition, omitObj(child, 'component'))
 
-        this.children.push(
-          new Component(this.main, this, definition, omitObj(child, 'component'))
-        )
+        this.children[childComponent.id] = childComponent
+        // set initial position
+        this.uiChildrenPositions.push(childComponent.id)
       }
     }
   }
