@@ -4,9 +4,10 @@ import {ComponentsPool} from './ComponentsPool.js';
 import {Component, ComponentDefinition} from './Component.js';
 import {UiElementDefinition} from './interfaces/UiElementDefinitionBase.js';
 import {OutcomeEvents, IncomeEvents} from './interfaces/DomEvents.js';
+import {RenderElement} from './interfaces/RenderElement.js';
 
 
-type OutcomeEventHandler = (event: OutcomeEvents, rootElId: string, childPosition: number, tmpl?: UiElementDefinition) => void
+type OutcomeEventHandler = (event: OutcomeEvents, rootElId: string, childPosition: number, tmpl?: RenderElement) => void
 
 
 export const COMPONENT_EVENT_PREFIX = 'C|'
