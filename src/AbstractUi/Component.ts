@@ -1,7 +1,9 @@
 import {omitObj, makeUniqId} from 'squidlet-lib';
 import {UiElementDefinitionBase} from './interfaces/UiElementDefinitionBase.js';
 import {COMPONENT_EVENT_PREFIX, Main} from './Main.js';
-import {IncomeEvents} from './interfaces/DomEvents.js';
+import {IncomeEvents, OutcomeEvents} from './interfaces/DomEvents.js';
+import {COMPONENT_ID_BYTES_NUM} from './interfaces/constants.js';
+import {RenderedElement} from './interfaces/RenderedElement.js';
 
 
 export interface ComponentProp {
@@ -20,9 +22,6 @@ export interface ComponentDefinition {
 }
 
 
-// TODO: onUpdate event
-
-
 export class Component {
   readonly id: string
   readonly children: Component[] = []
@@ -39,8 +38,7 @@ export class Component {
     componentDefinition: ComponentDefinition,
     props: Record<string, ComponentProp> = {}
   ) {
-    // TODO: указать количество символом
-    this.id = makeUniqId()
+    this.id = makeUniqId(COMPONENT_ID_BYTES_NUM)
     this.main = main
     this.componentDefinition = componentDefinition
     this.props = props
@@ -72,27 +70,21 @@ export class Component {
 
 
   async mount(rootElId: string, childPosition: number) {
-    // TODO: run onMount event
-    // TODO: mount
-    // TODO: наверное надо поднять событие монтирования
+    // TODO: call onMount component's callback
 
-    // TODO: resurse пройтись по потомкам и запросить у них tmpl.
-    // TODO: но если они уже примонтированны и у них нет изменений то не рендерить их
-
-    const el = {
-
-    }
-
-    this.main.outcomeEvents.emit(OutcomeEvents.mount, el)
+    this.main.outcomeEvents.emit(OutcomeEvents.mount, this.makeRenderedEl())
   }
 
   async unmount() {
-    // TODO: run onUnmount event
-    // TODO: unmount
+    // TODO: run onUnmount callback
+
+    this.main.outcomeEvents.emit(OutcomeEvents.unMount, this.makeRenderedEl())
   }
 
   async update() {
+    // TODO: run onUpdate callback
 
+    this.main.outcomeEvents.emit(OutcomeEvents.update, this.makeRenderedEl())
   }
 
 
@@ -100,7 +92,7 @@ export class Component {
     switch (event) {
       case IncomeEvents.click:
 
-        console.log(11111, 'click')
+        console.log(11111, 'click', elementId, ...data)
 
         // TODO: what to do ???
 
@@ -112,6 +104,8 @@ export class Component {
     if (this.componentDefinition.tmplExp) {
 
       // TODO: выполнить выражение
+
+      console.log(22222, 'ext', this.componentDefinition.tmplExp)
 
       return
     }
@@ -130,6 +124,24 @@ export class Component {
           new Component(this.main, definition, omitObj(child, 'component'))
         )
       }
+    }
+  }
+
+  private makeRenderedEl(): RenderedElement {
+
+    // TODO: resurse пройтись по потомкам и запросить у них tmpl. - только на mount
+
+    const el = {
+
+      // TODO: make params
+
+      // elId: string
+      // parentElId: string
+      // parentChildPosition: number
+      componentId: this.id,
+      // // params for rendered element
+      // params?: Record<string, any>
+      // children?: RenderedElement[]
     }
   }
 
