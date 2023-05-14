@@ -22,9 +22,9 @@ import {objGet, objSetMutate} from 'squidlet-lib'
 
 // TODO: может задать значение по умолчанию???
 
-export function getJsValue(scope: Record<string, any> = {}): any | undefined {
-  return (p: {path: string}) => {
-    objGet(scope, p.path)
+export function getJsValue(scope: Record<string, any> = {}) {
+  return (p: {path: string}): any | undefined => {
+    return objGet(scope, p.path)
   }
 }
 

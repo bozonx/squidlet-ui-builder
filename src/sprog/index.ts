@@ -1,4 +1,5 @@
 import {getJsValue, setJsValue} from './jsValue.js';
+import {jsCall} from './jsCall.js';
 
 
 /*
@@ -8,4 +9,5 @@ import {getJsValue, setJsValue} from './jsValue.js';
 export const sprog = {
   getJsValue,
   setJsValue,
+  jsCall,
 }
