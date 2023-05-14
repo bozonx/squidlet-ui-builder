@@ -31,8 +31,6 @@ export class Component {
   readonly id: string
   // id of UI element which is represents this component
   readonly uiElId: string
-  // component name. The same as in template and component class
-  readonly name: string
   readonly parent: Component
   // TODO: наверное лучше сделать {componentId: Component} для быстрого доступа
   readonly children: Component[] = []
@@ -43,6 +41,14 @@ export class Component {
   private readonly componentDefinition: ComponentDefinition
   private incomeEventListenerIndex?: number
   private childrenPositions: string[] = []
+
+
+  /**
+   * component name. The same as in template and component definition
+   */
+  get name(): string {
+    return this.componentDefinition.name
+  }
 
 
   constructor(
