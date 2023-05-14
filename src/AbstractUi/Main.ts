@@ -2,6 +2,7 @@ import yaml from 'yaml';
 import {IndexedEventEmitter} from 'squidlet-lib'
 import {ComponentsPool} from './ComponentsPool.js';
 import {Component, ComponentDefinition} from './Component.js';
+import {UiElementDefinition, UiElementDefinitionBase} from './interfaces/UiElementDefinitionBase.js';
 
 
 
@@ -29,11 +30,11 @@ export class Main {
 
     await this.rootComponent.init()
     // mount root component
-    await this.rootComponent.render()
+    await this.rootComponent.render('/', 0)
   }
 
 
-  emitRender(domPath: string) {
+  emitRender(rootElId: string, childPosition: number, tmpl: UiElementDefinition) {
 
   }
 

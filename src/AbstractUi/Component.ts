@@ -63,12 +63,15 @@ export class Component {
   }
 
 
-  async render() {
+  async render(rootElId: string, childPosition: number) {
     // TODO: run onMount event
     // TODO: mount
     // TODO: наверное надо поднять событие монтирования
 
-    this.main.emitRender()
+    // TODO: resurse пройтись по потомкам и запросить у них tmpl.
+    // TODO: но если они уже примонтированны и у них нет изменений то не рендерить их
+
+    this.main.emitRender(rootElId, childPosition)
   }
 
   async unmount() {
