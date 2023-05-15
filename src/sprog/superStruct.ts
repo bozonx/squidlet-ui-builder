@@ -3,46 +3,59 @@ import {IndexedEvents, objGet, objSetMutate} from 'squidlet-lib';
 
 // TODO: поддержка валидации по типу
 
-
-export interface SuperStructDefinition {
+interface SuperStrucDefinitionBase {
   // TODO: get normal props
   type: 'string' | 'number'
   default?: any
-  required?: boolean
-  readonly?: boolean
 }
+
+interface SuperStrucDefinitionExtra {
+  required: boolean
+  readonly: boolean
+}
+
+export type SuperStructInitDefinition = SuperStrucDefinitionBase & Partial<SuperStrucDefinitionExtra>
+export type SuperStructDefinition = SuperStrucDefinitionBase & SuperStrucDefinitionExtra
 
 
 /*
  * Struct which can be changed from anywhere
  */
 
-export function superStruct() {
+export function initSuperStruct() {
+
+}
+
+export function superStructGet() {
+
+}
+
+export function superStructSet() {
 
 }
 
 
 export class SuperStruct<T> {
   // It assumes that you will not change it
-  readonly definition: Record<string, SuperStructDefinition>
+  readonly definition: Record<string, SuperStructDefinition> = {}
   readonly changeEvent = new IndexedEvents<() => void>()
 
   private value: Record<any, any> = {}
 
 
-  /**
-   * It assumes that you will not change it
-   */
-  get struct(): T {
-    return this.value
-  }
+  constructor(definition: Record<string, SuperStructInitDefinition>, defaultRo: boolean = false) {
 
+    // TODO: do it deeply ???
 
-  constructor(definition: Record<string, SuperStructDefinition>, fullRo: boolean = false) {
-
-    // TODO: если fullRo - то проставить всем readonly deeply
-
-    this.definition = definition
+    for (const name of Object.keys(definition)) {
+      this.definition[name] = {
+        ...definition[name],
+        required: Boolean(definition[name].required),
+        readonly: (defaultRo)
+          ? definition[name].readonly !== false
+          : Boolean(definition[name].readonly),
+      }
+    }
   }
 
   /**
@@ -95,6 +108,16 @@ export class SuperStruct<T> {
 
   unsubscribe(handlerIndex: number) {
     this.changeEvent.removeListener(handlerIndex)
+  }
+
+  /**
+   * It make full deep clone. You can change it
+   */
+  clone(): T {
+
+    // TODO: make deep clone
+
+    return this.value
   }
 
 }
