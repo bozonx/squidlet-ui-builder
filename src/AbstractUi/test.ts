@@ -4,6 +4,7 @@ import {fileURLToPath} from 'url';
 import {Main} from './Main.js';
 import path from 'node:path';
 import {preloader} from './preloader.js';
+import {GOOD_UI} from './goodUi/index.js';
 
 
 (async () => {
@@ -15,7 +16,7 @@ import {preloader} from './preloader.js';
     (pathTo: string) => fs.readFile(pathTo, 'utf8')
   )
 
-  const main = new Main(definitions)
+  const main = new Main(definitions, {goodUi: GOOD_UI})
 
   await main.init()
 })()
