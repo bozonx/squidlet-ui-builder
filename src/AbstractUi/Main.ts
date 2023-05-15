@@ -1,9 +1,10 @@
 import yaml from 'yaml';
 import {IndexedEvents, IndexedEventEmitter} from 'squidlet-lib'
 import {ComponentsPool} from './ComponentsPool.js';
-import {Component, ComponentDefinition} from './Component.js';
 import {OutcomeEvents, IncomeEvents} from './interfaces/DomEvents.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
+import {RootComponent} from './RootComponent.js';
+import {ComponentDefinition} from './ComponentBase.js';
 
 
 type OutcomeEventHandler = (event: OutcomeEvents, el: RenderedElement) => void
@@ -16,7 +17,7 @@ export class Main {
   readonly outcomeEvents = new IndexedEvents<OutcomeEventHandler>()
   readonly incomeEvents = new IndexedEventEmitter()
   componentPool: ComponentsPool
-  rootComponent: Component
+  root: RootComponent
 
 
   constructor(rootComponentDefinitionStr: string) {
@@ -24,21 +25,17 @@ export class Main {
 
     const rootComponentDefinition: ComponentDefinition = yaml.parse(rootComponentDefinitionStr)
 
-    this.rootComponent = new Component(this, undefined, rootComponentDefinition)
+    this.root = new RootComponent(this, rootComponentDefinition)
   }
 
   async init() {
-    await this.rootComponent.init()
-    // render root component
-    await this.rootComponent.mount('/', 0)
+    await this.root.init()
   }
 
   async destroy() {
-    // TODO: послать событие на unmount корня
-    // TODO: дестрой всех компонентов
-
     this.outcomeEvents.destroy()
     this.incomeEvents.destroy()
+    await this.root.destroy()
   }
 
 
