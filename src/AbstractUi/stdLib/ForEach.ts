@@ -1,6 +1,18 @@
 export const ForEach = `
 name: ForEach
 props:
+
+    src:
+      $exp: getProp
+      path: children
+    do:
+      $exp: superFunc
+      lines:
+        - $exp: funcReturn
+          value:
+            $exp: getJsValue
+            path: item
+
   src:
     type: any[]
 #  as:

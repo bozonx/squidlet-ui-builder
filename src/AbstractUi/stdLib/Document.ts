@@ -18,17 +18,13 @@ props:
   children:
     type: Component[]
 tmpl:
-  - $exp: forEach
+  - component: ForEach
     src:
-      $exp: getProp
+      $exp: superStructGet
       path: children
-    do:
-      $exp: superFunc
-      lines:
-        - $exp: funcReturn
-          value:
-            $exp: getJsValue
-            path: item
+    slot:
+      - $exp: getJsValue
+        path: item
 `
 
 
