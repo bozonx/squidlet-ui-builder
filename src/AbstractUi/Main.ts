@@ -17,8 +17,9 @@ export class Main {
   readonly outcomeEvents = new IndexedEvents<OutcomeEventHandler>()
   readonly incomeEvents = new IndexedEventEmitter()
   readonly root: RootComponent
-
+  // like: {pathToComponent: ComponentDefinition}
   private readonly appComponentsDefinitions: Record<string, ComponentDefinition>
+  // like: {componentName: ComponentDefinition}
   private readonly componentsLib: Record<string, ComponentDefinition> = {}
 
 
