@@ -1,4 +1,4 @@
-import {Screen} from '../Screen';
+import {Screen} from './Screen.js';
 
 
 export interface Route {

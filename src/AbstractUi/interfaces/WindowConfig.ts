@@ -1,4 +1,4 @@
-import {Route} from './Route';
+import {Route} from '../router/Route.js';
 
 
 export interface WindowConfig {

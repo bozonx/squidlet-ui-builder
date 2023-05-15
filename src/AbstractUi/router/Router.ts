@@ -1,7 +1,7 @@
 import BreadCrumbs, {BREADCRUMBS_DELIMITER} from '../BreadCrumbs.js';
 import {Window} from '../Window.js';
-import {Route} from '../interfaces/Route.js';
-import {Screen} from '../Screen.js';
+import {Route} from './Route.js';
+import {Screen} from './Screen.js';
 
 
 export const Router = `
