@@ -16,23 +16,29 @@ export const COMPONENT_EVENT_PREFIX = 'C|'
 export class Main {
   readonly outcomeEvents = new IndexedEvents<OutcomeEventHandler>()
   readonly incomeEvents = new IndexedEventEmitter()
-  root: RootComponent
+  readonly root: RootComponent
+
   private readonly appComponentsDefinitions: Record<string, ComponentDefinition>
-  private readonly stdComponentsDefinitions: Record<string, ComponentDefinition> = {}
-  // TODO: add libs of components
+  private readonly componentsLib: Record<string, ComponentDefinition> = {}
 
 
-  constructor(preloadedComponentsDefinitions: Record<string, ComponentDefinition>) {
+  constructor(
+    preloadedComponentsDefinitions: Record<string, ComponentDefinition>,
+    // like: {libName: {componentName: ComponentDefinitionString}}
+    componentsLibsStr: Record<string, Record<string, string>> = { std: STD_COMPONENTS }
+  ) {
     this.appComponentsDefinitions = preloadedComponentsDefinitions
+
+    for (const libName of Object.keys(componentsLibsStr)) {
+      for (const cmpName of Object.keys(componentsLibsStr[libName])) {
+        this.componentsLib[cmpName] = yaml.parse(STD_COMPONENTS[cmpName])
+      }
+    }
 
     this.root = new RootComponent(this, this.appComponentsDefinitions[ROOT_COMPONENT_ID])
   }
 
   async init() {
-    for (const cmpName of Object.keys(STD_COMPONENTS)) {
-      this.stdComponentsDefinitions[cmpName] = yaml.parse(STD_COMPONENTS[cmpName])
-    }
-
     await this.root.init()
   }
 
@@ -50,8 +56,8 @@ export class Main {
     if (this.appComponentsDefinitions[pathOrStdComponentName]) {
       return this.appComponentsDefinitions[pathOrStdComponentName]
     }
-    else if (this.stdComponentsDefinitions[pathOrStdComponentName]) {
-      return this.stdComponentsDefinitions[pathOrStdComponentName]
+    else if (this.componentsLib[pathOrStdComponentName]) {
+      return this.componentsLib[pathOrStdComponentName]
     }
     else {
       throw new Error(`Can't find component "${pathOrStdComponentName}"`)

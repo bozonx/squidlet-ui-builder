@@ -14,6 +14,7 @@ import {preloader} from './preloader.js';
     path.resolve(dirname, '../../../sls-publish-bot/src/ui/root.yaml'),
     (pathTo: string) => fs.readFile(pathTo, 'utf8')
   )
+
   const main = new Main(definitions)
 
   await main.init()
