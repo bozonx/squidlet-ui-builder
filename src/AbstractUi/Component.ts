@@ -3,6 +3,7 @@ import {Main} from './Main.js';
 import {COMPONENT_ID_BYTES_NUM, ELEMENT_ID_BYTES_NUM} from './interfaces/constants.js';
 import {ComponentBase, ComponentDefinition} from './ComponentBase.js';
 import {RootComponent} from './RootComponent.js';
+import {SuperStruct} from '../sprog/superStruct.js';
 
 
 export class Component extends ComponentBase {
@@ -16,9 +17,9 @@ export class Component extends ComponentBase {
     main: Main,
     parent: Component | RootComponent,
     componentDefinition: ComponentDefinition,
-    propsValues?: Record<string, any>
+    incomeProps?: SuperStruct
   ) {
-    super(main, componentDefinition, propsValues)
+    super(main, componentDefinition, incomeProps)
 
     this.id = makeUniqId(COMPONENT_ID_BYTES_NUM)
     this.uiElId = makeUniqId(ELEMENT_ID_BYTES_NUM)

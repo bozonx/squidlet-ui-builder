@@ -1,6 +1,11 @@
 import {IndexedEvents, objGet, objSetMutate, cloneDeepObject} from 'squidlet-lib';
 
 
+/*
+ * Struct which can be changed from anywhere
+ */
+
+
 interface SuperStrucDefinitionBase {
   // TODO: get normal props
   type: 'string' | 'number'
@@ -16,10 +21,6 @@ export type SuperStructInitDefinition = SuperStrucDefinitionBase & Partial<Super
 export type SuperStructDefinition = SuperStrucDefinitionBase & SuperStrucDefinitionExtra
 
 
-/*
- * Struct which can be changed from anywhere
- */
-
 export function initSuperStruct() {
 
 }
@@ -33,7 +34,7 @@ export function superStructSet() {
 }
 
 
-export class SuperStruct<T> {
+export class SuperStruct<T = Record<any, any>> {
   // It assumes that you will not change it
   readonly definition: Record<string, SuperStructDefinition> = {}
   readonly changeEvent = new IndexedEvents<() => void>()

@@ -5,6 +5,7 @@ import {IncomeEvents, OutcomeEvents} from './interfaces/DomEvents.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
 import {Component} from './Component.js';
 import {RootComponent} from './RootComponent.js';
+import {SuperStruct, SuperStructInitDefinition} from '../sprog/superStruct.js';
 
 
 // TODO: поддержка перемещения элементов
@@ -19,9 +20,9 @@ export interface ComponentDefinition {
 
   name: string
   // props which are controlled by parent component
-  props?: Record<string, PropDefinition>
+  props?: Record<string, SuperStructInitDefinition>
   // local state
-  state?: Record<string, StateDefinition>
+  state?: Record<string, SuperStructInitDefinition>
   tmpl?: UiElementDefinition[]
 }
 
@@ -41,12 +42,12 @@ export abstract class ComponentBase {
   protected readonly componentDefinition: ComponentDefinition
   // position of UI children stdLib. Like [componentId, ...]
   protected uiChildrenPositions: string[] = []
-  protected state: UiState
+  protected state: SuperStruct
   private incomeEventListenerIndex?: number
   // They set in parent template
   // TODO: тут должен быть Super Prop - так как они будут управляться из вне
   // props set in template of parent component
-  readonly props: UiProps
+  readonly props: SuperStruct
 
 
   /**
@@ -57,11 +58,11 @@ export abstract class ComponentBase {
   }
 
 
-  protected constructor(main: Main, componentDefinition: ComponentDefinition, propsValues?: Record<string, any>) {
+  protected constructor(main: Main, componentDefinition: ComponentDefinition, incomeProps?: SuperStruct) {
     this.main = main
     this.componentDefinition = componentDefinition
-    this.props = new UiProps(componentDefinition.props || {}, propsValues)
-    this.state = new UiState(componentDefinition.state || {})
+    this.props = incomeProps || new SuperStruct({})
+    this.state = new SuperStruct(componentDefinition.state || {})
   }
 
 
@@ -172,11 +173,22 @@ export abstract class ComponentBase {
 
     for (const child of this.componentDefinition.tmpl) {
       const definition = await this.main.getComponentDefinition(child.component)
+
+      // TODO: props должен быть связан с текущим компонентом
+
+      const props = new SuperStruct(
+        // if not props then put just empty props
+        definition.props || {},
+        true
+      )
+      // TODO: надо сохранить себе чтобы потом устанавливать значения
+      const propSetter = props.init(omitObj(child, 'component'))
+
       const childComponent = new Component(
         this.main,
         this as Component | RootComponent,
         definition,
-        omitObj(child, 'component')
+        props
       )
 
       this.children[childComponent.id] = childComponent
