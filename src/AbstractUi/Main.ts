@@ -26,12 +26,17 @@ export class Main {
   constructor(
     preloadedComponentsDefinitions: Record<string, ComponentDefinition>,
     // like: {libName: {componentName: ComponentDefinitionString}}
-    componentsLibsStr: Record<string, Record<string, string>> = { std: STD_COMPONENTS }
+    componentsLibsStr: Record<string, Record<string, string>> = {}
   ) {
     this.appComponentsDefinitions = preloadedComponentsDefinitions
 
-    for (const libName of Object.keys(componentsLibsStr)) {
-      for (const cmpName of Object.keys(componentsLibsStr[libName])) {
+    const libs: Record<string, Record<string, string>> = {
+      std: STD_COMPONENTS,
+      ...componentsLibsStr
+    }
+
+    for (const libName of Object.keys(libs)) {
+      for (const cmpName of Object.keys(libs[libName])) {
         this.componentsLib[cmpName] = yaml.parse(STD_COMPONENTS[cmpName])
       }
     }

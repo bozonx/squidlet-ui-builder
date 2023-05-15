@@ -1,8 +1,12 @@
-import {AnyElement} from '../interfaces/AnyElement';
 
+export const Container = `
+`
 
-export interface Container {
-  name: string
-  visible: boolean
-  children: AnyElement
-}
+// import {AnyElement} from '../interfaces/AnyElement';
+//
+//
+// export interface Container {
+//   name: string
+//   visible: boolean
+//   children: AnyElement
+// }
