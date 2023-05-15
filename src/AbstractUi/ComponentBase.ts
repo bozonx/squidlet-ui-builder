@@ -4,10 +4,10 @@ import {COMPONENT_EVENT_PREFIX, Main} from './Main.js';
 import {IncomeEvents, OutcomeEvents} from './interfaces/DomEvents.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
 import {SuperStruct, SuperStructInitDefinition} from '../sprog/superStruct.js';
+import {ComponentSlot, SlotsDefinition} from './ComponentSlot.js';
 
 
 // TODO: поддержка перемещения элементов
-// TODO: add slot !!!
 // TODO: нужен какой-то scope где будет доступ в sprog к props, state
 //       и доступ к переменным навешанные на props навешанных на потомков
 
@@ -46,6 +46,7 @@ export abstract class ComponentBase {
   // TODO: тут должен быть Super Prop - так как они будут управляться из вне
   // props set in template of parent component
   readonly props: SuperStruct
+  readonly slots: ComponentSlot
 
 
   /**
@@ -56,11 +57,17 @@ export abstract class ComponentBase {
   }
 
 
-  protected constructor(main: Main, componentDefinition: ComponentDefinition, incomeProps?: SuperStruct) {
+  protected constructor(
+    main: Main,
+    componentDefinition: ComponentDefinition,
+    slotsDefinition: SlotsDefinition,
+    incomeProps?: SuperStruct
+  ) {
     this.main = main
     this.componentDefinition = componentDefinition
     this.props = incomeProps || new SuperStruct({})
     this.state = new SuperStruct(componentDefinition.state || {})
+    this.slots = new ComponentSlot(slotsDefinition)
   }
 
 
@@ -181,6 +188,8 @@ export abstract class ComponentBase {
       )
       // TODO: надо сохранить себе чтобы потом устанавливать значения
       const propSetter = props.init(omitObj(child, 'component'))
+
+      // TODO: add slot !!!
 
       const childComponent = new Component(
         this.main,
