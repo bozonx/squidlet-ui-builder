@@ -1,4 +1,4 @@
-import BreadCrumbs, {BREADCRUMBS_DELIMITER} from '../BreadCrumbs.js';
+import BreadCrumbs, {BREADCRUMBS_DELIMITER} from './BreadCrumbs.js';
 import {Route} from './Route.js';
 import {Screen} from './Screen.js';
 

@@ -4,7 +4,7 @@ import {OutcomeEvents, IncomeEvents} from './interfaces/DomEvents.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
 import {ROOT_COMPONENT_ID, RootComponent} from './RootComponent.js';
 import {ComponentDefinition} from './ComponentBase.js';
-import {STD_COMPONENTS} from './StdComponents.js';
+import {STD_COMPONENTS} from './stdLib/index.js';
 
 
 type OutcomeEventHandler = (event: OutcomeEvents, el: RenderedElement) => void
