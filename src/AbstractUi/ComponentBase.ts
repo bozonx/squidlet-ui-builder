@@ -3,15 +3,13 @@ import {UiElementDefinition} from './interfaces/UiElementDefinitionBase.js';
 import {COMPONENT_EVENT_PREFIX, Main} from './Main.js';
 import {IncomeEvents, OutcomeEvents} from './interfaces/DomEvents.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
-import {Component} from './Component.js';
-import {RootComponent} from './RootComponent.js';
 import {SuperStruct, SuperStructInitDefinition} from '../sprog/superStruct.js';
 
 
 // TODO: поддержка перемещения элементов
 // TODO: add slot !!!
-// TODO: add props
-// TODO: add state
+// TODO: нужен какой-то scope где будет доступ в sprog к props, state
+//       и доступ к переменным навешанные на props навешанных на потомков
 
 
 export interface ComponentDefinition {
@@ -35,7 +33,7 @@ export abstract class ComponentBase {
   // id of UI element which is represents this component
   readonly abstract uiElId: string
   // like {componentId: Component}
-  readonly children: Record<string, Component> = {}
+  readonly children: Record<string, ComponentBase> = {}
 
   protected readonly main: Main
   // initial component definition with its children
@@ -186,7 +184,7 @@ export abstract class ComponentBase {
 
       const childComponent = new Component(
         this.main,
-        this as Component | RootComponent,
+        this,
         definition,
         props
       )
@@ -213,7 +211,7 @@ export abstract class ComponentBase {
     }
     else {
       // not root means it is Component
-      const cmp: Component = this as any
+      const cmp: ComponentBase = this
 
       return {
         ...params,

@@ -1,9 +1,13 @@
 import {IndexedEvents, objGet, objSetMutate, cloneDeepObject} from 'squidlet-lib';
+import {values} from 'lodash';
 
 
 /*
  * Struct which can be changed from anywhere
  */
+
+
+// TODO: проще использовать proxy
 
 
 interface SuperStrucDefinitionBase {
@@ -49,9 +53,6 @@ export class SuperStruct<T = Record<any, any>> {
 
 
   constructor(definition: Record<string, SuperStructInitDefinition>, defaultRo: boolean = false) {
-
-    // TODO: do it deeply ???
-
     for (const name of Object.keys(definition)) {
       this.definition[name] = {
         ...definition[name],
@@ -89,17 +90,28 @@ export class SuperStruct<T = Record<any, any>> {
 
 
   getValue(pathTo: string): any {
-    return objGet(this.value, pathTo)
+
+    // TODO: если глубокий путь то
+    //       * если обычный объект то взять его значение
+    //       * обычный массив то взять его значение
+    //       * struct - вызвать getValue и идти дальше
+    //       * superArray - вызвать getValue и идти дальше
+
+    return this.value[pathTo]
+
+    //return objGet(this.value, pathTo)
   }
 
   setValue(pathTo: string, newValue: any) {
     // TODO: проверить если readonly то ошибка
+    // TODO: если глубокий путь ???
 
     this.justSetValue(pathTo, newValue)
   }
 
   resetValue(pathTo: string) {
     // TODO: проверить если readonly то ошибка
+    // TODO: если глубокий путь ???
 
     this.justSetValue(pathTo, null)
   }
