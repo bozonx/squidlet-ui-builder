@@ -8,6 +8,9 @@ import {RootComponent} from './RootComponent.js';
 
 
 // TODO: поддержка перемещения элементов
+// TODO: add slot !!!
+// TODO: add props
+// TODO: add state
 
 
 export interface ComponentDefinition {
