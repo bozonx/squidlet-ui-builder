@@ -3,7 +3,7 @@ import {MainSection} from './MainSection.js';
 import {SideMenu} from './SideMenu.js';
 import {VerticalMenu} from './VerticalMenu.js';
 import {NestedMenu} from './NestedMenu.js';
-import {ButtonGroup} from './ButtonGroup.js';
+import {ButtonGroup} from '../goodUi/ButtonGroup.js';
 import {Link} from './Link.js';
 import {ForEach} from './ForEach.js';
 import {RenderComponent} from './RenderComponent.js';

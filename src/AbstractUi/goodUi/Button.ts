@@ -1,4 +1,4 @@
-import {INPUT_DEFAULTS, InputBase, InputInitial} from '../interfaces/InputBase';
+import {INPUT_DEFAULTS, InputBase, InputInitial} from '../interfaces/InputBase.js';
 
 
 export const BUTTON_TYPE = 'Button'
