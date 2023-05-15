@@ -4,11 +4,10 @@ import {COMPONENT_EVENT_PREFIX, Main} from './Main.js';
 import {IncomeEvents, OutcomeEvents} from './interfaces/DomEvents.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
 import {Component} from './Component.js';
+import {RootComponent} from './RootComponent.js';
 
 
 // TODO: поддержка перемещения элементов
-// TODO: use <PropsDef = Record<string, any>> ???
-// TODO: use StateDef ???
 
 
 export interface ComponentDefinition {
@@ -16,10 +15,10 @@ export interface ComponentDefinition {
   // TODO: add others component parameters
 
   name: string
-  // props which are controlled by outer component
-  props: Record<string, PropDefinition>
+  // props which are controlled by parent component
+  props?: Record<string, PropDefinition>
   // local state
-  state: Record<string, StateDefinition>
+  state?: Record<string, StateDefinition>
   tmpl?: UiElementDefinition[]
 }
 
@@ -41,6 +40,8 @@ export abstract class ComponentBase {
   protected uiChildrenPositions: string[] = []
   protected state: UiState
   private incomeEventListenerIndex?: number
+  // They set in parent template
+  // TODO: тут должен быть Super Prop - так как они будут управляться из вне
   // props set in template of parent component
   readonly props: UiProps
 
@@ -53,7 +54,7 @@ export abstract class ComponentBase {
   }
 
 
-  constructor(main: Main, componentDefinition: ComponentDefinition, propsValues?: Record<string, any>) {
+  protected constructor(main: Main, componentDefinition: ComponentDefinition, propsValues?: Record<string, any>) {
     this.main = main
     this.componentDefinition = componentDefinition
     this.props = new UiProps(componentDefinition.props || {}, propsValues)
@@ -163,42 +164,47 @@ export abstract class ComponentBase {
     }
   }
 
-  // TODO: review
   private async instantiateChildren() {
-    if (this.componentDefinition.tmplExp) {
+    if (!this.componentDefinition.tmpl) return
 
-      // TODO: выполнить выражение
+    for (const child of this.componentDefinition.tmpl) {
+      const definition = await this.main.getComponentDefinition(child.component)
+      const childComponent = new Component(
+        this.main,
+        this as Component | RootComponent,
+        definition,
+        omitObj(child, 'component')
+      )
 
-      console.log(22222, 'ext', this.componentDefinition.tmplExp)
-
-      return
-    }
-    else if (this.componentDefinition.tmpl) {
-      const children: UiElementDefinition[] = this.componentDefinition.tmpl
-
-      for (const child of children) {
-        const definition = await this.main.getComponentDefinition(child.component)
-        const childComponent = new Component(
-          this.main,
-          this,
-          definition,
-          omitObj(child, 'component')
-        )
-
-        this.children[childComponent.id] = childComponent
-        // set initial position
-        this.uiChildrenPositions.push(childComponent.id)
-      }
+      this.children[childComponent.id] = childComponent
+      // set initial position
+      this.uiChildrenPositions.push(childComponent.id)
     }
   }
 
   private makeRenderedEl(): RenderedElement {
-    return {
+    const params = {
       elId: this.uiElId,
       elName: this.name,
-      parentElId: this.parent?.uiElId,
-      parentChildPosition: this.parent?.getPositionOfChildrenEl(this.uiElId),
       componentId: this.id,
+    }
+
+    if (this.isRoot) {
+      return {
+        ...params,
+        parentElId: '',
+        parentChildPosition: -1,
+      }
+    }
+    else {
+      // not root means it is Component
+      const cmp: Component = this as any
+
+      return {
+        ...params,
+        parentElId: cmp.parent.uiElId,
+        parentChildPosition: cmp.parent.getPositionOfChildrenEl(this.uiElId),
+      }
     }
   }
 

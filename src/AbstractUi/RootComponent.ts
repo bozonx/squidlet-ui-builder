@@ -18,8 +18,10 @@ export class RootComponent extends ComponentBase {
 
   async init() {
     await super.init()
+
+    // TODO: а чё всмысле ???
     // render root component
-    await this.rootComponent.mount('/', 0)
+    await this.mount('/', 0)
   }
 
   async destroy() {

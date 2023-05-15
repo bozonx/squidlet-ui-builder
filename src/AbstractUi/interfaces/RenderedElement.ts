@@ -3,10 +3,11 @@ export interface RenderedElement {
   elId: string
   // means component name
   elName: string
-  // undefined means root
-  parentElId?: string
-  // undefined means root
-  parentChildPosition?: number
+  // An empty string means it is root and don't have children
+  // but do not check it - use Component.isRoot instead
+  parentElId: string
+  // -1 means root
+  parentChildPosition: number
   // id of component in component tree which is handle this element
   componentId: string
   // unified params for rendered element
