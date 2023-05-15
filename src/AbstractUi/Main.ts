@@ -1,10 +1,10 @@
 import yaml from 'yaml';
 import {IndexedEvents, IndexedEventEmitter} from 'squidlet-lib'
-import {ComponentsPool} from './ComponentsPool.js';
 import {OutcomeEvents, IncomeEvents} from './interfaces/DomEvents.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
-import {RootComponent} from './RootComponent.js';
+import {ROOT_COMPONENT_ID, RootComponent} from './RootComponent.js';
 import {ComponentDefinition} from './ComponentBase.js';
+import {STD_COMPONENTS} from './StdComponents.js';
 
 
 type OutcomeEventHandler = (event: OutcomeEvents, el: RenderedElement) => void
@@ -16,19 +16,23 @@ export const COMPONENT_EVENT_PREFIX = 'C|'
 export class Main {
   readonly outcomeEvents = new IndexedEvents<OutcomeEventHandler>()
   readonly incomeEvents = new IndexedEventEmitter()
-  componentPool: ComponentsPool
   root: RootComponent
+  private readonly appComponentsDefinitions: Record<string, ComponentDefinition>
+  private readonly stdComponentsDefinitions: Record<string, ComponentDefinition> = {}
+  // TODO: add libs of components
 
 
-  constructor(rootComponentDefinitionStr: string) {
-    this.componentPool = new ComponentsPool()
+  constructor(preloadedComponentsDefinitions: Record<string, ComponentDefinition>) {
+    this.appComponentsDefinitions = preloadedComponentsDefinitions
 
-    const rootComponentDefinition: ComponentDefinition = yaml.parse(rootComponentDefinitionStr)
-
-    this.root = new RootComponent(this, rootComponentDefinition)
+    this.root = new RootComponent(this, this.appComponentsDefinitions[ROOT_COMPONENT_ID])
   }
 
   async init() {
+    for (const cmpName of Object.keys(STD_COMPONENTS)) {
+      this.stdComponentsDefinitions[cmpName] = yaml.parse(STD_COMPONENTS[cmpName])
+    }
+
     await this.root.init()
   }
 
@@ -38,6 +42,21 @@ export class Main {
     await this.root.destroy()
   }
 
+
+  getComponentDefinition(pathOrStdComponentName: string): ComponentDefinition {
+
+    console.log(111, 'requested cmp - ', pathOrStdComponentName)
+
+    if (this.appComponentsDefinitions[pathOrStdComponentName]) {
+      return this.appComponentsDefinitions[pathOrStdComponentName]
+    }
+    else if (this.stdComponentsDefinitions[pathOrStdComponentName]) {
+      return this.stdComponentsDefinitions[pathOrStdComponentName]
+    }
+    else {
+      throw new Error(`Can't find component "${pathOrStdComponentName}"`)
+    }
+  }
 
   /**
    * Call it from outside code

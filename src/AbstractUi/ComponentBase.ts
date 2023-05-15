@@ -177,8 +177,7 @@ export abstract class ComponentBase {
       const children: UiElementDefinition[] = this.componentDefinition.tmpl
 
       for (const child of children) {
-        const definition = await this.main.componentPool
-          .getComponentDefinition(child.component)
+        const definition = await this.main.getComponentDefinition(child.component)
         const childComponent = new Component(
           this.main,
           this,
