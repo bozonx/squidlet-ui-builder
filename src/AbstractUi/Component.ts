@@ -9,7 +9,6 @@ export class Component extends ComponentBase {
   readonly isRoot: boolean = false
   readonly id: string
   readonly uiElId: string
-  // undefined means root
   readonly parent: Component | RootComponent
 
 
