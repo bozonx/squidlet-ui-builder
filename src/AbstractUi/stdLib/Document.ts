@@ -34,7 +34,7 @@ tmpl:
 
 // export class Document extends Component {
 //   readonly events = new IndexedEvents<DocumentEventHandler>()
-//   readonly elements: AnyElement[] = []
+//   readonly stdLib: AnyElement[] = []
 //
 //   private readonly definition: DocumentDefinition
 //
@@ -50,7 +50,7 @@ tmpl:
 //   }
 //
 //   async destroy() {
-//     // TODO: destroy all the elements
+//     // TODO: destroy all the stdLib
 //   }
 //
 //

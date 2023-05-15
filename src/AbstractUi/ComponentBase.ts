@@ -36,7 +36,7 @@ export abstract class ComponentBase {
   protected readonly main: Main
   // initial component definition with its children
   protected readonly componentDefinition: ComponentDefinition
-  // position of UI children elements. Like [componentId, ...]
+  // position of UI children stdLib. Like [componentId, ...]
   protected uiChildrenPositions: string[] = []
   protected state: UiState
   private incomeEventListenerIndex?: number
@@ -93,7 +93,7 @@ export abstract class ComponentBase {
   }
 
   /**
-   * Mount rendered elements and it's children and start listening income events
+   * Mount rendered stdLib and it's children and start listening income events
    */
   async mount(rootElId: string, childPosition: number) {
 
@@ -111,7 +111,7 @@ export abstract class ComponentBase {
   }
 
   /**
-   * Unmount rendered elements and it's children and stop listening incoming events.
+   * Unmount rendered stdLib and it's children and stop listening incoming events.
    * But the component won't be destroyed
    */
   async unmount() {
