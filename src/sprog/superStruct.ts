@@ -1,7 +1,5 @@
-import {IndexedEvents, objGet, objSetMutate} from 'squidlet-lib';
+import {IndexedEvents, objGet, objSetMutate, cloneDeepObject} from 'squidlet-lib';
 
-
-// TODO: поддержка валидации по типу
 
 interface SuperStrucDefinitionBase {
   // TODO: get normal props
@@ -39,8 +37,14 @@ export class SuperStruct<T> {
   // It assumes that you will not change it
   readonly definition: Record<string, SuperStructDefinition> = {}
   readonly changeEvent = new IndexedEvents<() => void>()
-
+  // current values
   private value: Record<any, any> = {}
+  private inited: boolean = false
+
+
+  get isInitialized(): boolean {
+    return this.inited
+  }
 
 
   constructor(definition: Record<string, SuperStructInitDefinition>, defaultRo: boolean = false) {
@@ -63,16 +67,19 @@ export class SuperStruct<T> {
    * It returns setter for readonly params
    */
   init(initialValues?: Record<string, any>): ((pathTo: string, newValue: any) => void) {
+    if (this.inited) {
+      throw new Error(`The struct has been already initialized`)
+    }
+
     if (initialValues) {
-      // TODO: валидировать
-      this.value = initialValues
+      for (const name of Object.keys(initialValues)) {
+        this.justSetValue(name, initialValues[name])
+      }
     }
 
-    return (pathTo: string, newValue: any) => {
-      objSetMutate(this.value, pathTo, newValue)
+    this.inited = true
 
-      this.changeEvent.emit()
-    }
+    return this.justSetValue
   }
 
   destroy() {
@@ -86,20 +93,14 @@ export class SuperStruct<T> {
 
   setValue(pathTo: string, newValue: any) {
     // TODO: проверить если readonly то ошибка
-    // TODO: если нет определения deeply то ошибка
 
-    objSetMutate(this.value, pathTo, newValue)
-
-    this.changeEvent.emit()
+    this.justSetValue(pathTo, newValue)
   }
 
   resetValue(pathTo: string) {
     // TODO: проверить если readonly то ошибка
-    // TODO: если нет определения deeply то ошибка
 
-    objSetMutate(this.value, pathTo, null)
-
-    this.changeEvent.emit()
+    this.justSetValue(pathTo, null)
   }
 
   subscribe(handler: () => void): number {
@@ -111,13 +112,21 @@ export class SuperStruct<T> {
   }
 
   /**
-   * It make full deep clone. You can change it
+   * It make full deep clone.
+   * You can change it but changes will not affect the struct.
    */
   clone(): T {
+    return cloneDeepObject(this.value)
+  }
 
-    // TODO: make deep clone
 
-    return this.value
+  private justSetValue = (pathTo: string, newValue: any) => {
+    // TODO: если нет определения deeply то ошибка
+    // TODO: поддержка валидации по типу
+
+    objSetMutate(this.value, pathTo, newValue)
+
+    this.changeEvent.emit()
   }
 
 }
