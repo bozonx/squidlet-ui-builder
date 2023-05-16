@@ -1,6 +1,9 @@
 
 export const ExternalLink = `
 name: ExternalLink
+uiParams:
+  - url
+  - text
 `
 
 // export interface ExternalLink {

@@ -7,6 +7,7 @@ import {preloader} from './preloader.js';
 import {GOOD_UI} from './goodUi/index.js';
 import {OutcomeEvents} from './interfaces/DomEvents.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
+import {transformToTg} from '../renderTelegram/transformToTg.js';
 
 
 (async () => {
@@ -26,6 +27,10 @@ import {RenderedElement} from './interfaces/RenderedElement.js';
 
   main.outcomeEvents.addListener((event: OutcomeEvents, el: RenderedElement) => {
     console.log(2222, event, JSON.stringify(el, null, 2))
+
+    const tgButtons = transformToTg(el)
+
+    console.log(3333, tgButtons)
   })
 
 

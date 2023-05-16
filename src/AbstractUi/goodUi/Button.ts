@@ -1,5 +1,7 @@
 export const Button = `
 name: Button
+uiParams:
+  - text
 `
 
 
