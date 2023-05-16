@@ -39,6 +39,7 @@ export abstract class ComponentBase {
   readonly abstract uiElId: string
   // like {componentId: Component}
   readonly children: Record<string, ComponentBase> = {}
+  readonly parent?: ComponentBase
 
   protected readonly main: Main
   // initial component definition with its children
@@ -227,7 +228,7 @@ export abstract class ComponentBase {
   }
 
   private makeRenderedEl(): RenderedElement {
-    const params = {
+    const baseParams = {
       elId: this.uiElId,
       elName: this.name,
       componentId: this.id,
@@ -235,19 +236,19 @@ export abstract class ComponentBase {
 
     if (this.isRoot) {
       return {
-        ...params,
+        ...baseParams,
         parentElId: '',
         parentChildPosition: -1,
       }
     }
     else {
-      // not root means it is Component
-      const cmp: ComponentBase = this
+      // not root means it is Component. It has to have parent
+      const cmpParent: ComponentBase = this.parent!
 
       return {
-        ...params,
-        parentElId: cmp.parent.uiElId,
-        parentChildPosition: cmp.parent.getPositionOfChildrenEl(this.uiElId),
+        ...baseParams,
+        parentElId: cmpParent.uiElId,
+        parentChildPosition: cmpParent.getPositionOfChildrenEl(this.uiElId),
       }
     }
   }

@@ -4,6 +4,7 @@ import {COMPONENT_ID_BYTES_NUM, ELEMENT_ID_BYTES_NUM} from './interfaces/constan
 import {ComponentBase, ComponentDefinition} from './ComponentBase.js';
 import {RootComponent} from './RootComponent.js';
 import {SuperStruct} from '../sprog/superStruct.js';
+import {SlotsDefinition} from './ComponentSlotsManager.js';
 
 
 export class Component extends ComponentBase {
@@ -17,9 +18,10 @@ export class Component extends ComponentBase {
     main: Main,
     parent: Component | RootComponent,
     componentDefinition: ComponentDefinition,
-    incomeProps?: SuperStruct
+    slotsDefinition: SlotsDefinition,
+    incomeProps: SuperStruct
   ) {
-    super(main, componentDefinition, incomeProps)
+    super(main, componentDefinition, slotsDefinition, incomeProps)
 
     this.id = makeUniqId(COMPONENT_ID_BYTES_NUM)
     this.uiElId = makeUniqId(ELEMENT_ID_BYTES_NUM)
