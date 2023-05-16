@@ -1,7 +1,7 @@
 import {Main} from './Main.js';
 import {ComponentBase, ComponentDefinition} from './ComponentBase.js';
 import {SuperStruct} from '../sprog/superStruct.js';
-import {SlotsDefinition} from './ComponentSlot.js';
+import {SlotsDefinition} from './ComponentSlotsManager.js';
 
 
 export const ROOT_COMPONENT_ID = 'root'

@@ -7,7 +7,7 @@ export interface SlotsDefinition {
 }
 
 
-export class ComponentSlot {
+export class ComponentSlotsManager {
 
 
   constructor(slotsDefinition: SlotsDefinition) {

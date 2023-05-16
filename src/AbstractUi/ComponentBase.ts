@@ -4,7 +4,7 @@ import {COMPONENT_EVENT_PREFIX, Main} from './Main.js';
 import {IncomeEvents, OutcomeEvents} from './interfaces/DomEvents.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
 import {SuperStruct, SuperStructInitDefinition} from '../sprog/superStruct.js';
-import {ComponentSlot, SlotsDefinition} from './ComponentSlot.js';
+import {ComponentSlotsManager, SlotsDefinition} from './ComponentSlotsManager.js';
 
 
 // TODO: поддержка перемещения элементов
@@ -46,7 +46,7 @@ export abstract class ComponentBase {
   // TODO: тут должен быть Super Prop - так как они будут управляться из вне
   // props set in template of parent component
   readonly props: SuperStruct
-  readonly slots: ComponentSlot
+  readonly slots: ComponentSlotsManager
 
 
   /**
@@ -70,7 +70,7 @@ export abstract class ComponentBase {
     this.componentDefinition = componentDefinition
     this.props = incomeProps
     this.state = new SuperStruct(componentDefinition.state || {})
-    this.slots = new ComponentSlot(slotsDefinition)
+    this.slots = new ComponentSlotsManager(slotsDefinition)
   }
 
 
