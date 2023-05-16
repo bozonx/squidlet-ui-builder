@@ -8,6 +8,7 @@ import {ComponentSlotsManager, SlotsDefinition} from './ComponentSlotsManager.js
 
 
 // TODO: поддержка перемещения элементов
+
 // TODO: нужен какой-то scope где будет доступ в sprog к props, state
 //       и доступ к переменным навешанные на props навешанных на потомков
 
@@ -198,37 +199,48 @@ export abstract class ComponentBase {
   }
 
   private async instantiateChildren() {
-
-    // TODO: наверное брать из slot
-
-    if (!this.componentDefinition.tmpl) return
-
-    for (const child of this.componentDefinition.tmpl) {
-      const definition = await this.main.getComponentDefinition(child.component)
-
-      // TODO: props должен быть связан с текущим компонентом
-
-      const props = new SuperStruct(
-        // if not props then put just empty props
-        definition.props || {},
-        true
-      )
-      // TODO: надо сохранить себе чтобы потом устанавливать значения
-      const propSetter = props.init(omitObj(child, 'component'))
-
-      // TODO: add slot !!!
-
-      const childComponent = new Component(
-        this.main,
-        this,
-        definition,
-        props
-      )
-
-      this.children[childComponent.id] = childComponent
-      // set initial position
-      this.uiChildrenPositions.push(childComponent.id)
+    if (this.componentDefinition.tmpl) {
+      for (const child of this.componentDefinition.tmpl) {
+        await this.instantiateChild(child)
+      }
     }
+    else {
+      // if component doesn't have tmpl then just render default slot
+
+      // TODO: what to do ???
+    }
+  }
+
+  async instantiateChild(child: UiElementDefinition) {
+    const childComponentName: string = child.component
+    const childPropsValues = omitObj(child, 'component', 'slot')
+    const childSlotDefinition = child.slot
+    // TODO: если есть tmpl то рисуем его и в этом tmpl будет запрос default slot
+
+    const definition = await this.main.getComponentDefinition(childComponentName)
+
+    // TODO: props должен быть связан с текущим компонентом
+
+    const props = new SuperStruct(
+      // if not props then put just empty props
+      definition.props || {},
+      true
+    )
+    // TODO: надо сохранить себе чтобы потом устанавливать значения
+    const propSetter = props.init(childPropsValues)
+
+    // TODO: add slot !!!
+
+    const childComponent = new Component(
+      this.main,
+      this,
+      definition,
+      props
+    )
+
+    this.children[childComponent.id] = childComponent
+    // set initial position
+    this.uiChildrenPositions.push(childComponent.id)
   }
 
   private makeRenderedEl(): RenderedElement {
@@ -288,7 +300,7 @@ export abstract class ComponentBase {
         res[item[0]] = item[1]()
       }
     }
-    
+
     if (!Object.keys(res).length) return
 
     return res

@@ -5,7 +5,7 @@ import {Component} from '../Component.js';
 
 
 export interface DocumentDefinition extends UiElementDefinitionBase {
-  children: UiElementDefinitionBase[]
+  //children: UiElementDefinitionBase[]
 }
 
 export type DocumentEventHandler = (elementPath: string, eventName: string, data: any) => void
@@ -14,9 +14,9 @@ export type DocumentEventHandler = (elementPath: string, eventName: string, data
 
 export const Document: string = `
 name: Document
-props:
-  children:
-    type: Component[]
+`
+
+/*
 tmpl:
   - component: ForEach
     src:
@@ -25,7 +25,7 @@ tmpl:
     slot:
       - $exp: getJsValue
         path: item
-`
+ */
 
 
 // export class Document extends Component {
