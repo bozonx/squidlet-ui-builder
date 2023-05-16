@@ -74,10 +74,16 @@ const renderComponent: Record<string, (el: RenderedElement) => [TgReplyButton[][
   MainSection: (el: RenderedElement) => renderComponent.Container(el),
   Nav: (el: RenderedElement) => renderComponent.Container(el),
   NestedMenu: (el: RenderedElement) => {
+    return [
+      [[{
+        text: el.params?.text || 'No text',
 
-    // TODO: тут должен быть переход на вложенное меню
+        // TODO: продумать urlы переходов
 
-    return [[], '']
+        callback_data: CALLBACK_COMMANDS.toRoute + el.name
+      }]],
+      el.params?.header || ''
+    ]
   },
   RadioGroupInput: (el: RenderedElement) => {
 
@@ -104,7 +110,14 @@ const renderComponent: Record<string, (el: RenderedElement) => [TgReplyButton[][
 
     return [[], '']
   },
-  VerticalMenu: (el: RenderedElement) => renderComponent.Container(el),
+  VerticalMenu: (el: RenderedElement) => {
+    const res = renderComponent.Container(el)
+
+    return [
+      res[0],
+      (el.params?.header) ? el.params.header + '\n' + res[1] : res[1]
+    ]
+  },
 }
 
 
