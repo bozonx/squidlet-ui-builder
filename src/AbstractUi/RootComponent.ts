@@ -1,5 +1,5 @@
 import {Main} from './Main.js';
-import {ComponentBase, ComponentDefinition} from './ComponentBase.js';
+import {Component, ComponentDefinition} from './Component.js';
 import {SuperStruct} from '../sprog/superStruct.js';
 import {SlotsDefinition} from './ComponentSlotsManager.js';
 
@@ -7,10 +7,10 @@ import {SlotsDefinition} from './ComponentSlotsManager.js';
 export const ROOT_COMPONENT_ID = 'root'
 
 
-export class RootComponent extends ComponentBase {
+export class RootComponent extends Component {
   readonly isRoot: boolean = true
   readonly id = ROOT_COMPONENT_ID
-  readonly uiElId = ROOT_COMPONENT_ID
+  //readonly uiElId = ROOT_COMPONENT_ID
 
 
   constructor(main: Main, componentDefinition: ComponentDefinition) {
@@ -18,8 +18,15 @@ export class RootComponent extends ComponentBase {
       // TODO: правильно ???
       default: componentDefinition.tmpl
     }
+    // TODO: не очень хорошо так делать
+    const parent = null as any
 
-    super(main, componentDefinition, slots, new SuperStruct({}))
+    super(main, parent, componentDefinition, slots, new SuperStruct({}))
+  }
+
+
+  protected makeId(): string {
+    return ROOT_COMPONENT_ID
   }
 
 }

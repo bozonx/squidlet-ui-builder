@@ -1,5 +1,5 @@
 import yaml from 'yaml';
-import {ComponentDefinition} from './ComponentBase.js';
+import {ComponentDefinition} from './Component.js';
 import {ROOT_COMPONENT_ID} from './RootComponent.js';
 
 

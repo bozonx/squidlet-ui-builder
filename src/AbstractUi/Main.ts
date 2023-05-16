@@ -3,7 +3,7 @@ import {IndexedEvents, IndexedEventEmitter} from 'squidlet-lib'
 import {OutcomeEvents, IncomeEvents} from './interfaces/DomEvents.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
 import {ROOT_COMPONENT_ID, RootComponent} from './RootComponent.js';
-import {ComponentDefinition} from './ComponentBase.js';
+import {ComponentDefinition} from './Component.js';
 import {STD_COMPONENTS} from './stdLib/index.js';
 
 
