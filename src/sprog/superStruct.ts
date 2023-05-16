@@ -89,6 +89,13 @@ export class SuperStruct<T = Record<any, any>> {
   }
 
 
+  has(pathTo: string): boolean {
+
+    // TODO: deep
+
+    return Boolean(this.value[pathTo])
+  }
+
   getValue(pathTo: string): any {
 
     // TODO: если глубокий путь то

@@ -25,6 +25,10 @@ export interface ComponentDefinition {
   props?: Record<string, SuperStructInitDefinition>
   // local state
   state?: Record<string, SuperStructInitDefinition>
+  // names of params which will be sent to UI.
+  // they will be got from props and state.
+  // to rename or get param from component use [newName, () => { return ... }]
+  uiParams?: (string | [string, () => any])[]
   tmpl?: UiElementDefinition[]
 }
 
@@ -266,9 +270,28 @@ export abstract class ComponentBase {
   }
 
   private getUiParams(): Record<string, any> | undefined {
-    // TODO: нужно получить унифицированные параметры для элемента ????
-    // TODO: или это props просто? но не всё а только то что нужно для рендера
-    return
+    if (!this.componentDefinition.uiParams) return
+
+    const res: Record<string, any> = {}
+
+    for (const item of this.componentDefinition.uiParams) {
+      if (typeof item === 'string') {
+        if (this.state.has(item)) {
+          res[item] = this.state.getValue(item)
+        }
+        else if (this.props.has(item)) {
+          res[item] = this.props.getValue(item)
+        }
+      }
+      else {
+        // means [string, () => any]
+        res[item[0]] = item[1]()
+      }
+    }
+    
+    if (!Object.keys(res).length) return
+
+    return res
   }
 
 }

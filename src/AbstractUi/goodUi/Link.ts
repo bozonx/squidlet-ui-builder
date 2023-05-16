@@ -2,6 +2,9 @@
 
 
 export const Link = `
+uiParams:
+  - path
+  - text
 `
 
 // export const LINK_TYPE = 'Link'
