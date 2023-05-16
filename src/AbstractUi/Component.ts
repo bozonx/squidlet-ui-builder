@@ -231,7 +231,7 @@ export class Component {
       props,
     } = this.prepareChild(childUiDefinition)
 
-    console.log(1111, childUiDefinition, componentDefinition, slotDefinition, props)
+    //console.log(1111, childUiDefinition, componentDefinition, slotDefinition, props)
 
     const childComponent = new Component(
       this.main,
@@ -293,15 +293,14 @@ export class Component {
 
   private makeRenderedEl(): RenderedElement {
     const baseParams = {
-      //elId: this.uiElId,
-      elName: this.name,
+      name: this.name,
       componentId: this.id,
     }
 
     if (this.isRoot) {
       return {
         ...baseParams,
-        //parentElId: '',
+        parentId: '',
         parentChildPosition: -1,
       }
     }
@@ -311,7 +310,7 @@ export class Component {
 
       return {
         ...baseParams,
-        //parentElId: cmpParent.uiElId,
+        parentId: cmpParent.id,
         parentChildPosition: cmpParent.getPositionOfChildrenEl(this.id),
       }
     }

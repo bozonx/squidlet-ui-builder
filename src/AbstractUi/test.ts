@@ -5,6 +5,8 @@ import {Main} from './Main.js';
 import path from 'node:path';
 import {preloader} from './preloader.js';
 import {GOOD_UI} from './goodUi/index.js';
+import {OutcomeEvents} from './interfaces/DomEvents.js';
+import {RenderedElement} from './interfaces/RenderedElement.js';
 
 
 (async () => {
@@ -20,6 +22,12 @@ import {GOOD_UI} from './goodUi/index.js';
     goodUi: GOOD_UI
   }
   const main = new Main(definitions, libs)
+
+
+  main.outcomeEvents.addListener((event: OutcomeEvents, el: RenderedElement) => {
+    console.log(2222, event, JSON.stringify(el, null, 2))
+  })
+
 
   await main.init()
 })()
