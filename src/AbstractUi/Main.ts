@@ -37,7 +37,7 @@ export class Main {
 
     for (const libName of Object.keys(libs)) {
       for (const cmpName of Object.keys(libs[libName])) {
-        this.componentsLib[cmpName] = yaml.parse(STD_COMPONENTS[cmpName])
+        this.componentsLib[cmpName] = yaml.parse(libs[libName][cmpName])
       }
     }
 

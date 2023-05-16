@@ -224,16 +224,14 @@ export class Component {
     }
   }
 
-  async instantiateChild(child: UiElementDefinition) {
+  async instantiateChild(childUiDefinition: UiElementDefinition) {
     const {
       componentDefinition,
       slotDefinition,
       props,
-    } = this.prepareChild(child)
+    } = this.prepareChild(childUiDefinition)
 
-    // TODO: если есть tmpl то рисуем его и в этом tmpl будет запрос default slot
-
-    // TODO: add slotDefinition
+    console.log(1111, childUiDefinition, componentDefinition, slotDefinition, props)
 
     const childComponent = new Component(
       this.main,
@@ -248,7 +246,7 @@ export class Component {
     this.uiChildrenPositions.push(childComponent.id)
   }
 
-  private prepareChild(child: UiElementDefinition): {
+  private prepareChild(childUiDefinition: UiElementDefinition): {
     componentName: string
     propsValues: Record<string, any>
     slotDefinition: SlotsDefinition
@@ -256,18 +254,11 @@ export class Component {
     props: SuperStruct
     propSetter: (pathTo: string, newValue: any) => void
   } {
-    const componentName: string = child.component
+    const componentName: string = childUiDefinition.component
     // values of child props which are set in this (parent) component
-    const propsValues: Record<string, any> = omitObj(child, 'component', 'slot')
-    const slotDefinition: SlotsDefinition = {
-
-      // TODO: работаться со слотом !!!
-
-      default: child.slot || []
-    }
+    const propsValues: Record<string, any> = omitObj(childUiDefinition, 'component', 'slot')
     const componentDefinition = this.main
       .getComponentDefinition(componentName)
-
     const props = new SuperStruct(
       // if no props then put just empty props
       componentDefinition.props || {},
@@ -275,6 +266,16 @@ export class Component {
       true
     )
     const propSetter = props.init(propsValues)
+    let slotDefinition: SlotsDefinition = {}
+
+    if (Array.isArray(childUiDefinition.slot)) {
+      slotDefinition = {
+        default: childUiDefinition.slot
+      }
+    }
+    else if (typeof childUiDefinition.slot === 'object') {
+      slotDefinition = childUiDefinition.slot
+    }
 
     // TODO: в childPropsValues как примитивы, так и sprog - надо его выполнить наверное
     // TODO: props должен быть связан с текущим компонентом
