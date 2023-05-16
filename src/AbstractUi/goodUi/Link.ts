@@ -2,6 +2,7 @@
 
 
 export const Link = `
+name: Link
 uiParams:
   - path
   - text

@@ -239,7 +239,7 @@ export class Component {
       this.main,
       this,
       componentDefinition,
-      {},
+      slotDefinition,
       props
     )
 
@@ -251,7 +251,7 @@ export class Component {
   private prepareChild(child: UiElementDefinition): {
     componentName: string
     propsValues: Record<string, any>
-    slotDefinition: AnyElementDefinitions[]
+    slotDefinition: SlotsDefinition
     componentDefinition: ComponentDefinition
     props: SuperStruct
     propSetter: (pathTo: string, newValue: any) => void
@@ -259,7 +259,12 @@ export class Component {
     const componentName: string = child.component
     // values of child props which are set in this (parent) component
     const propsValues: Record<string, any> = omitObj(child, 'component', 'slot')
-    const slotDefinition: AnyElementDefinitions[] = child.slot || []
+    const slotDefinition: SlotsDefinition = {
+
+      // TODO: работаться со слотом !!!
+
+      default: child.slot || []
+    }
     const componentDefinition = this.main
       .getComponentDefinition(componentName)
 

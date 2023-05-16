@@ -1,5 +1,6 @@
 
 export const Container = `
+name: Container
 `
 
 // import {AnyElement} from '../interfaces/AnyElement';

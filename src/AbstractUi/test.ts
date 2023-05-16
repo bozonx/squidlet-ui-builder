@@ -17,7 +17,7 @@ import {GOOD_UI} from './goodUi/index.js';
   )
 
   const libs = {
-    //goodUi: GOOD_UI
+    goodUi: GOOD_UI
   }
   const main = new Main(definitions, libs)
 
