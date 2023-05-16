@@ -30,6 +30,7 @@ export abstract class ComponentBase {
   readonly abstract isRoot: boolean
   // componentId
   readonly abstract id: string
+  // TODO: поидее не нужно так как 1 компонент = 1 ui элемент
   // id of UI element which is represents this component
   readonly abstract uiElId: string
   // like {componentId: Component}
@@ -87,6 +88,7 @@ export abstract class ComponentBase {
 
   async destroy() {
     this.main.incomeEvents.removeListener(this.incomeEventListenerIndex)
+    await this.slots.destroy()
     this.props.destroy()
     this.state.destroy()
 
@@ -105,12 +107,10 @@ export abstract class ComponentBase {
   }
 
   /**
-   * Mount rendered stdLib and it's children and start listening income events
+   * Mount this component's element.
+   * Actually means emit mount event and listen element's income events
    */
-  async mount(rootElId: string, childPosition: number) {
-
-    // TODO: корень разве здесь должен устанавливаться???
-
+  async mount() {
     // start listening income events
     this.incomeEventListenerIndex = this.main.incomeEvents.addListener(
       COMPONENT_EVENT_PREFIX + this.id,

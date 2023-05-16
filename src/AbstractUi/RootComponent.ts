@@ -22,20 +22,4 @@ export class RootComponent extends ComponentBase {
     super(main, componentDefinition, slots, new SuperStruct({}))
   }
 
-
-  async init() {
-    await super.init()
-
-    // TODO: а чё всмысле ???
-    // render root component
-    await this.mount('/', 0)
-  }
-
-  async destroy() {
-    await super.destroy()
-    // TODO: послать событие на unmount корня
-    // TODO: дестрой всех компонентов
-
-  }
-
 }

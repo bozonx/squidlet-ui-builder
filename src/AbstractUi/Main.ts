@@ -46,6 +46,8 @@ export class Main {
 
   async init() {
     await this.root.init()
+    // render root component
+    await this.root.mount()
   }
 
   async destroy() {
