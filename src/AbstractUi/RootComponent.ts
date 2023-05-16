@@ -1,5 +1,7 @@
 import {Main} from './Main.js';
 import {ComponentBase, ComponentDefinition} from './ComponentBase.js';
+import {SuperStruct} from '../sprog/superStruct.js';
+import {SlotsDefinition} from './ComponentSlot.js';
 
 
 export const ROOT_COMPONENT_ID = 'root'
@@ -12,7 +14,12 @@ export class RootComponent extends ComponentBase {
 
 
   constructor(main: Main, componentDefinition: ComponentDefinition) {
-    super(main, componentDefinition)
+    const slots: SlotsDefinition = {
+      // TODO: правильно ???
+      default: componentDefinition.tmpl
+    }
+
+    super(main, componentDefinition, slots, new SuperStruct({}))
   }
 
 

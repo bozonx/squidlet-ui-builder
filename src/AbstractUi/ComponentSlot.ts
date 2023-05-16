@@ -1,8 +1,9 @@
-import {ComponentDefinition} from './ComponentBase.js';
+import {UiElementDefinition} from './interfaces/UiElementDefinitionBase.js';
+
 
 export interface SlotsDefinition {
-  default?: ComponentDefinition[]
-  [index: string]: ComponentDefinition[]
+  default?: UiElementDefinition[]
+  [index: string]: UiElementDefinition[] | undefined
 }
 
 

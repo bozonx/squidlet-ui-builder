@@ -59,13 +59,16 @@ export abstract class ComponentBase {
 
   protected constructor(
     main: Main,
+    // definition component itself
     componentDefinition: ComponentDefinition,
+    // slots of component which get from parent component template
     slotsDefinition: SlotsDefinition,
-    incomeProps?: SuperStruct
+    // props which parent give
+    incomeProps: SuperStruct
   ) {
     this.main = main
     this.componentDefinition = componentDefinition
-    this.props = incomeProps || new SuperStruct({})
+    this.props = incomeProps
     this.state = new SuperStruct(componentDefinition.state || {})
     this.slots = new ComponentSlot(slotsDefinition)
   }
@@ -174,6 +177,9 @@ export abstract class ComponentBase {
   }
 
   private async instantiateChildren() {
+
+    // TODO: наверное брать из slot
+
     if (!this.componentDefinition.tmpl) return
 
     for (const child of this.componentDefinition.tmpl) {
