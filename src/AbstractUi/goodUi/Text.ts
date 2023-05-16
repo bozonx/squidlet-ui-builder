@@ -1,6 +1,8 @@
 
 export const Text = `
 name: Text
+uiParams:
+  - text
 `
 
 // import {ELEMENT_DEFAULTS, ElementBase, ElementInitial} from '../interfaces/ElementBase';

@@ -2,10 +2,10 @@ import {RenderedElement} from '../AbstractUi/interfaces/RenderedElement.js';
 import {TgReplyButton} from './TgReplyButton.js';
 
 
-const CALLBACK_COMMANDS = {
-  click: 'CLICK|',
-  toRoute: 'TO_ROUTE|',
-}
+// const CALLBACK_COMMANDS = {
+//   click: 'CLICK|',
+//   toRoute: 'TO_ROUTE|',
+// }
 
 
 const renderComponent: Record<string, (el: RenderedElement) => [TgReplyButton[][], string]> = {
@@ -18,7 +18,8 @@ const renderComponent: Record<string, (el: RenderedElement) => [TgReplyButton[][
     return [
       [[{
         text: el.params?.text || 'No text',
-        callback_data: CALLBACK_COMMANDS.click + el.componentId
+        //callback_data: CALLBACK_COMMANDS.click + el.componentId
+        callback_data: el.componentId,
       }]],
       ''
     ]
@@ -34,7 +35,8 @@ const renderComponent: Record<string, (el: RenderedElement) => [TgReplyButton[][
     return [
       [[{
         text: el.params?.text || 'No text',
-        callback_data: CALLBACK_COMMANDS.toRoute + el.params?.path || '',
+        //callback_data: CALLBACK_COMMANDS.toRoute + el.params?.path || '',
+        callback_data: el.componentId,
       }]]
       , ''
     ]
@@ -77,10 +79,8 @@ const renderComponent: Record<string, (el: RenderedElement) => [TgReplyButton[][
     return [
       [[{
         text: el.params?.text || 'No text',
-
-        // TODO: продумать urlы переходов
-
-        callback_data: CALLBACK_COMMANDS.toRoute + el.name
+        //callback_data: CALLBACK_COMMANDS.toRoute + el.name
+        callback_data: el.componentId,
       }]],
       el.params?.header || ''
     ]
@@ -105,10 +105,7 @@ const renderComponent: Record<string, (el: RenderedElement) => [TgReplyButton[][
   },
   SideMenu: (el: RenderedElement) => renderComponent.Container(el),
   Text: (el: RenderedElement) => {
-
-    // TODO: add ??? - а как его напишешь то ???
-
-    return [[], '']
+    return [[], el.params?.text || '']
   },
   VerticalMenu: (el: RenderedElement) => {
     const res = renderComponent.Container(el)
