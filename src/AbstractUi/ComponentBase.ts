@@ -5,6 +5,7 @@ import {IncomeEvents, OutcomeEvents} from './interfaces/DomEvents.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
 import {SuperStruct, SuperStructInitDefinition} from '../sprog/superStruct.js';
 import {ComponentSlotsManager, SlotsDefinition} from './ComponentSlotsManager.js';
+import {AnyElementDefinitions} from './interfaces/AnyElementDefinition.js';
 
 
 // TODO: поддержка перемещения элементов
@@ -213,39 +214,63 @@ export abstract class ComponentBase {
   }
 
   async instantiateChild(child: UiElementDefinition) {
-    const childComponentName: string = child.component
-    // values of child props which are set in this (parent) component
-    const childPropsValues = omitObj(child, 'component', 'slot')
-    const childSlotDefinition = child.slot
-    const childComponentDefinition = await this.main
-      .getComponentDefinition(childComponentName)
-
-    // TODO: props должен быть связан с текущим компонентом
-
-    const props = new SuperStruct(
-      // if no props then put just empty props
-      childComponentDefinition.props || {},
-      // props are readonly by default
-      true
-    )
-    // TODO: надо сохранить себе чтобы потом устанавливать значения
-    const propSetter = props.init(childPropsValues)
+    const {
+      componentDefinition,
+      slotDefinition,
+      props,
+    } = this.prepareChild(child)
 
     // TODO: в childPropsValues как примитивы, так и sprog - надо его выполнить наверное
     // TODO: add slot !!!
     // TODO: если есть tmpl то рисуем его и в этом tmpl будет запрос default slot
 
-
     const childComponent = new Component(
       this.main,
       this,
-      definition,
+      componentDefinition,
+      slotDefinition,
       props
     )
 
     this.children[childComponent.id] = childComponent
     // set initial position
     this.uiChildrenPositions.push(childComponent.id)
+  }
+
+  private prepareChild(child: UiElementDefinition): {
+    componentName: string
+    propsValues: Record<string, any>
+    slotDefinition?: AnyElementDefinitions[]
+    componentDefinition: ComponentDefinition
+    props: SuperStruct
+    propSetter: (pathTo: string, newValue: any) => void
+  } {
+    const componentName: string = child.component
+    // values of child props which are set in this (parent) component
+    const propsValues: Record<string, any> = omitObj(child, 'component', 'slot')
+    const slotDefinition = child.slot
+    const componentDefinition = this.main
+      .getComponentDefinition(componentName)
+
+    const props = new SuperStruct(
+      // if no props then put just empty props
+      componentDefinition.props || {},
+      // props are readonly by default
+      true
+    )
+    const propSetter = props.init(propsValues)
+
+    // TODO: props должен быть связан с текущим компонентом
+    // TODO: propSetter надо сохранить себе чтобы потом устанавливать значения
+
+    return {
+      componentName,
+      propsValues,
+      slotDefinition,
+      componentDefinition,
+      props,
+      propSetter,
+    }
   }
 
   private makeRenderedEl(): RenderedElement {
