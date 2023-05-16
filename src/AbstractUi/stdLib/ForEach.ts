@@ -1,5 +1,9 @@
 export const ForEach = `
 name: ForEach
+
+`
+
+/*
 props:
 
     src:
@@ -32,4 +36,4 @@ tmpl:
       lines:
         -
 #tmplExp: 'for (const item of src) this.main.newComponentFromTmpl(item)'
-`
+ */

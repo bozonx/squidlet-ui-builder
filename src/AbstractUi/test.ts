@@ -16,7 +16,10 @@ import {GOOD_UI} from './goodUi/index.js';
     (pathTo: string) => fs.readFile(pathTo, 'utf8')
   )
 
-  const main = new Main(definitions, {goodUi: GOOD_UI})
+  const libs = {
+    //goodUi: GOOD_UI
+  }
+  const main = new Main(definitions, libs)
 
   await main.init()
 })()

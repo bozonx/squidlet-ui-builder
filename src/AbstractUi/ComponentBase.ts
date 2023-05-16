@@ -222,11 +222,13 @@ export abstract class ComponentBase {
 
     // TODO: если есть tmpl то рисуем его и в этом tmpl будет запрос default slot
 
+    // TODO: add slotDefinition
+
     const childComponent = new Component(
       this.main,
-      this,
+      this as  any,
       componentDefinition,
-      slotDefinition,
+      {},
       props
     )
 
@@ -238,7 +240,7 @@ export abstract class ComponentBase {
   private prepareChild(child: UiElementDefinition): {
     componentName: string
     propsValues: Record<string, any>
-    slotDefinition?: AnyElementDefinitions[]
+    slotDefinition: AnyElementDefinitions[]
     componentDefinition: ComponentDefinition
     props: SuperStruct
     propSetter: (pathTo: string, newValue: any) => void
@@ -246,7 +248,7 @@ export abstract class ComponentBase {
     const componentName: string = child.component
     // values of child props which are set in this (parent) component
     const propsValues: Record<string, any> = omitObj(child, 'component', 'slot')
-    const slotDefinition = child.slot
+    const slotDefinition: AnyElementDefinitions[] = child.slot || []
     const componentDefinition = this.main
       .getComponentDefinition(componentName)
 
