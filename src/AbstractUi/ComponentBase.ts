@@ -11,6 +11,10 @@ import {ComponentSlotsManager, SlotsDefinition} from './ComponentSlotsManager.js
 // TODO: нужен какой-то scope где будет доступ в sprog к props, state
 //       и доступ к переменным навешанные на props навешанных на потомков
 
+// TODO: run onUpdate callback of component definition
+// TODO: call onMount component's callback of component definition
+// TODO: call onUnmount component's callback of component definition
+
 
 export interface ComponentDefinition {
 
@@ -120,8 +124,6 @@ export abstract class ComponentBase {
       this.handleIncomeEvent
     )
 
-    // TODO: call onMount component's callback
-
     if (!silent) {
       this.main.outcomeEvents.emit(OutcomeEvents.mount, this.render())
     }
@@ -145,18 +147,17 @@ export abstract class ComponentBase {
       await this.children[childId].unmount(true)
     }
 
-    // TODO: run onUnmount callback
-
     if (!silent) {
       this.main.outcomeEvents.emit(OutcomeEvents.unMount, this.makeRenderedEl())
     }
   }
 
-  async update() {
-    // TODO: run onUpdate callback
-
-    this.main.outcomeEvents.emit(OutcomeEvents.update, this.renderSelf())
-  }
+  // async update() {
+  //
+  //
+  //
+  //   this.main.outcomeEvents.emit(OutcomeEvents.update, this.renderSelf())
+  // }
 
   /**
    * Make render element only for itself without children

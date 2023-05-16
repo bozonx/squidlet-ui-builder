@@ -53,6 +53,7 @@ export class Main {
   async destroy() {
     this.outcomeEvents.destroy()
     this.incomeEvents.destroy()
+    await this.root.unmount()
     await this.root.destroy()
   }
 
