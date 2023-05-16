@@ -220,8 +220,6 @@ export abstract class ComponentBase {
       props,
     } = this.prepareChild(child)
 
-    // TODO: в childPropsValues как примитивы, так и sprog - надо его выполнить наверное
-    // TODO: add slot !!!
     // TODO: если есть tmpl то рисуем его и в этом tmpl будет запрос default slot
 
     const childComponent = new Component(
@@ -260,6 +258,7 @@ export abstract class ComponentBase {
     )
     const propSetter = props.init(propsValues)
 
+    // TODO: в childPropsValues как примитивы, так и sprog - надо его выполнить наверное
     // TODO: props должен быть связан с текущим компонентом
     // TODO: propSetter надо сохранить себе чтобы потом устанавливать значения
 
