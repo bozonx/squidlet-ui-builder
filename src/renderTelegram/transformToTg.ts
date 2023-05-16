@@ -8,141 +8,91 @@ const CALLBACK_COMMANDS = {
 }
 
 
-const renderComponent: Record<string, (el: RenderedElement) => TgReplyButton[][]> = {
+const renderComponent: Record<string, (el: RenderedElement) => [TgReplyButton[][], string]> = {
 
   // TODO: add ForEach ???
   // TODO: add RenderComponent ???
 
-  Document: (el: RenderedElement): TgReplyButton[][] => {
-    let res: TgReplyButton[][] = []
-
-    for (const item of el.children || []) {
-      res = [
-        ...res,
-        ...renderComponent[item.name](item),
-      ]
-    }
-
-    return res
-  },
-  Button: (el: RenderedElement): TgReplyButton[][] => {
+  Document: (el: RenderedElement) => renderComponent.Container(el),
+  Button: (el: RenderedElement) => {
     return [[{
       text: el.params?.text || 'No text',
       callback_data: CALLBACK_COMMANDS.click + el.componentId
     }]]
   },
-  ButtonGroup: (el: RenderedElement): TgReplyButton[][] => {
+  ButtonGroup: (el: RenderedElement) => {
     return [(el.children || [])
       .map((item) => renderComponent[item.name](item)[0][0])]
   },
-  Link: (el: RenderedElement): TgReplyButton[][] => {
+  Link: (el: RenderedElement) => {
     return [[{
       text: el.params?.text || 'No text',
-      callback_data: CALLBACK_COMMANDS + el.params?.url || '',
+      callback_data: CALLBACK_COMMANDS.toRoute + el.params?.path || '',
     }]]
   },
-  ExternalLink: (el: RenderedElement): TgReplyButton[][] => {
+  ExternalLink: (el: RenderedElement) => {
     return [[{
       text: el.params?.text || 'No text',
       url: el.params?.url || '',
     }]]
   },
-  CheckBox: (el: RenderedElement): TgReplyButton[][] => {
+  CheckBox: (el: RenderedElement) => {
 
     // TODO: add
 
-    return []
+    return [[], '']
   },
-  Container: (el: RenderedElement): TgReplyButton[][] => {
+  Container: (el: RenderedElement) => {
     let res: TgReplyButton[][] = []
+    const messages: string[] = []
 
     for (const item of el.children || []) {
+      const renderedItem = renderComponent[item.name](item)
+
+      if (renderedItem[1]) messages.push(renderedItem[1])
+
       res = [
         ...res,
-        ...renderComponent[item.name](item),
+        ...renderedItem[0],
       ]
     }
 
-    return res
+    return [res, messages.join('\n')]
   },
-  MainSection: (el: RenderedElement): TgReplyButton[][] => {
-    let res: TgReplyButton[][] = []
-
-    for (const item of el.children || []) {
-      res = [
-        ...res,
-        ...renderComponent[item.name](item),
-      ]
-    }
-
-    return res
-  },
-  Nav: (el: RenderedElement): TgReplyButton[][] => {
-    let res: TgReplyButton[][] = []
-
-    for (const item of el.children || []) {
-      res = [
-        ...res,
-        ...renderComponent[item.name](item),
-      ]
-    }
-
-    return res
-  },
-  NestedMenu: (el: RenderedElement): TgReplyButton[][] => {
+  MainSection: (el: RenderedElement) => renderComponent.Container(el),
+  Nav: (el: RenderedElement) => renderComponent.Container(el),
+  NestedMenu: (el: RenderedElement) => {
 
     // TODO: тут должен быть переход на вложенное меню
 
-    return []
+    return [[], '']
   },
-  RadioGroupInput: (el: RenderedElement): TgReplyButton[][] => {
+  RadioGroupInput: (el: RenderedElement) => {
 
     // TODO: add
 
-    return []
+    return [[], '']
   },
-  MultiSelectInput: (el: RenderedElement): TgReplyButton[][] => {
+  MultiSelectInput: (el: RenderedElement) => {
 
     // TODO: add
 
-    return []
+    return [[], '']
   },
-  SelectInput: (el: RenderedElement): TgReplyButton[][] => {
+  SelectInput: (el: RenderedElement) => {
 
     // TODO: add
 
-    return []
+    return [[], '']
   },
-  SideMenu: (el: RenderedElement): TgReplyButton[][] => {
-    let res: TgReplyButton[][] = []
-
-    for (const item of el.children || []) {
-      res = [
-        ...res,
-        ...renderComponent[item.name](item),
-      ]
-    }
-
-    return res
-  },
-  Text: (el: RenderedElement): TgReplyButton[][] => {
+  SideMenu: (el: RenderedElement) => renderComponent.Container(el),
+  Text: (el: RenderedElement) => {
 
     // TODO: add ??? - а как его напишешь то ???
 
-    return []
+    return [[], '']
   },
-  VerticalMenu: (el: RenderedElement): TgReplyButton[][] => {
-    let res: TgReplyButton[][] = []
-
-    for (const item of el.children || []) {
-      res = [
-        ...res,
-        ...renderComponent[item.name](item),
-      ]
-    }
-
-    return res
-  },
+  VerticalMenu: (el: RenderedElement) => renderComponent.Container(el),
 }
 
 
