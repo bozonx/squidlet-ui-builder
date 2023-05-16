@@ -205,31 +205,36 @@ export abstract class ComponentBase {
       }
     }
     else {
-      // if component doesn't have tmpl then just render default slot
-
-      // TODO: what to do ???
+      // if component doesn't have tmpl then just render default slot like it is tmpl
+      for (const child of this.slots.getDefaultDefinition() || []) {
+        await this.instantiateChild(child)
+      }
     }
   }
 
   async instantiateChild(child: UiElementDefinition) {
     const childComponentName: string = child.component
+    // values of child props which are set in this (parent) component
     const childPropsValues = omitObj(child, 'component', 'slot')
     const childSlotDefinition = child.slot
-    // TODO: если есть tmpl то рисуем его и в этом tmpl будет запрос default slot
-
-    const definition = await this.main.getComponentDefinition(childComponentName)
+    const childComponentDefinition = await this.main
+      .getComponentDefinition(childComponentName)
 
     // TODO: props должен быть связан с текущим компонентом
 
     const props = new SuperStruct(
-      // if not props then put just empty props
-      definition.props || {},
+      // if no props then put just empty props
+      childComponentDefinition.props || {},
+      // props are readonly by default
       true
     )
     // TODO: надо сохранить себе чтобы потом устанавливать значения
     const propSetter = props.init(childPropsValues)
 
+    // TODO: в childPropsValues как примитивы, так и sprog - надо его выполнить наверное
     // TODO: add slot !!!
+    // TODO: если есть tmpl то рисуем его и в этом tmpl будет запрос default slot
+
 
     const childComponent = new Component(
       this.main,

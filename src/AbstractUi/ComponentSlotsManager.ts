@@ -8,9 +8,11 @@ export interface SlotsDefinition {
 
 
 export class ComponentSlotsManager {
+  private slotsDefinition: SlotsDefinition
 
 
   constructor(slotsDefinition: SlotsDefinition) {
+    this.slotsDefinition = slotsDefinition
   }
 
   async init(scope: Record<any, any>) {
@@ -21,5 +23,9 @@ export class ComponentSlotsManager {
 
   }
 
+
+  getDefaultDefinition(): UiElementDefinition[] | undefined {
+    return this.slotsDefinition.default
+  }
 
 }
