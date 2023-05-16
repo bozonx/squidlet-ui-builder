@@ -28,9 +28,9 @@ import {transformToTg} from '../renderTelegram/transformToTg.js';
   main.outcomeEvents.addListener((event: OutcomeEvents, el: RenderedElement) => {
     console.log(2222, event, JSON.stringify(el, null, 2))
 
-    const tgButtons = transformToTg(el)
+    const [tgButtons, message] = transformToTg(el)
 
-    console.log(3333, tgButtons)
+    console.log(3333, message, tgButtons)
   })
 
 

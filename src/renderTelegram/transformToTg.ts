@@ -15,26 +15,38 @@ const renderComponent: Record<string, (el: RenderedElement) => [TgReplyButton[][
 
   Document: (el: RenderedElement) => renderComponent.Container(el),
   Button: (el: RenderedElement) => {
-    return [[{
-      text: el.params?.text || 'No text',
-      callback_data: CALLBACK_COMMANDS.click + el.componentId
-    }]]
+    return [
+      [[{
+        text: el.params?.text || 'No text',
+        callback_data: CALLBACK_COMMANDS.click + el.componentId
+      }]],
+      ''
+    ]
   },
   ButtonGroup: (el: RenderedElement) => {
-    return [(el.children || [])
-      .map((item) => renderComponent[item.name](item)[0][0])]
+    return [
+      (el.children || [])
+        .map((item) => renderComponent[item.name](item)[0][0]),
+      ''
+    ]
   },
   Link: (el: RenderedElement) => {
-    return [[{
-      text: el.params?.text || 'No text',
-      callback_data: CALLBACK_COMMANDS.toRoute + el.params?.path || '',
-    }]]
+    return [
+      [[{
+        text: el.params?.text || 'No text',
+        callback_data: CALLBACK_COMMANDS.toRoute + el.params?.path || '',
+      }]]
+      , ''
+    ]
   },
   ExternalLink: (el: RenderedElement) => {
-    return [[{
-      text: el.params?.text || 'No text',
-      url: el.params?.url || '',
-    }]]
+    return [
+      [[{
+        text: el.params?.text || 'No text',
+        url: el.params?.url || '',
+      }]]
+      , ''
+    ]
   },
   CheckBox: (el: RenderedElement) => {
 
@@ -96,21 +108,24 @@ const renderComponent: Record<string, (el: RenderedElement) => [TgReplyButton[][
 }
 
 
-export function transformToTg(el: RenderedElement | RenderedElement[]): TgReplyButton[][] {
+export function transformToTg(el: RenderedElement | RenderedElement[]): [TgReplyButton[][],  string] {
 
   // TODO: наверное взять msg из root???
 
   const els = (Array.isArray(el)) ? el : el.children || []
   let res: TgReplyButton[][] = []
+  let message = ''
 
   for (const item of els) {
-    const rendered: TgReplyButton[][] = renderComponent[item.name](item)
+    const rendered: [TgReplyButton[][], string] = renderComponent[item.name](item)
 
     res = [
       ...res,
-      ...rendered,
+      ...rendered[0],
     ]
+
+    message += rendered[1]
   }
 
-  return res
+  return [res, message]
 }
