@@ -108,9 +108,12 @@ export abstract class ComponentBase {
 
   /**
    * Mount this component's element.
-   * Actually means emit mount event and listen element's income events
+   * Actually means emit mount event and listen element's income events.
+   * @param silent - means do not emit render event.
+   *   It is used only if parent has already rendered. Buy this component need to
+   *   listen ui events
    */
-  async mount() {
+  async mount(silent: boolean = false) {
     // start listening income events
     this.incomeEventListenerIndex = this.main.incomeEvents.addListener(
       COMPONENT_EVENT_PREFIX + this.id,
@@ -119,22 +122,34 @@ export abstract class ComponentBase {
 
     // TODO: call onMount component's callback
 
-    this.main.outcomeEvents.emit(OutcomeEvents.mount, this.render())
+    if (!silent) {
+      this.main.outcomeEvents.emit(OutcomeEvents.mount, this.render())
+    }
+
+    for (const childId of Object.keys(this.children)) {
+      // mount child always silent
+      await this.children[childId].mount(true)
+    }
   }
 
   /**
-   * Unmount rendered stdLib and it's children and stop listening incoming events.
-   * But the component won't be destroyed
+   * Unmount this component's element.
+   * Means stop listenint ui change events and But the component won't be destroyed
    */
-  async unmount() {
+  async unmount(silent: boolean = false) {
     // stop listening income events
     this.main.incomeEvents.removeListener(this.incomeEventListenerIndex)
 
-    // TODO: запустить unmount на потомках чтобы они описались от событий
-    //       но при этом не нужно уже вызывать из emit unMount event
+    for (const childId of Object.keys(this.children)) {
+      // unmount child always silent
+      await this.children[childId].unmount(true)
+    }
+
     // TODO: run onUnmount callback
 
-    this.main.outcomeEvents.emit(OutcomeEvents.unMount, this.makeRenderedEl())
+    if (!silent) {
+      this.main.outcomeEvents.emit(OutcomeEvents.unMount, this.makeRenderedEl())
+    }
   }
 
   async update() {
