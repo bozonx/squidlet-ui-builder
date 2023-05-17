@@ -10,7 +10,9 @@ handlers:
   click:
     $exp: superFunc
     vars:
-      pathToRoute: data[0]
+      pathToRoute:
+        $exp: getPrimitive
+        path: data[0]
     lines:
       - $exp: jsCall
         $jsExp: console.log(555, data)

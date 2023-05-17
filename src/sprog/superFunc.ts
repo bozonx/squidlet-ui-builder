@@ -30,10 +30,20 @@ export const superCall: SprogFn = (scope: SprogScope) => {
  * lines - any code execution include set vars
  * return - value to return
  */
-export const superFunc: SprogFn = (scope: SprogScope) => {
-  return async (p: {lines: any[]}): Promise<void> => {
+export const superFunc: SprogFn = (rawScope: SprogScope) => {
+  return async (p: {vars: Record<string, any>, lines: any[]}): Promise<void> => {
+    const scope = {
+      ...rawScope,
+      context: {
+        ...rawScope.context,
+      }
+    }
 
-    // TODO: add vars
+    if (p.vars) {
+      for (const varName of Object.keys(p.vars)) {
+        scope.context[varName] = scope.sprogRun(scope, p.vars[varName])
+      }
+    }
 
     for (const line of p.lines) {
       await scope.sprogRun(scope, line)
