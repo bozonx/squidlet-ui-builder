@@ -15,7 +15,7 @@ handlers:
         path: context.data[0]
     lines:
       - $exp: jsCall
-        $jsExp: console.log(555, context.data)
+        $jsExp: console.log(555, context.data, context.pathToRoute)
       - $exp: superCall
         path: app.router.toPath
         params:

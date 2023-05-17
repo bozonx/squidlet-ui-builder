@@ -41,7 +41,7 @@ export const superFunc: SprogFn = (rawScope: SprogScope) => {
 
     if (p.vars) {
       for (const varName of Object.keys(p.vars)) {
-        scope.context[varName] = scope.sprogRun(scope, p.vars[varName])
+        scope.context[varName] = await scope.sprogRun(scope, p.vars[varName])
       }
     }
 
