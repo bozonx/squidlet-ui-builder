@@ -1,4 +1,6 @@
 import {objGet} from 'squidlet-lib'
+import {SprogFn} from './index.js';
+import {NodeVM} from 'vm2'
 
 
 /*
@@ -13,14 +15,25 @@ import {objGet} from 'squidlet-lib'
  *     - 'some value'
  */
 
-export function jsCall(scope: Record<string, any> = {}) {
-  return (p: {path: string, async: boolean, args: any[]}): any | void => {
-    const func = objGet(scope, p.path)
+export const  jsCall: SprogFn = (scope: Record<string, any> = {}) => {
+  return async (p: {$jsExp?: string, path?: string, async?: boolean, args?: any[]}): Promise<any | void> => {
 
-    if (!func) throw new Error(`Can't find function ${p.path}`)
+    console.log(2222, scope, p)
 
-    // TODO: add async
+    if (p.$jsExp) {
+      const vm = new NodeVM({
+        sandbox: scope
+      })
 
-    return func(...p.args)
+      return vm.run(p.$jsExp)
+    }
+
+    // const func = objGet(scope, p.path)
+    //
+    // if (!func) throw new Error(`Can't find function ${p.path}`)
+    //
+    // // TODO: add async
+    //
+    // return func(...p.args)
   }
 }

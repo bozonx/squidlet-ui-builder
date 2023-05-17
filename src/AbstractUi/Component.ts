@@ -6,7 +6,7 @@ import {RenderedElement} from './interfaces/RenderedElement.js';
 import {SuperStruct, SuperStructInitDefinition} from '../sprog/superStruct.js';
 import {ComponentSlotsManager, SlotsDefinition} from './ComponentSlotsManager.js';
 import {COMPONENT_ID_BYTES_NUM} from './interfaces/constants.js';
-import {callSprog} from '../sprog/index.js';
+import {sprogRun} from '../sprog/index.js';
 
 
 // TODO: поддержка перемещения элементов
@@ -205,7 +205,7 @@ export class Component {
       switch (event) {
         case IncomeEvents.click:
           if (this.componentDefinition?.handlers?.click) {
-            await callSprog({}, this.componentDefinition.handlers.click)
+            await sprogRun({data}, this.componentDefinition.handlers.click)
           }
 
           break;

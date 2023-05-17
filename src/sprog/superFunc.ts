@@ -10,12 +10,9 @@ import {SprogFn} from './index.js';
 
 
 export const superFunc: SprogFn = (scope: Record<string, any> = {}) => {
-  return async (p: {lines: any[]}) => {
-
-    console.log(2222, scope, p)
-
+  return async (p: {lines: any[]}): Promise<void> => {
     for (const line of p.lines) {
-
+      scope.sprogRun(scope, line)
     }
 
   }

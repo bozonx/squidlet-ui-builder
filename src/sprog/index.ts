@@ -15,12 +15,12 @@ export type SprogFn = (scope?: Record<string, any>) =>
  * SuperProg visual programming language
  */
 
-export const sprog: Record<string, SprogFn> = {
+export const sprogFuncs: Record<string, SprogFn> = {
   // // JS
   // getJsValue,
   // setJsValue,
   // newJsVar,
-  // jsCall,
+  jsCall,
   // jsFunc,
   // funcReturn,
   //
@@ -30,9 +30,13 @@ export const sprog: Record<string, SprogFn> = {
 }
 
 
-export async function callSprog(scope: Record<any, any>, p: {$exp: keyof typeof sprog, [index: string]: any}) {
-  const sprogFn = sprog[p.$exp]
+export async function sprogRun(rawScope: Record<any, any>, p: {$exp: keyof typeof sprogFuncs, [index: string]: any}) {
+  const sprogFn = sprogFuncs[p.$exp]
   const params = omitObj(p, '$exp')
+  const scope = {
+    ...rawScope,
+    sprogRun,
+  }
 
   if (!sprogFn) throw new Error(`Sprog doesn't have function ${p.$exp}`)
 
