@@ -21,28 +21,22 @@ export async function preloader(
     loader
   ) as RootComponentDefinition
 
-
-  console.log(5555, JSON.stringify(rootCompDef, null, 2))
-
-
-  let res = {
+  let res: Record<string, ComponentDefinition> = {
     [ROOT_COMPONENT_ID]: rootCompDef
     // TODO: add other components - get from root
   }
 
   if (rootCompDef.components) {
-    res = {
-      ...res,
-      ...rootCompDef.components,
+    for (const item of rootCompDef.components) {
+      res[item.name] = item
     }
 
     delete rootCompDef.components
   }
 
   if (rootCompDef.screens) {
-    res = {
-      ...res,
-      ...rootCompDef.screens,
+    for (const item of rootCompDef.screens) {
+      res[item.name] = item
     }
 
     delete rootCompDef.screens
@@ -55,10 +49,22 @@ export async function preloader(
 async function recursiveInclude(
   current: any | any[],
   loader: (pathTo: string) => Promise<string>
-): Promise<Record<string, any>> {
+): Promise<any> {
   if (Array.isArray(current)) {
     for (const arrIndex in current) {
-      current[arrIndex] = await recursiveInclude(current[arrIndex], loader)
+      if (
+        typeof current[arrIndex] === 'string'
+        && current[arrIndex].indexOf(INCLUDE_STATEMENT) === 0
+      ) {
+        current[arrIndex] = await recursiveInclude(
+          await doInclude(current[arrIndex], loader),
+          loader
+        )
+      }
+      else {
+        current[arrIndex] = await recursiveInclude(current[arrIndex], loader)
+      }
+
     }
 
     return current
@@ -67,42 +73,46 @@ async function recursiveInclude(
     return current
   }
 
-
+  // objects
   for (const itemName of Object.keys(current)) {
     if (
-      typeof current[itemName] !== 'string'
-      || current[itemName].indexOf(INCLUDE_STATEMENT) !== 0
+      typeof current[itemName] === 'string'
+      && current[itemName].indexOf(INCLUDE_STATEMENT) === 0
     ) {
-      current[itemName] = await recursiveInclude(current[itemName], loader)
-
-      continue
+      // string and include statement
+      current[itemName] = await doInclude(current[itemName], loader)
     }
-
-    // string and include statement
-
-    const filePath = current[itemName].split(INCLUDE_STATEMENT)[1]
-    let fileContentStr: string
-
-    try {
-      fileContentStr = await loader(filePath)
+    else {
+      current[itemName] = await recursiveInclude(
+        await recursiveInclude(current[itemName], loader),
+        loader
+      )
     }
-    catch (e) {
-      throw new Error(`Can't include yaml file "${filePath}": ${e}`)
-    }
-
-    let jsContent: any
-
-    try {
-      jsContent = yaml.parse(fileContentStr)
-    }
-    catch (e) {
-      throw new Error(`Can't parse yaml file "${filePath}": ${e}`)
-    }
-
-    // TODO: в этом include тоже может быть include
-
-    current[itemName] = jsContent
   }
 
   return current
+}
+
+
+async function doInclude(includeStr: string, loader: (pathTo: string) => Promise<string>): Promise<any> {
+  const filePath = includeStr.split(INCLUDE_STATEMENT)[1]
+  let fileContentStr: string
+
+  try {
+    fileContentStr = await loader(filePath)
+  }
+  catch (e) {
+    throw new Error(`Can't include yaml file "${filePath}": ${e}`)
+  }
+
+  let jsContent: any
+
+  try {
+    jsContent = yaml.parse(fileContentStr)
+  }
+  catch (e) {
+    throw new Error(`Can't parse yaml file "${filePath}": ${e}`)
+  }
+
+  return jsContent
 }
