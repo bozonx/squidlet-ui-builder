@@ -1,4 +1,10 @@
-import {Component} from '../Component.js';
+import {Component, ComponentDefinition} from '../Component.js';
+
+
+export interface ScreenDefinition extends ComponentDefinition {
+  components: ComponentDefinition[]
+  screens: ComponentDefinition[]
+}
 
 
 export class Screen extends Component {
