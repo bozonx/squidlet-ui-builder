@@ -6,6 +6,7 @@ import {objGet} from 'squidlet-lib'
  * example yaml template:
  *   $ext: jsCall
  *   path: myFunc
+ *   $jsExp: console.log(param)
  *   async: true
  *   args:
  *     - 1

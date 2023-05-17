@@ -6,6 +6,12 @@ name: Link
 uiParams:
   - path
   - text
+handlers:
+  click:
+    $exp: superFunc
+    lines:
+      - $exp: jsCall
+        $jsExp: console.log(555, data)
 `
 
 // export const LINK_TYPE = 'Link'

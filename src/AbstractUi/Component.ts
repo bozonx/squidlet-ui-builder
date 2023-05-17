@@ -5,7 +5,6 @@ import {IncomeEvents, OutcomeEvents} from './interfaces/DomEvents.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
 import {SuperStruct, SuperStructInitDefinition} from '../sprog/superStruct.js';
 import {ComponentSlotsManager, SlotsDefinition} from './ComponentSlotsManager.js';
-import {AnyElementDefinitions} from './interfaces/AnyElementDefinition.js';
 import {COMPONENT_ID_BYTES_NUM} from './interfaces/constants.js';
 
 
@@ -32,6 +31,8 @@ export interface ComponentDefinition {
   // they will be got from props and state.
   // to rename or get param from component use [newName, () => { return ... }]
   uiParams?: (string | [string, () => any])[]
+  // TODO: add there type of Sprog
+  handlers?: Record<string, any>
   tmpl?: UiElementDefinition[]
 }
 

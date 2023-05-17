@@ -38,7 +38,7 @@ import {ROUTER_COMPONENT} from './router/index.js';
 
     setTimeout(() => {
       main.emitIncomeEvent(IncomeEvents.click, (tgButtons[0][0] as any).callback_data, 'data')
-    })
+    }, 100)
 
   })
 
