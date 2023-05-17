@@ -3,7 +3,7 @@ import {ComponentDefinition} from './Component.js';
 import {ROOT_COMPONENT_ID, RootComponentDefinition} from './RootComponent.js';
 
 
-const INCLUDE_STATEMENT = '@include:'
+const INCLUDE_STATEMENT = '$include:'
 
 
 /**
@@ -20,6 +20,10 @@ export async function preloader(
     rootCompRawDef,
     loader
   ) as RootComponentDefinition
+
+
+  console.log(5555, JSON.stringify(rootCompDef, null, 2))
+
 
   let res = {
     [ROOT_COMPONENT_ID]: rootCompDef
@@ -49,16 +53,34 @@ export async function preloader(
 
 
 async function recursiveInclude(
-  currentObj: Record<string, any>,
+  current: any | any[],
   loader: (pathTo: string) => Promise<string>
 ): Promise<Record<string, any>> {
-  for (const itemName of Object.keys(currentObj)) {
-    if (
-      typeof currentObj[itemName] !== 'string'
-      || currentObj[itemName].indexOf(INCLUDE_STATEMENT) !== 0
-    ) continue
+  if (Array.isArray(current)) {
+    for (const arrIndex in current) {
+      current[arrIndex] = await recursiveInclude(current[arrIndex], loader)
+    }
 
-    const filePath = currentObj[itemName].split(INCLUDE_STATEMENT)[1]
+    return current
+  }
+  else if (typeof current !== 'object') {
+    return current
+  }
+
+
+  for (const itemName of Object.keys(current)) {
+    if (
+      typeof current[itemName] !== 'string'
+      || current[itemName].indexOf(INCLUDE_STATEMENT) !== 0
+    ) {
+      current[itemName] = await recursiveInclude(current[itemName], loader)
+
+      continue
+    }
+
+    // string and include statement
+
+    const filePath = current[itemName].split(INCLUDE_STATEMENT)[1]
     let fileContentStr: string
 
     try {
@@ -79,8 +101,8 @@ async function recursiveInclude(
 
     // TODO: в этом include тоже может быть include
 
-    currentObj[itemName] = jsContent
+    current[itemName] = jsContent
   }
 
-  return currentObj
+  return current
 }

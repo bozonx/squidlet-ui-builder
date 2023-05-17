@@ -60,7 +60,7 @@ export class Main {
 
   getComponentDefinition(pathOrStdComponentName: string): ComponentDefinition {
 
-    console.log(111, 'requested cmp - ', pathOrStdComponentName)
+    //console.log(111, 'requested cmp - ', pathOrStdComponentName)
 
     if (this.appComponentsDefinitions[pathOrStdComponentName]) {
       return this.appComponentsDefinitions[pathOrStdComponentName]

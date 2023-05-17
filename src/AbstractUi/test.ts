@@ -15,9 +15,11 @@ import {ROUTER_COMPONENT} from './router/index.js';
   const filename: string = fileURLToPath(import.meta.url)
   const dirname: string = pathDirname(filename)
 
+  const filesRoot = path.resolve(dirname, '../../../sls-publish-bot/src/ui/')
+
   const definitions = await preloader(
-    path.resolve(dirname, '../../../sls-publish-bot/src/ui/root.yaml'),
-    (pathTo: string) => fs.readFile(pathTo, 'utf8')
+    path.resolve(filesRoot, 'root.yaml'),
+    (pathTo: string) => fs.readFile(path.resolve(filesRoot, pathTo), 'utf8')
   )
 
   const libs = {
@@ -28,11 +30,11 @@ import {ROUTER_COMPONENT} from './router/index.js';
 
 
   main.outcomeEvents.addListener((event: OutcomeEvents, el: RenderedElement) => {
-    console.log(2222, event, JSON.stringify(el, null, 2))
+    //console.log(2222, event, JSON.stringify(el, null, 2))
 
     const [tgButtons, message] = transformToTg(el)
 
-    console.log(3333, message, tgButtons)
+    //console.log(3333, message, tgButtons)
   })
 
 
