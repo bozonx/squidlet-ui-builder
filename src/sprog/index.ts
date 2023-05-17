@@ -4,9 +4,13 @@ import {superCall, superFunc} from './superFunc.js';
 import {getPrimitive} from './primitive.js';
 
 
-export type SprogFn = (scope?: Record<string, any>) =>
-  (p: any) => Promise<any | void>
+export interface SprogScope {
+  sprogRun: typeof sprogRun
+  [index: string]: any
+}
 
+export type SprogFn = (scope: SprogScope) =>
+  (p: any) => Promise<any | void>
 
 
 /*

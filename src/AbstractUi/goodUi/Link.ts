@@ -19,7 +19,7 @@ handlers:
         params:
           path:
             $exp: getPrimitive
-            path: local.pathToRoute
+            path: context.pathToRoute
 
 `
 
