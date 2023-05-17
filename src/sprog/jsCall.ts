@@ -1,4 +1,3 @@
-import {objGet} from 'squidlet-lib'
 import {SprogFn, SprogScope} from './index.js';
 import {NodeVM} from 'vm2'
 

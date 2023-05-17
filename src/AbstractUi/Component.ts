@@ -200,7 +200,7 @@ export class Component {
   }
 
 
-  private handleIncomeEvent = (event: IncomeEvents, ...data: any[]) => {
+  private handleIncomeEvent = (event: IncomeEvents, ...args: any[]) => {
     (async () => {
       switch (event) {
         case IncomeEvents.click:
@@ -209,13 +209,13 @@ export class Component {
               // TODO: сделать по нормальному
               app: {
                 router: {
-                  toPath: (val: any) => {
-                    console.log(777, val)
+                  toPath: (p: Record<any, any>) => {
+                    console.log(777, p)
                   }
                 }
               },
               context: {
-                data,
+                args,
               },
 
             }

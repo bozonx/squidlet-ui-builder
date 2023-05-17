@@ -12,7 +12,7 @@ handlers:
     vars:
       pathToRoute:
         $exp: getPrimitive
-        path: context.data[0]
+        path: context.args[0]
     lines:
       - $exp: jsCall
         $jsExp: console.log(555, context.data, context.pathToRoute)

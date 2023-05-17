@@ -1,4 +1,4 @@
-import {objGet, objSetMutate} from 'squidlet-lib'
+import {deepGet, objSetMutate} from 'squidlet-lib'
 
 
 /*
@@ -24,7 +24,7 @@ import {objGet, objSetMutate} from 'squidlet-lib'
 
 export function getJsValue(scope: Record<string, any> = {}) {
   return (p: {path: string}): any | undefined => {
-    return objGet(scope, p.path)
+    return deepGet(scope, p.path)
   }
 }
 

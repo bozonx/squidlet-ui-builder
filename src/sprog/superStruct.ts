@@ -1,4 +1,4 @@
-import {IndexedEvents, objGet, objSetMutate, cloneDeepObject} from 'squidlet-lib';
+import {IndexedEvents, objSetMutate, cloneDeepObject} from 'squidlet-lib';
 import {values} from 'lodash';
 
 
