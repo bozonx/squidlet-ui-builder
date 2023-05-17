@@ -25,9 +25,20 @@ const renderComponent: Record<string, (el: RenderedElement) => [TgReplyButton[][
     ]
   },
   ButtonGroup: (el: RenderedElement) => {
+    // let rowItems: any[] = []
+    //
+    // for (const item of el.children || []) {
+    //   rowItems = [
+    //     ...rowItems,
+    //     ...renderComponent[item.name](item)[0]
+    //   ]
+    // }
+
     return [
-      (el.children || [])
-        .map((item) => renderComponent[item.name](item)[0][0]),
+      [
+        (el.children || [])
+          .map((item) => renderComponent[item.name](item)[0][0][0]),
+      ],
       ''
     ]
   },
@@ -125,9 +136,6 @@ const renderComponent: Record<string, (el: RenderedElement) => [TgReplyButton[][
 
 
 export function transformToTg(el: RenderedElement | RenderedElement[]): [TgReplyButton[][],  string] {
-
-  // TODO: наверное взять msg из root???
-
   const els = (Array.isArray(el)) ? el : el.children || []
   let res: TgReplyButton[][] = []
   let message = ''
