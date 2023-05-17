@@ -9,9 +9,18 @@ uiParams:
 handlers:
   click:
     $exp: superFunc
+    vars:
+      pathToRoute: data[0]
     lines:
       - $exp: jsCall
         $jsExp: console.log(555, data)
+      - $exp: superCall
+        path: app.router.toPath
+        params:
+          path:
+            $exp: getPrimitive
+            path: local.pathToRoute
+
 `
 
 // export const LINK_TYPE = 'Link'

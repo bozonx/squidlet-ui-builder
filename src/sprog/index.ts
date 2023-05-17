@@ -1,9 +1,7 @@
 import {omitObj} from 'squidlet-lib';
-import {getJsValue, newJsVar, setJsValue} from './jsValue.js';
 import {jsCall} from './jsCall.js';
-import {superFunc} from './superFunc.js';
-import {funcReturn, jsFunc} from './jsFunc.js';
-import {forEach} from './forEach.js';
+import {superCall, superFunc} from './superFunc.js';
+import {getPrimitive} from './primitive.js';
 
 
 export type SprogFn = (scope?: Record<string, any>) =>
@@ -16,16 +14,20 @@ export type SprogFn = (scope?: Record<string, any>) =>
  */
 
 export const sprogFuncs: Record<string, SprogFn> = {
-  // // JS
+  ////// JS
   // getJsValue,
   // setJsValue,
   // newJsVar,
   jsCall,
   // jsFunc,
   // funcReturn,
-  //
-  // // SUPER
+
+  ////// PRIMITIVE
+  getPrimitive,
+
+  ////// SUPER
   // forEach,
+  superCall,
   superFunc,
 }
 
