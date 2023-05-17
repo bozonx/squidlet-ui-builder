@@ -6,6 +6,7 @@ import {RenderedElement} from './interfaces/RenderedElement.js';
 import {SuperStruct, SuperStructInitDefinition} from '../sprog/superStruct.js';
 import {ComponentSlotsManager, SlotsDefinition} from './ComponentSlotsManager.js';
 import {COMPONENT_ID_BYTES_NUM} from './interfaces/constants.js';
+import {callSprog} from '../sprog/index.js';
 
 
 // TODO: поддержка перемещения элементов
@@ -200,15 +201,18 @@ export class Component {
 
 
   private handleIncomeEvent = (event: IncomeEvents, ...data: any[]) => {
-    switch (event) {
-      case IncomeEvents.click:
+    (async () => {
+      switch (event) {
+        case IncomeEvents.click:
+          if (this.componentDefinition?.handlers?.click) {
+            await callSprog({}, this.componentDefinition.handlers.click)
+          }
 
-        console.log(2222, 'click', ...data)
-
-        // TODO: нужно вызвать соответствующий хэндлер
-
-        break;
-    }
+          break;
+      }
+    })()
+      // TODO: put to main logger
+      .catch(console.error)
   }
 
   private async instantiateChildren() {

@@ -7,7 +7,7 @@ import {forEach} from './forEach.js';
 
 
 export type SprogFn = (scope?: Record<string, any>) =>
-  (p: Record<any, any>) => Promise<any | undefined>
+  (p: any) => Promise<any | void>
 
 
 
@@ -26,13 +26,15 @@ export const sprog: Record<string, SprogFn> = {
   //
   // // SUPER
   // forEach,
-  // superFunc,
+  superFunc,
 }
 
 
 export async function callSprog(scope: Record<any, any>, p: {$exp: keyof typeof sprog, [index: string]: any}) {
   const sprogFn = sprog[p.$exp]
   const params = omitObj(p, '$exp')
+
+  if (!sprogFn) throw new Error(`Sprog doesn't have function ${p.$exp}`)
 
   return sprogFn(scope)(params)
 }
