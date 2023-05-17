@@ -117,12 +117,9 @@ const renderComponent: Record<string, (el: RenderedElement) => [TgReplyButton[][
   },
   Router: (el: RenderedElement) => {
 
-    // TODO: add
+    // TODO: add ???
 
-    return [
-      [],
-      ''
-    ]
+    return [[], '']
   }
 }
 
