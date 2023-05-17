@@ -42,6 +42,8 @@ export async function preloader(
     delete rootCompDef.screens
   }
 
+  //console.log(4444, JSON.stringify(res, null, 2))
+
   return res
 }
 

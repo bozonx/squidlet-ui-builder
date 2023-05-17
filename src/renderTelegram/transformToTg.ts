@@ -115,6 +115,15 @@ const renderComponent: Record<string, (el: RenderedElement) => [TgReplyButton[][
       (el.params?.header) ? el.params.header + '\n' + res[1] : res[1]
     ]
   },
+  Router: (el: RenderedElement) => {
+
+    // TODO: add
+
+    return [
+      [],
+      ''
+    ]
+  }
 }
 
 

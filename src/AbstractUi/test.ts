@@ -34,7 +34,7 @@ import {ROUTER_COMPONENT} from './router/index.js';
 
     const [tgButtons, message] = transformToTg(el)
 
-    //console.log(3333, message, tgButtons)
+    console.log(3333, message, tgButtons)
   })
 
 
