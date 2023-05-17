@@ -14,8 +14,6 @@ handlers:
         $exp: getPrimitive
         path: context.args[0]
     lines:
-      - $exp: jsCall
-        $jsExp: console.log(555, context.data, context.pathToRoute)
       - $exp: superCall
         path: app.router.toPath
         params:
@@ -24,6 +22,9 @@ handlers:
             path: context.pathToRoute
 
 `
+
+// - $exp: jsCall
+//   $jsExp: console.log(555, context.args, context.pathToRoute)
 
 // export const LINK_TYPE = 'Link'
 //
