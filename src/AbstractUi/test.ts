@@ -5,7 +5,7 @@ import {Main} from './Main.js';
 import path from 'node:path';
 import {preloader} from './preloader.js';
 import {GOOD_UI} from './goodUi/index.js';
-import {OutcomeEvents} from './interfaces/DomEvents.js';
+import {IncomeEvents, OutcomeEvents} from './interfaces/DomEvents.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
 import {transformToTg} from '../renderTelegram/transformToTg.js';
 import {ROUTER_COMPONENT} from './router/index.js';
@@ -34,9 +34,16 @@ import {ROUTER_COMPONENT} from './router/index.js';
 
     const [tgButtons, message] = transformToTg(el)
 
-    console.log(3333, message, tgButtons)
+    console.log(3333, message, tgButtons, (tgButtons[0][0] as any).callback_data)
+
+    setTimeout(() => {
+      main.emitIncomeEvent(IncomeEvents.click, (tgButtons[0][0] as any).callback_data, 'data')
+    })
+
   })
 
 
   await main.init()
+
+
 })()

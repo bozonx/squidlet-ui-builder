@@ -198,13 +198,13 @@ export class Component {
   }
 
 
-  private handleIncomeEvent = (event: IncomeEvents, elementId: string, ...data: any[]) => {
+  private handleIncomeEvent = (event: IncomeEvents, ...data: any[]) => {
     switch (event) {
       case IncomeEvents.click:
 
-        console.log(11111, 'click', elementId, ...data)
+        console.log(2222, 'click', ...data)
 
-        // TODO: what to do ???
+        // TODO: нужно вызвать соответствующий хэндлер
 
         break;
     }

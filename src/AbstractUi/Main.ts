@@ -76,11 +76,11 @@ export class Main {
   /**
    * Call it from outside code
    */
-  emitIncomeEvent(event: IncomeEvents, componentId: string, elementId: string, ...data: any[]) {
+  emitIncomeEvent(event: IncomeEvents, componentId: string, ...data: any[]) {
     // emit ordinary event
-    this.incomeEvents.emit(event, componentId, elementId, ...data)
+    this.incomeEvents.emit(event, componentId, ...data)
     // emit component specific event
-    this.incomeEvents.emit(COMPONENT_EVENT_PREFIX + componentId, event, elementId, ...data)
+    this.incomeEvents.emit(COMPONENT_EVENT_PREFIX + componentId, event, ...data)
   }
 
 }
