@@ -4,6 +4,14 @@ import {Screen} from './Screen.js';
 
 
 export const Router = `
+name: Router
+props:
+  root:
+    type: string
+    default: '/'
+  routes:
+    type: array
+
 `
 
 
@@ -43,9 +51,9 @@ export class RouterClass {
     return this.breadCrumbs.getCurrentStep().params
   }
 
-  get routeState(): UiState {
-    return this.breadCrumbs.getCurrentStep().state
-  }
+  // get routeState(): UiState {
+  //   return this.breadCrumbs.getCurrentStep().state
+  // }
 
 
   constructor(window: Window, routes: Route[]) {

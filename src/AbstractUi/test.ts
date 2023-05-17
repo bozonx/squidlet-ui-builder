@@ -8,6 +8,7 @@ import {GOOD_UI} from './goodUi/index.js';
 import {OutcomeEvents} from './interfaces/DomEvents.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
 import {transformToTg} from '../renderTelegram/transformToTg.js';
+import {ROUTER_COMPONENT} from './router/index.js';
 
 
 (async () => {
@@ -20,7 +21,8 @@ import {transformToTg} from '../renderTelegram/transformToTg.js';
   )
 
   const libs = {
-    goodUi: GOOD_UI
+    goodUi: GOOD_UI,
+    router: ROUTER_COMPONENT,
   }
   const main = new Main(definitions, libs)
 
