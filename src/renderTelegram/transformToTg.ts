@@ -25,15 +25,6 @@ const renderComponent: Record<string, (el: RenderedElement) => [TgReplyButton[][
     ]
   },
   ButtonGroup: (el: RenderedElement) => {
-    // let rowItems: any[] = []
-    //
-    // for (const item of el.children || []) {
-    //   rowItems = [
-    //     ...rowItems,
-    //     ...renderComponent[item.name](item)[0]
-    //   ]
-    // }
-
     return [
       [
         (el.children || [])
