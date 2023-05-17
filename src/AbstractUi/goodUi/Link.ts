@@ -12,10 +12,10 @@ handlers:
     vars:
       pathToRoute:
         $exp: getPrimitive
-        path: data[0]
+        path: context.data[0]
     lines:
       - $exp: jsCall
-        $jsExp: console.log(555, data)
+        $jsExp: console.log(555, context.data)
       - $exp: superCall
         path: app.router.toPath
         params:

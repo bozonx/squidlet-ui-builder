@@ -205,7 +205,22 @@ export class Component {
       switch (event) {
         case IncomeEvents.click:
           if (this.componentDefinition?.handlers?.click) {
-            await sprogRun({data}, this.componentDefinition.handlers.click)
+            const scope = {
+              // TODO: сделать по нормальному
+              app: {
+                router: {
+                  toPath: (val: any) => {
+                    console.log(777, val)
+                  }
+                }
+              },
+              context: {
+                data,
+              },
+
+            }
+
+            await sprogRun(scope, this.componentDefinition.handlers.click)
           }
 
           break;
