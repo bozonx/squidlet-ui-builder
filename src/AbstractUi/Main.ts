@@ -5,6 +5,7 @@ import {RenderedElement} from './interfaces/RenderedElement.js';
 import {ROOT_COMPONENT_ID, RootComponent} from './RootComponent.js';
 import {ComponentDefinition} from './Component.js';
 import {STD_COMPONENTS} from './stdLib/index.js';
+import {AppSingleton} from './AppSingleton.js';
 
 
 type OutcomeEventHandler = (event: OutcomeEvents, el: RenderedElement) => void
@@ -17,10 +18,14 @@ export class Main {
   readonly outcomeEvents = new IndexedEvents<OutcomeEventHandler>()
   readonly incomeEvents = new IndexedEventEmitter()
   readonly root: RootComponent
+  readonly app = new AppSingleton(this)
   // like: {pathToComponent: ComponentDefinition}
   private readonly appComponentsDefinitions: Record<string, ComponentDefinition>
   // like: {componentName: ComponentDefinition}
   private readonly componentsLib: Record<string, ComponentDefinition> = {}
+
+
+  // TODO: add logger
 
 
   constructor(

@@ -7,6 +7,7 @@ import {SuperStruct, SuperStructInitDefinition} from '../sprog/superStruct.js';
 import {ComponentSlotsManager, SlotsDefinition} from './ComponentSlotsManager.js';
 import {COMPONENT_ID_BYTES_NUM} from './interfaces/constants.js';
 import {sprogRun} from '../sprog/index.js';
+import {AppSingleton} from './AppSingleton.js';
 
 
 // TODO: поддержка перемещения элементов
@@ -35,6 +36,17 @@ export interface ComponentDefinition {
   // TODO: add there type of Sprog
   handlers?: Record<string, any>
   tmpl?: UiElementDefinition[]
+}
+
+/**
+ * Scope for executing sprog
+ */
+export interface ComponentScope {
+  app: AppSingleton
+  props: SuperStruct
+  state: SuperStruct
+  // local vars and context of functions execution
+  context: Record<any, any>
 }
 
 
@@ -66,6 +78,8 @@ export class Component {
   readonly props: SuperStruct
   readonly slots: ComponentSlotsManager
 
+  protected readonly scope: ComponentScope
+
 
   /**
    * component name. The same as in template and component definition
@@ -92,6 +106,12 @@ export class Component {
     this.state = new SuperStruct(componentDefinition.state || {})
     this.slots = new ComponentSlotsManager(slotsDefinition)
     this.id = this.makeId()
+    this.scope = {
+      app: this.main.app,
+      props: this.props,
+      state: this.state,
+      context: {},
+    }
   }
 
 
@@ -206,24 +226,17 @@ export class Component {
         case IncomeEvents.click:
           if (this.componentDefinition?.handlers?.click) {
             const scope = {
-              // TODO: сделать по нормальному
-              app: {
-                router: {
-                  toPath: (p: Record<any, any>) => {
-                    console.log(777, p)
-                  }
-                }
-              },
+              ...this.scope,
               context: {
+                ...this.scope.context,
                 args,
               },
-
             }
 
             await sprogRun(scope, this.componentDefinition.handlers.click)
           }
 
-          break;
+          break
       }
     })()
       // TODO: put to main logger
