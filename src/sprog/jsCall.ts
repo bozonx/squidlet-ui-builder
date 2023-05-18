@@ -1,4 +1,4 @@
-import {SprogFn, SuperScope} from './index.js';
+import {SprogFn, SuperScope} from './Sprog.js';
 import {NodeVM} from 'vm2'
 
 

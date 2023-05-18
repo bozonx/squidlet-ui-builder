@@ -1,6 +1,5 @@
 import {IndexedEvents, objSetMutate, cloneDeepObject} from 'squidlet-lib';
-import {values} from 'lodash';
-import {SprogItemDefinition, SuperScope} from './index.js';
+
 
 
 /*

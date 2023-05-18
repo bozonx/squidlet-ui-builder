@@ -1,5 +1,5 @@
 import {deepGet} from 'squidlet-lib';
-import {SprogFn} from './index.js';
+import {SprogFn} from './Sprog.js';
 
 
 export const getPrimitive: SprogFn = (scope: Record<string, any>) => {

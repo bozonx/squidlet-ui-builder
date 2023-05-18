@@ -7,7 +7,7 @@ import {SuperStruct, SuperStructInitDefinition} from '../sprog/superStruct.js';
 import {ComponentSlotsManager, SlotsDefinition} from './ComponentSlotsManager.js';
 import {COMPONENT_ID_BYTES_NUM} from './interfaces/constants.js';
 import {AppSingleton} from './AppSingleton.js';
-import {newScope, SuperScope} from '../sprog/index.js';
+import {newScope, SuperScope} from '../sprog/Sprog.js';
 
 
 // TODO: поддержка перемещения элементов
