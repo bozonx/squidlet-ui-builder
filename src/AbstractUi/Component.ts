@@ -6,8 +6,8 @@ import {RenderedElement} from './interfaces/RenderedElement.js';
 import {SuperStruct, SuperStructInitDefinition} from '../sprog/superStruct.js';
 import {ComponentSlotsManager, SlotsDefinition} from './ComponentSlotsManager.js';
 import {COMPONENT_ID_BYTES_NUM} from './interfaces/constants.js';
-import {sprogRun} from '../sprog/index.js';
 import {AppSingleton} from './AppSingleton.js';
+import {newScope, SuperScope} from '../sprog/index.js';
 
 
 // TODO: поддержка перемещения элементов
@@ -78,7 +78,7 @@ export class Component {
   readonly props: SuperStruct
   readonly slots: ComponentSlotsManager
 
-  protected readonly scope: ComponentScope
+  protected readonly scope: ComponentScope & SuperScope
 
 
   /**
@@ -106,12 +106,12 @@ export class Component {
     this.state = new SuperStruct(componentDefinition.state || {})
     this.slots = new ComponentSlotsManager(slotsDefinition)
     this.id = this.makeId()
-    this.scope = {
+    this.scope = newScope<ComponentScope>({
       app: this.main.app,
       props: this.props,
       state: this.state,
       context: {},
-    }
+    })
   }
 
 
@@ -225,15 +225,13 @@ export class Component {
       switch (event) {
         case IncomeEvents.click:
           if (this.componentDefinition?.handlers?.click) {
-            const scope = {
-              ...this.scope,
+            const scope = newScope({
               context: {
-                ...this.scope.context,
-                args,
-              },
-            }
+                args
+              }
+            }, this.scope)
 
-            await sprogRun(scope, this.componentDefinition.handlers.click)
+            await scope.run(this.componentDefinition.handlers.click)
           }
 
           break

@@ -1,5 +1,6 @@
 import {IndexedEvents, objSetMutate, cloneDeepObject} from 'squidlet-lib';
 import {values} from 'lodash';
+import {SprogItemDefinition, SuperScope} from './index.js';
 
 
 /*
@@ -8,6 +9,36 @@ import {values} from 'lodash';
 
 
 // TODO: проще использовать proxy
+// export async function newScope(initialScope?: Record<string, any>): Promise<SuperScope> {
+//   const originalScope = {
+//     ...initialScope,
+//   }
+//
+//   const handler: ProxyHandler<SuperScope> = {
+//     get(target: SuperScope, p: string | symbol, receiver: any) {
+//       return "world"
+//     },
+//
+//     has(target: SuperScope, p: string | symbol): boolean {
+//
+//     },
+//
+//     set(target: SuperScope, p: string | symbol, newValue: any, receiver: any): boolean {
+//
+//     },
+//
+//     deleteProperty(target: SuperScope, p: string | symbol): boolean {
+//
+//     },
+//   }
+//   const scope: SuperScope = {
+//     run(definition: SprogItemDefinition): Promise<any | void> {
+//
+//     }
+//   }
+//
+//   return new Proxy(scope, handler)
+// }
 
 
 interface SuperStrucDefinitionBase {

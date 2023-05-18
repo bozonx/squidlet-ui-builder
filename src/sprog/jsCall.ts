@@ -1,4 +1,4 @@
-import {SprogFn, SprogScope} from './index.js';
+import {SprogFn, SuperScope} from './index.js';
 import {NodeVM} from 'vm2'
 
 
@@ -14,7 +14,7 @@ import {NodeVM} from 'vm2'
  *     - 'some value'
  */
 
-export const  jsCall: SprogFn = (scope: SprogScope) => {
+export const  jsCall: SprogFn = (scope: SuperScope) => {
   return async (p: {$jsExp?: string, path?: string, async?: boolean, args?: any[]}): Promise<any | void> => {
 
     console.log(2222, scope, p)
