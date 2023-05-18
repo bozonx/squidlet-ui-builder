@@ -1,5 +1,5 @@
 import {jsCall} from './jsCall.js';
-import {getPrimitive} from './primitive.js';
+import {getPrimitive} from './superPrimitive.js';
 import {superCall, superFunc} from './superFunc.js';
 
 
