@@ -1,5 +1,5 @@
 import {deepGet} from 'squidlet-lib'
-import {SprogFn, SuperScope} from './Sprog.js';
+import {SprogFn, SuperScope} from './scope.js';
 
 
 export const superCall: SprogFn = (scope: SuperScope) => {
