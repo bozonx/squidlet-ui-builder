@@ -1,5 +1,5 @@
 import {omitObj, mergeDeepObjects, cloneDeepObject} from 'squidlet-lib';
-import {sprogFuncs} from './index.js';
+import {sprogFuncs} from './allFuncs.js';
 
 
 export type SprogScopedFn = (p: any) => Promise<any | void>
