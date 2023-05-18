@@ -3,11 +3,11 @@ import {UiElementDefinition} from './interfaces/UiElementDefinitionBase.js';
 import {COMPONENT_EVENT_PREFIX, Main} from './Main.js';
 import {IncomeEvents, OutcomeEvents} from './interfaces/DomEvents.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
-import {SuperStruct, SuperStructInitDefinition} from '../sprog/lang/superStruct.js';
+import {SuperStruct, SuperStructInitDefinition} from '../sprog/index.js';
 import {ComponentSlotsManager, SlotsDefinition} from './ComponentSlotsManager.js';
 import {COMPONENT_ID_BYTES_NUM} from './interfaces/constants.js';
 import {AppSingleton} from './AppSingleton.js';
-import {newScope, SuperScope} from '../sprog/scope.js';
+import {newScope, SuperScope} from '../sprog/index.js';
 
 
 // TODO: поддержка перемещения элементов
