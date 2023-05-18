@@ -1,6 +1,6 @@
-import {jsCall} from './jsCall.js';
-import {getPrimitive} from './superPrimitive.js';
-import {superCall, superFunc} from './superFunc.js';
+import {jsCall} from './lang/jsCall.js';
+import {getPrimitive} from './lang/superPrimitive.js';
+import {superCall, superFunc} from './lang/superFunc.js';
 
 
 /*

@@ -1,4 +1,4 @@
-import {SuperPromise} from './stdLib/SuperPromise.js';
+import {SuperPromise} from '../stdLib/SuperPromise.js';
 
 /*
  * Super for each cycle

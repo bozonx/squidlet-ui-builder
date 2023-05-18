@@ -1,4 +1,4 @@
-import {SprogFn, SuperScope} from './scope.js';
+import {SprogFn, SuperScope} from '../scope.js';
 import {NodeVM} from 'vm2'
 
 
