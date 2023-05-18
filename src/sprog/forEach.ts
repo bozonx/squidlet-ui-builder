@@ -1,4 +1,4 @@
-import {Spromise} from './lib/Spromise.js';
+import {SuperPromise} from './stdLib/SuperPromise.js';
 
 /*
  * Super for each cycle
@@ -23,7 +23,7 @@ interface ForEachParams {
   src: any[] | Record<string, any>
   // default is 'item'
   //as?: string
-  do: (p: {item: any, index: string | number}) => Spromise<void>
+  do: (p: {item: any, index: string | number}) => SuperPromise<void>
 }
 
 
