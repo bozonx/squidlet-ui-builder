@@ -3,10 +3,9 @@ import {superCall, superFunc} from './lang/superFunc.js';
 import {deleteValue, getValue, setValue} from './lang/deepValue.js';
 import {deleteVar, newVar} from './lang/simpleVar.js';
 import {jsExp} from './lang/jsExp.js';
-import {makeSimpleFunc, setSimpleFunc} from './lang/simpleFunc.js';
 
 
-
+// TODO: review superFunc
 // TODO: add forEach
 // TODO: add if
 // TODO: add switch
@@ -14,6 +13,7 @@ import {makeSimpleFunc, setSimpleFunc} from './lang/simpleFunc.js';
 // TODO: add SuperArray
 // TODO: add SuperPrimitive
 
+// TODO: simple function вообще нужен тогда???
 // TODO: add module
 // TODO: add simpleClass
 // TODO: add SuperClass
@@ -31,8 +31,8 @@ export const sprogFuncs = {
   deleteVar,
   jsExp,
   simpleCall,
-  setSimpleFunc,
-  makeSimpleFunc,
+  // setSimpleFunc,
+  // makeSimpleFunc,
 
   ////// SUPER
   superCall,
