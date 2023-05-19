@@ -1,6 +1,6 @@
 export * from './scope.js'
 export * from './allFuncs.js'
-// std lib
+// types
 export * from './types/SuperPromise.js'
 export * from './types/SuperNumber.js'
 export * from './types/SuperString.js'

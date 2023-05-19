@@ -1,11 +1,12 @@
 import {deepGet} from 'squidlet-lib'
-import {SprogFn, SuperScope} from '../scope.js';
-import {SuperFuncParam} from '../types/SuperFunc.js';
+import {SprogFn, SuperScope} from '../scope.js'
+import {SuperFunc, SuperFuncArgs, superFuncProxyHandler} from '../types/SuperFunc.js'
+import {EXP_MARKER} from '../constants.js'
 
 
 /**
  * Call super function. It always await.
- * params:
+ * args:
  *   * path {string} - path to super function in scope
  *   * params {Object} - parameters of super function which will be called
  */
@@ -16,10 +17,10 @@ export const superCall: SprogFn = (scope: SuperScope) => {
     if (!fn) throw new Error(`Can't find super function ${p.path}`)
 
     const finalParams: Record<string, any> = {}
-
-
+    // collect function params
     for (const paramName of Object.keys((p.params))) {
-      if (typeof p.params[paramName] === 'object' && p.params[paramName].$exp) {
+      // execute it if it is expression
+      if (typeof p.params[paramName] === 'object' && p.params[paramName][EXP_MARKER]) {
         finalParams[paramName] = await scope.run(p.params[paramName])
       }
       else {
@@ -38,25 +39,9 @@ export const superCall: SprogFn = (scope: SuperScope) => {
  *   * lines - any code execution include set vars
  */
 export const superFunc: SprogFn = (scope: SuperScope) => {
-  return async (p: {params: Record<string, SuperFuncParam>, lines?: any[]}): Promise<any | void> => {
+  return async (p: SuperFuncArgs): Promise<SuperFunc> => {
+    const newSuperFunc = new SuperFunc(scope, p)
 
-    // TODO: do it need to rename it?
-
-    // if (p.vars) {
-    //   for (const varName of Object.keys(p.vars)) {
-    //     scope.context[varName] = await scope.run(p.vars[varName])
-    //   }
-    // }
-
-    for (const line of p.lines || []) {
-      await scope.run(line)
-    }
-
-    // if (p.return) {
-    //   return await scope.run(scope, p.return)
-    // }
-
-    // TODO: add var definition
-    // TODO: add return definition
+    return new Proxy(newSuperFunc, superFuncProxyHandler)
   }
 }
