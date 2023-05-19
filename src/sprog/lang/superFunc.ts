@@ -19,7 +19,7 @@ export const superCall: SprogFn = (scope: SuperScope) => {
     const finalParams: Record<string, any> = {}
     // collect function params
     for (const paramName of Object.keys((p.params))) {
-      // execute it if it is expression
+      // execute if it is expression
       if (typeof p.params[paramName] === 'object' && p.params[paramName][EXP_MARKER]) {
         finalParams[paramName] = await scope.run(p.params[paramName])
       }

@@ -1,15 +1,16 @@
-import {AllTypes} from './types.js';
-import {SuperScope} from '../scope.js';
+import {mergeDeepObjects, cloneDeepObject} from 'squidlet-lib'
+import {AllTypes} from './types.js'
+import {SuperScope} from '../scope.js'
 
 
 export interface SuperFuncParam {
   type: AllTypes
-
+  // TODO: do it need to rename it?
 }
 
 export interface SuperFuncArgs {
   params: Record<string, SuperFuncParam>
-  lines?: any[]
+  lines: any[]
 }
 
 
@@ -32,12 +33,17 @@ export const superFuncProxyHandler: ProxyHandler<SuperFunc> = {
 
 
 export class SuperFunc {
-
   private scope: SuperScope
+  private readonly params: Record<string, SuperFuncParam>
+  // TODO: какой тип???
+  private readonly lines: any[]
+  private appliedValues: Record<string, any> = {}
 
 
-  constructor(scope: SuperScope, args: SuperFuncArgs) {
+  constructor(scope: SuperScope, {params, lines}: SuperFuncArgs) {
     this.scope = scope
+    this.params = params
+    this.lines = lines
   }
 
 
@@ -50,31 +56,29 @@ export class SuperFunc {
   }
 
   /**
-   * Apply values of function's params to exec function later
+   * Apply values of function's params to exec function later.
+   * It replaces previously applied values
    */
   applyValues(values: Record<string, any>) {
-
+    this.appliedValues = values
   }
 
-  async exec(args?: Record<string, any>): ProxyHandler<any> {
-    //const a = new Proxy()
+  /**
+   * Apply values of function's params to exec function later.
+   * It merges new values with previously applied values
+   */
+  mergeValues(values: Record<string, any>) {
+    this.appliedValues = mergeDeepObjects(values, this.appliedValues)
+  }
+
+  async exec(values?: Record<string, any>): ProxyHandler<any> {
+    const finalValues = mergeDeepObjects(values, this.appliedValues)
 
 
-    // TODO: do it need to rename it?
 
-    // if (p.vars) {
-    //   for (const varName of Object.keys(p.vars)) {
-    //     scope.context[varName] = await scope.run(p.vars[varName])
-    //   }
-    // }
-
-    for (const line of p.lines || []) {
+    for (const line of this.lines) {
       await this.scope.run(line)
     }
-
-    // if (p.return) {
-    //   return await scope.run(scope, p.return)
-    // }
 
     // TODO: add var definition
     // TODO: add return definition
@@ -85,7 +89,12 @@ export class SuperFunc {
    * but with the same scope
    */
   clone(newScope?: SuperScope, values?: Record<string, any>) {
+    const newSuperFunc = new SuperFunc(
+      newScope || this.scope,
+      mergeDeepObjects(values, this.appliedValues)
+    )
 
+    return new Proxy(newSuperFunc, superFuncProxyHandler)
   }
 
 }
