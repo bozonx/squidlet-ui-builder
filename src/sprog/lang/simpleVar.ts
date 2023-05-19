@@ -29,6 +29,9 @@ export function newVar(scope: SuperScope) {
 
 /**
  * Delete var from top level of scope
+ * params:
+ *   $exp: deleteVar
+ *   name: nameOfVarToDelete
  */
 export function deleteVar(scope: SuperScope) {
   return async (p: {name: string}) => {

@@ -1,5 +1,6 @@
 import {SprogFn, SuperScope} from '../scope.js';
 
+
 /**
  * Call js function
  * example yaml template:

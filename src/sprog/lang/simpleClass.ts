@@ -3,6 +3,6 @@
  */
 
 
-export function jsNewClass() {
+export function simpleClass() {
 
 }

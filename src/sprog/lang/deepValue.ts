@@ -1,4 +1,4 @@
-import {deepGet, deepSet} from 'squidlet-lib'
+import {deepGet, deepSet, deepDelete} from 'squidlet-lib'
 import {SuperScope} from '../scope.js';
 
 
@@ -9,9 +9,7 @@ import {SuperScope} from '../scope.js';
  *   path: obj.param1
  * It supports arrays path like obj.arr[0].param.
  * Path can be an expression
- * @param scope
  */
-
 export function getValue(scope: SuperScope) {
   return async (p: {path: string, defaultValue?: any}): Promise<any | undefined> => {
     const path: string = await scope.$resolve(p.path)
@@ -45,12 +43,17 @@ export function setValue(scope: SuperScope) {
   }
 }
 
+/**
+ * Deeply delete a key
+ * params:
+ *   $exp: deleteValue
+ *   path: pathToItemToDelete
+ * Arrays are supported
+ */
 export function deleteValue(scope: SuperScope) {
   return async (p: {path: string}) => {
     const path: string = await scope.$resolve(p.path)
 
-    // TODO: взять родителя и у него удалить потомка
-
-    //deepSet(scope, path, value)
+    deepDelete(scope, path)
   }
 }

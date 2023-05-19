@@ -5,6 +5,19 @@ import {deleteVar, newVar} from './lang/simpleVar.js';
 import {jsExp} from './lang/jsExp.js';
 
 
+
+// TODO: add simpleFunc
+// TODO: add forEach
+// TODO: add if
+// TODO: add switch
+// TODO: add SuperStruct
+// TODO: add SuperArray
+// TODO: add SuperPrimitive
+
+// TODO: add module
+// TODO: add simpleClass
+// TODO: add SuperClass
+
 /*
  * SuperProg visual programming language
  */
