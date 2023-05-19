@@ -2,6 +2,7 @@ import {omitObj, mergeDeepObjects, cloneDeepObject} from 'squidlet-lib';
 import {sprogFuncs} from './allFuncs.js';
 
 
+// TODO: всегда ли должно ли быть async???
 export type SprogScopedFn = (p: any) => Promise<any | void>
 export type SprogFn = (scope: SuperScope) => SprogScopedFn
 

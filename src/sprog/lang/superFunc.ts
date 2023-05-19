@@ -40,9 +40,6 @@ export const superCall: SprogFn = (scope: SuperScope) => {
  *   * lines - any code execution include set vars
  */
 export const superFunc: SprogFn = (scope: SuperScope) => {
-
-  // TODO: а должно ли быть async тут???
-
   return async (p: SuperFuncArgs): Promise<any> => {
     const newSuperFunc = new SuperFunc(scope, p)
 
