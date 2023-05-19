@@ -4,7 +4,10 @@ import {SuperScope} from '../scope.js'
 
 
 export interface SuperFuncParam {
+  // type of value
   type: AllTypes
+  // default value
+  default?: any
   // TODO: do it need to rename some params?
 }
 
@@ -14,17 +17,19 @@ export interface SuperFuncArgs {
 }
 
 
-export const superFuncProxyHandler: ProxyHandler<SuperFunc> = {
-  apply(target: SuperFunc, thisArg: any, argArray: any[]) {
-    return target.exec(...argArray)
-  },
+export const makeSuperFuncProxyHandler = (obj: SuperFunc): ProxyHandler<any> => {
+  return {
+    apply(target: SuperFunc, thisArg: any, argArray: any[]) {
+      return obj.exec(...argArray)
+    },
 
-  get(target: SuperFunc, p: keyof SuperFunc): any {
-    return target[p]
-  },
+    get(target: SuperFunc, p: keyof SuperFunc): any {
+      return obj[p]
+    },
 
-  has(target: SuperFunc, p: keyof SuperFunc): boolean {
-    return Boolean(target[p])
+    has(target: SuperFunc, p: keyof SuperFunc): boolean {
+      return Boolean(obj[p])
+    }
   }
 }
 
@@ -69,8 +74,10 @@ export class SuperFunc {
   }
 
   async exec(values?: Record<string, any>): Promise<any> {
+    // TODO: add params defaults
     const finalValues = mergeDeepObjects(values, this.appliedValues)
 
+    console.log(111, values, finalValues, this.lines, this.params)
 
 
     for (const line of this.lines) {
@@ -88,10 +95,14 @@ export class SuperFunc {
   clone(newScope?: SuperScope, values?: Record<string, any>) {
     const newSuperFunc = new SuperFunc(
       newScope || this.scope,
-      mergeDeepObjects(values, this.appliedValues)
+      {params: this.params, lines: this.lines}
     )
 
-    return new Proxy(newSuperFunc, superFuncProxyHandler)
+    if (values) newSuperFunc.applyValues(values)
+
+    function fakeFunction () {}
+
+    return new Proxy(fakeFunction, makeSuperFuncProxyHandler(newSuperFunc))
   }
 
 }

@@ -1,6 +1,6 @@
 import {deepGet} from 'squidlet-lib'
 import {SprogFn, SuperScope} from '../scope.js'
-import {SuperFunc, SuperFuncArgs, superFuncProxyHandler} from '../types/SuperFunc.js'
+import {makeSuperFuncProxyHandler, SuperFunc, SuperFuncArgs} from '../types/SuperFunc.js'
 import {EXP_MARKER} from '../constants.js'
 
 
@@ -39,9 +39,12 @@ export const superCall: SprogFn = (scope: SuperScope) => {
  *   * lines - any code execution include set vars
  */
 export const superFunc: SprogFn = (scope: SuperScope) => {
-  return async (p: SuperFuncArgs): Promise<SuperFunc> => {
+
+  // TODO: а должно ли быть async тут???
+
+  return async (p: SuperFuncArgs): Promise<any> => {
     const newSuperFunc = new SuperFunc(scope, p)
 
-    return new Proxy(newSuperFunc, superFuncProxyHandler)
+    return newSuperFunc.clone()
   }
 }
