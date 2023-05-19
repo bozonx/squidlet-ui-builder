@@ -15,12 +15,19 @@ export interface SuperScope {
   /**
    * Get scoped function to run it later
    */
-  $getScopedFn(fnName: string): SprogScopedFn
+  $getScopedFn(fnName: keyof typeof sprogFuncs): SprogScopedFn
 
   /**
    * Run sprog function in this scope
+   * It accepts sprog definition
    */
   run(definition: SprogItemDefinition): Promise<any | void>
+
+  // /**
+  //  * Run sprog function in this scope
+  //  */
+  // run(funcName: string, params: Record<any, any>): Promise<any | void>
+
   [index: string]: any
 }
 
@@ -31,7 +38,7 @@ export interface SprogItemDefinition {
 }
 
 
-const SCOPE_FUNCTIONS = ['run', '$clone']
+const SCOPE_FUNCTIONS = ['run', '$cloneSelf', '$getScopedFn']
 
 
 export function newScope<T = any>(initialScope: T = {} as T, previousScope?: SuperScope): T & SuperScope {
@@ -55,7 +62,7 @@ export function newScope<T = any>(initialScope: T = {} as T, previousScope?: Sup
     },
     run(definition: SprogItemDefinition): Promise<any | void> {
       const sprogFn = sprogFuncs[definition.$exp]
-      const params = omitObj(definition, '$exp')
+      const params: any = omitObj(definition, '$exp')
       const thisScope = this as SuperScope
 
       if (!sprogFn) throw new Error(`Sprog doesn't have function ${definition.$exp}`)

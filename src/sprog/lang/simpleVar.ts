@@ -4,7 +4,7 @@
  * If you don't have to chech it then better to use setJsValue
  */
 export function newVar(scope: Record<string, any> = {}) {
-  return (p: {name: string, value: any}) => {
+  return async (p: {name: string, value: any}) => {
     if (Object.keys(scope).indexOf(p.name) >= 0) {
       throw new Error(`Can't reinitialize existent var ${p.name}`)
     }
@@ -15,5 +15,7 @@ export function newVar(scope: Record<string, any> = {}) {
 
 // TODO: add deleteVar
 export function deleteVar() {
+  return async (p: {name: string, value: any}) => {
 
+  }
 }

@@ -27,15 +27,20 @@ export const jsExp: SprogFn = (scope: SuperScope) => {
  * example yaml template:
  *   $ext: simpleCall
  *   path: myFunc
- *   $jsExp: console.log(param)
- *   async: true
  *   args:
  *     - 1
  *     - 'some value'
  */
 
-export const  simpleCall: SprogFn = (scope: SuperScope) => {
-  return async (p: {$jsExp?: string, path?: string, async?: boolean, args?: any[]}): Promise<any | void> => {
+export const  jsCall: SprogFn = (scope: SuperScope) => {
+  return async (p: {path: string, args?: any[]}): Promise<any | void> => {
+    const func = await scope.$getScopedFn('getValue')({
+      path: p.path
+    })
+
+    if (typeof func !== 'function') {
+      throw new Error(`It isn't a function`)
+    }
 
     console.log(2222, scope, p)
 

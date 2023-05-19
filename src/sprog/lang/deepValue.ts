@@ -15,8 +15,8 @@ export function getValue(scope: Record<string, any> = {}) {
 
   // TODO: path может быть exp
 
-  return (p: {path: string}, defaultValue?: any): any | undefined => {
-    return deepGet(scope, p.path, defaultValue)
+  return async (p: {path: string, defaultValue?: any}): Promise<any | undefined> => {
+    return deepGet(scope, p.path, p.defaultValue)
   }
 }
 
@@ -41,7 +41,7 @@ export function setValue(scope: Record<string, any> = {}) {
   // TODO: value может быть exp
 
 
-  return (p: {path: string, value: any}) => {
+  return async (p: {path: string, value: any}) => {
     deepSet(scope, p.path, p.value)
   }
 }
