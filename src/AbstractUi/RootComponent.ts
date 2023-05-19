@@ -1,6 +1,6 @@
 import {Main} from './Main.js';
 import {Component, ComponentDefinition} from './Component.js';
-import {SuperStruct} from '../sprog/lang/superStruct.js';
+import {SuperStruct} from '../sprog/index.js';
 import {SlotsDefinition} from './ComponentSlotsManager.js';
 import {ScreenDefinition} from './router/Screen.js';
 

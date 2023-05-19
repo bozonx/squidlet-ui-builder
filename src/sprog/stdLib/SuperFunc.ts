@@ -10,18 +10,20 @@ export interface SuperFuncParam {
 
 export class SuperFunc {
 
+  private scope: SuperScope
 
-  constructor() {
+
+  constructor(scope: SuperScope) {
+    this.scope = scope
   }
 
 
-
-  getScope() {
-
+  getScope(): SuperScope {
+    return this.scope
   }
 
   replaceScope(newScope: SuperScope) {
-
+    this.scope = newScope
   }
 
   /**
