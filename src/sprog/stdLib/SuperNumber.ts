@@ -3,15 +3,15 @@ export class SuperNumber {
 
   // TODO: можно сразу установить валидацию range
 
-  increment(): NumberClass {
+  increment(): SuperNumber {
     return this
   }
 
-  decrement(): NumberClass {
+  decrement(): SuperNumber {
     return this
   }
 
-  exp(): NumberClass {
+  exp(): SuperNumber {
     return this
   }
 }
