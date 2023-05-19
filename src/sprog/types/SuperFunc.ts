@@ -1,4 +1,4 @@
-import {mergeDeepObjects, cloneDeepObject} from 'squidlet-lib'
+import {mergeDeepObjects} from 'squidlet-lib'
 import {AllTypes} from './types.js'
 import {SuperScope} from '../scope.js'
 import {makeFuncProxy} from '../lib/functionProxy.js';
@@ -9,26 +9,42 @@ export interface SuperFuncParam {
   type: AllTypes
   // default value
   default?: any
-  // TODO: do it need to rename some params?
+  // TODO: do it need to rename some props?
 }
 
 export interface SuperFuncArgs {
-  params: Record<string, SuperFuncParam>
+  props: Record<string, SuperFuncParam>
   lines: any[]
 }
 
 
 export class SuperFunc {
   private scope: SuperScope
-  private readonly params: Record<string, SuperFuncParam>
+  private readonly props: Record<string, SuperFuncParam>
   // TODO: какой тип???
   private readonly lines: any[]
   private appliedValues: Record<string, any> = {}
 
 
-  constructor(scope: SuperScope, {params, lines}: SuperFuncArgs) {
+  get propsDefaults(): Record<any, any> {
+
+    // TODO: move to squidlet-lib
+
+    const res: Record<any, any> = {}
+
+    for (const key of Object.keys(this.props)) {
+      if (typeof this.props[key].default === 'undefined') continue
+
+      res[key] = this.props[key].default
+    }
+
+    return res
+  }
+
+
+  constructor(scope: SuperScope, {props, lines}: SuperFuncArgs) {
     this.scope = scope
-    this.params = params
+    this.props = props
     this.lines = lines
   }
 
@@ -42,15 +58,18 @@ export class SuperFunc {
   }
 
   /**
-   * Apply values of function's params to exec function later.
+   * Apply values of function's props to exec function later.
    * It replaces previously applied values
    */
   applyValues(values: Record<string, any>) {
+
+    // TODO: validate props
+
     this.appliedValues = values
   }
 
   /**
-   * Apply values of function's params to exec function later.
+   * Apply values of function's props to exec function later.
    * It merges new values with previously applied values
    */
   mergeValues(values: Record<string, any>) {
@@ -58,11 +77,15 @@ export class SuperFunc {
   }
 
   async exec(values?: Record<string, any>): Promise<any> {
-    // TODO: add params defaults
-    const finalValues = mergeDeepObjects(values, this.appliedValues)
 
-    console.log(111, values, finalValues, this.lines, this.params)
+    // TODO: validate props
 
+    const finalValues = mergeDeepObjects(
+      values,
+      mergeDeepObjects(this.appliedValues, this.propsDefaults)
+    )
+
+    console.log(111, values, finalValues, this.lines, this.props)
 
     for (const line of this.lines) {
       await this.scope.run(line)
@@ -73,13 +96,13 @@ export class SuperFunc {
   }
 
   /**
-   * Make clone of function include applied params
+   * Make clone of function include applied props
    * but with the same scope
    */
   clone(newScope?: SuperScope, values?: Record<string, any>) {
     const newSuperFunc = new SuperFunc(
       newScope || this.scope,
-      {params: this.params, lines: this.lines}
+      {props: this.props, lines: this.lines}
     )
 
     if (values) newSuperFunc.applyValues(values)
