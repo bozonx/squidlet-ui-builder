@@ -1,5 +1,5 @@
 import {SprogFn, SuperScope} from '../scope.js';
-import {NodeVM} from 'vm2'
+import {evalInSandBox} from '../lib/sandBox.js';
 
 
 /**
@@ -15,10 +15,6 @@ export const jsExp: SprogFn = (scope: SuperScope) => {
 
     const exp: string = await scope.$resolve(p.exp)
 
-    const vm = new NodeVM({
-      sandbox: scope
-    })
-
-    return vm.run(exp)
+    return evalInSandBox(scope, exp)
   }
 }
