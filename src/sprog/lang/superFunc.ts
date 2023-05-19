@@ -1,7 +1,14 @@
 import {deepGet} from 'squidlet-lib'
 import {SprogFn, SuperScope} from '../scope.js';
+import {SuperFuncParam} from '../stdLib/SuperFunc.js';
 
 
+/**
+ * Call super function. It always await.
+ * params:
+ *   * path {string} - path to super function in scope
+ *   * params {Object} - parameters of super function which will be called
+ */
 export const superCall: SprogFn = (scope: SuperScope) => {
   return async (p: {path: string, params: Record<string, any>}): Promise<void> => {
     const fn = deepGet(scope, p.path)
@@ -25,22 +32,21 @@ export const superCall: SprogFn = (scope: SuperScope) => {
 }
 
 /**
- * Define super function
- * vars - top level vars or functions of function scope
- * as - rename some income params
- * lines - any code execution include set vars
+ * Define super function. Which is always async.
+ * Params:
+ *   * params - define income params, their type and default value
+ *   * lines - any code execution include set vars
  */
 export const superFunc: SprogFn = (scope: SuperScope) => {
-  return async (p: {
-    vars: Record<string, any>,
-    lines?: any[],
-    return?: any
-  }): Promise<any | void> => {
-    if (p.vars) {
-      for (const varName of Object.keys(p.vars)) {
-        scope.context[varName] = await scope.run(p.vars[varName])
-      }
-    }
+  return async (p: {params: Record<string, SuperFuncParam>, lines?: any[]}): Promise<any | void> => {
+
+    // TODO: do it need to rename it?
+
+    // if (p.vars) {
+    //   for (const varName of Object.keys(p.vars)) {
+    //     scope.context[varName] = await scope.run(p.vars[varName])
+    //   }
+    // }
 
     for (const line of p.lines || []) {
       await scope.run(line)
@@ -49,5 +55,8 @@ export const superFunc: SprogFn = (scope: SuperScope) => {
     // if (p.return) {
     //   return await scope.run(scope, p.return)
     // }
+
+    // TODO: add var definition
+    // TODO: add return definition
   }
 }

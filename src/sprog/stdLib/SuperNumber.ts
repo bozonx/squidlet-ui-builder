@@ -1,5 +1,5 @@
 
-class NumberClass {
+export class SuperNumber {
 
   // TODO: можно сразу установить валидацию range
 
