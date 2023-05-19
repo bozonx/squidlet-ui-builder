@@ -1,6 +1,7 @@
 import {mergeDeepObjects, cloneDeepObject} from 'squidlet-lib'
 import {AllTypes} from './types.js'
 import {SuperScope} from '../scope.js'
+import {makeFuncProxy} from '../lib/functionProxy.js';
 
 
 export interface SuperFuncParam {
@@ -14,23 +15,6 @@ export interface SuperFuncParam {
 export interface SuperFuncArgs {
   params: Record<string, SuperFuncParam>
   lines: any[]
-}
-
-
-export const makeSuperFuncProxyHandler = (obj: SuperFunc): ProxyHandler<any> => {
-  return {
-    apply(target: SuperFunc, thisArg: any, argArray: any[]) {
-      return obj.exec(...argArray)
-    },
-
-    get(target: SuperFunc, p: keyof SuperFunc): any {
-      return obj[p]
-    },
-
-    has(target: SuperFunc, p: keyof SuperFunc): boolean {
-      return Boolean(obj[p])
-    }
-  }
 }
 
 
@@ -100,9 +84,7 @@ export class SuperFunc {
 
     if (values) newSuperFunc.applyValues(values)
 
-    function fakeFunction () {}
-
-    return new Proxy(fakeFunction, makeSuperFuncProxyHandler(newSuperFunc))
+    return makeFuncProxy(newSuperFunc)
   }
 
 }
