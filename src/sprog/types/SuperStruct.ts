@@ -8,6 +8,7 @@ import {IndexedEvents, objSetMutate, cloneDeepObject} from 'squidlet-lib';
 
 
 // TODO: проще использовать proxy
+// TODO: поидее удалять элемент нельзя, а только установит null, так как структура уже задана
 // export async function newScope(initialScope?: Record<string, any>): Promise<SuperScope> {
 //   const originalScope = {
 //     ...initialScope,

@@ -46,7 +46,7 @@ export interface SprogItemDefinition {
 }
 
 
-const SCOPE_FUNCTIONS = ['$resolve', '$run', '$cloneSelf', '$getScopedFn']
+export const SCOPE_FUNCTIONS = ['$resolve', '$run', '$cloneSelf', '$getScopedFn']
 
 
 export function newScope<T = any>(initialScope: T = {} as T, previousScope?: SuperScope): T & SuperScope {

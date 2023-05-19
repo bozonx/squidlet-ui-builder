@@ -15,7 +15,7 @@ import {SuperScope} from '../scope.js';
 export function getValue(scope: SuperScope) {
   return async (p: {path: string, defaultValue?: any}): Promise<any | undefined> => {
     const path: string = await scope.$resolve(p.path)
-    const defaultValue: string | undefined = await scope.$resolve(p.defaultValue)
+    const defaultValue: any | undefined = await scope.$resolve(p.defaultValue)
 
     return deepGet(scope, path, defaultValue)
   }
@@ -39,8 +39,18 @@ export function getValue(scope: SuperScope) {
 export function setValue(scope: SuperScope) {
   return async (p: {path: string, value: any}) => {
     const path: string = await scope.$resolve(p.path)
-    const value: string = await scope.$resolve(p.value)
+    const value: any = await scope.$resolve(p.value)
 
     deepSet(scope, path, value)
+  }
+}
+
+export function deleteValue(scope: SuperScope) {
+  return async (p: {path: string}) => {
+    const path: string = await scope.$resolve(p.path)
+
+    // TODO: взять родителя и у него удалить потомка
+
+    //deepSet(scope, path, value)
   }
 }

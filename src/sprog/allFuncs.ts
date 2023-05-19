@@ -1,6 +1,6 @@
 import {simpleCall} from './lang/simpleCall.js';
 import {superCall, superFunc} from './lang/superFunc.js';
-import {getValue, setValue} from './lang/deepValue.js';
+import {deleteValue, getValue, setValue} from './lang/deepValue.js';
 import {deleteVar, newVar} from './lang/simpleVar.js';
 import {jsExp} from './lang/jsExp.js';
 
@@ -13,6 +13,7 @@ export const sprogFuncs = {
   ////// JS
   getValue,
   setValue,
+  deleteValue,
   newVar,
   deleteVar,
   jsExp,
