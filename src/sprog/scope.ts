@@ -1,5 +1,6 @@
 import {omitObj, mergeDeepObjects, cloneDeepObject} from 'squidlet-lib';
 import {sprogFuncs} from './allFuncs.js';
+import {EXP_MARKER} from './constants.js';
 
 
 // TODO: всегда ли должно ли быть async???
@@ -21,7 +22,14 @@ export interface SuperScope {
    * Run sprog function in this scope
    * It accepts sprog definition
    */
-  run(definition: SprogItemDefinition): Promise<any | void>
+  $run(definition: SprogItemDefinition): Promise<any | void>
+
+  /**
+   * If is is an expression then run it.
+   * If not then return a value
+   * @param defOrValue
+   */
+  $resolve(defOrValue: any): Promise<any>
 
   // /**
   //  * Run sprog function in this scope
@@ -38,7 +46,7 @@ export interface SprogItemDefinition {
 }
 
 
-const SCOPE_FUNCTIONS = ['run', '$cloneSelf', '$getScopedFn']
+const SCOPE_FUNCTIONS = ['$resolve', '$run', '$cloneSelf', '$getScopedFn']
 
 
 export function newScope<T = any>(initialScope: T = {} as T, previousScope?: SuperScope): T & SuperScope {
@@ -60,7 +68,7 @@ export function newScope<T = any>(initialScope: T = {} as T, previousScope?: Sup
 
       return sprogFn(thisScope)
     },
-    run(definition: SprogItemDefinition): Promise<any | void> {
+    $run(definition: SprogItemDefinition): Promise<any | void> {
       const sprogFn = sprogFuncs[definition.$exp]
       const params: any = omitObj(definition, '$exp')
       const thisScope = this as SuperScope
@@ -68,6 +76,13 @@ export function newScope<T = any>(initialScope: T = {} as T, previousScope?: Sup
       if (!sprogFn) throw new Error(`Sprog doesn't have function ${definition.$exp}`)
 
       return sprogFn(thisScope)(params)
+    },
+    async $resolve(defOrValue: any): Promise<any> {
+      if (typeof defOrValue === 'object' && defOrValue[EXP_MARKER]) {
+        return this.$run(defOrValue)
+      }
+      // simple value
+      return defOrValue
     }
   }
 }
