@@ -5,7 +5,7 @@ import {SuperScope} from '../scope.js'
 
 export interface SuperFuncParam {
   type: AllTypes
-  // TODO: do it need to rename it?
+  // TODO: do it need to rename some params?
 }
 
 export interface SuperFuncArgs {
