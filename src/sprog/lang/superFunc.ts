@@ -1,6 +1,6 @@
 import {deepGet} from 'squidlet-lib'
 import {SprogFn, SuperScope} from '../scope.js';
-import {SuperFuncParam} from '../stdLib/SuperFunc.js';
+import {SuperFuncParam} from '../types/SuperFunc.js';
 
 
 /**

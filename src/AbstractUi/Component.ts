@@ -68,7 +68,7 @@ export class Component {
   protected readonly main: Main
   // initial component definition with its children
   protected readonly componentDefinition: ComponentDefinition
-  // position of UI children stdLib. Like [componentId, ...]
+  // position of UI children lib. Like [componentId, ...]
   protected uiChildrenPositions: string[] = []
   protected state: SuperStruct
   private incomeEventListenerIndex?: number

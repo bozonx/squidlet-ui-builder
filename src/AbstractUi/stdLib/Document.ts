@@ -29,7 +29,7 @@ tmpl:
 
 // export class Document extends Component {
 //   readonly events = new IndexedEvents<DocumentEventHandler>()
-//   readonly stdLib: AnyElement[] = []
+//   readonly types: AnyElement[] = []
 //
 //   private readonly definition: DocumentDefinition
 //
@@ -45,7 +45,7 @@ tmpl:
 //   }
 //
 //   async destroy() {
-//     // TODO: destroy all the stdLib
+//     // TODO: destroy all the types
 //   }
 //
 //
