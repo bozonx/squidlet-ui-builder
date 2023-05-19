@@ -9,10 +9,12 @@ uiParams:
 handlers:
   click:
     $exp: superFunc
-    vars:
+    props:
       pathToRoute:
-        $exp: getPrimitive
-        path: context.args[0]
+        type: string
+        default:
+          $exp: getPrimitive
+          path: context.args[0]
     lines:
       - $exp: superCall
         path: app.router.toPath

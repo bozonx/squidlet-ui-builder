@@ -9,6 +9,8 @@ export interface SuperFuncParam {
   type: AllTypes
   // default value
   default?: any
+  // check if it is undefined
+  required?: boolean
   // TODO: do it need to rename some props?
 }
 
