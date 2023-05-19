@@ -1,5 +1,4 @@
 import {deepGet, deepSet} from 'squidlet-lib'
-import {EXP_MARKER} from '../constants.js';
 import {SuperScope} from '../scope.js';
 
 
@@ -38,12 +37,10 @@ export function getValue(scope: SuperScope) {
  *       path: otherObj.param2
  */
 export function setValue(scope: SuperScope) {
-
-  // TODO: path может быть exp
-  // TODO: value может быть exp
-
-
   return async (p: {path: string, value: any}) => {
-    deepSet(scope, p.path, p.value)
+    const path: string = await scope.$resolve(p.path)
+    const value: string = await scope.$resolve(p.value)
+
+    deepSet(scope, path, value)
   }
 }

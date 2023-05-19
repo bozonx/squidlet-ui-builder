@@ -1,8 +1,8 @@
-import {jsExp, jsCall} from './lang/simpleCall.js';
-import {getPrimitive} from './lang/superPrimitive.js';
+import {simpleCall} from './lang/simpleCall.js';
 import {superCall, superFunc} from './lang/superFunc.js';
 import {getValue, setValue} from './lang/deepValue.js';
 import {deleteVar, newVar} from './lang/simpleVar.js';
+import {jsExp} from './lang/jsExp.js';
 
 
 /*
@@ -16,13 +16,9 @@ export const sprogFuncs = {
   newVar,
   deleteVar,
   jsExp,
-  jsCall,
-
-  ////// PRIMITIVE
-  getPrimitive,
+  simpleCall,
 
   ////// SUPER
-  // forEach,
   superCall,
   superFunc,
 }
