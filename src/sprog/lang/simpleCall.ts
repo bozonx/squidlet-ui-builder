@@ -5,7 +5,7 @@ import {NodeVM} from 'vm2'
 /*
  * Call js function
  * example yaml template:
- *   $ext: jsCall
+ *   $ext: simpleCall
  *   path: myFunc
  *   $jsExp: console.log(param)
  *   async: true
@@ -14,7 +14,7 @@ import {NodeVM} from 'vm2'
  *     - 'some value'
  */
 
-export const  jsCall: SprogFn = (scope: SuperScope) => {
+export const  simpleCall: SprogFn = (scope: SuperScope) => {
   return async (p: {$jsExp?: string, path?: string, async?: boolean, args?: any[]}): Promise<any | void> => {
 
     console.log(2222, scope, p)

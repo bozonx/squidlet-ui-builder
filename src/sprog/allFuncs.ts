@@ -1,4 +1,4 @@
-import {jsCall} from './lang/jsCall.js';
+import {simpleCall} from './lang/simpleCall.js';
 import {getPrimitive} from './lang/superPrimitive.js';
 import {superCall, superFunc} from './lang/superFunc.js';
 
@@ -13,7 +13,7 @@ export const sprogFuncs = {
   // getJsValue,
   // setJsValue,
   // newJsVar,
-  jsCall,
+  jsCall: simpleCall,
   // jsFunc,
   // funcReturn,
 

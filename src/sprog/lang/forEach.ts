@@ -9,7 +9,7 @@ import {SuperPromise} from '../types/SuperPromise.js';
  *   do:
  *     $exp: superFunc
  *     lines:
- *       - $exp: jsCall
+ *       - $exp: simpleCall
  */
 
 // TODO: add setIterator - установить значение I

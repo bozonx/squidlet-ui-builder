@@ -25,7 +25,7 @@ handlers:
 
 `
 
-// - $exp: jsCall
+// - $exp: simpleCall
 //   $jsExp: console.log(555, context.args, context.pathToRoute)
 
 // export const LINK_TYPE = 'Link'
