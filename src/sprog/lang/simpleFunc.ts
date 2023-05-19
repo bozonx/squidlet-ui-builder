@@ -1,7 +1,7 @@
 
 
 
-export function jsFunc (scope: Record<string, any> = {}) {
+export function simpleFunc (scope: Record<string, any> = {}) {
   return (p: {name: string}) => {
 
   }

@@ -14,7 +14,7 @@ export const sprogFuncs = {
   // setJsValue,
   // newJsVar,
   jsCall: simpleCall,
-  // jsFunc,
+  // simpleFunc,
   // funcReturn,
 
   ////// PRIMITIVE
