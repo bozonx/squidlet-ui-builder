@@ -23,7 +23,7 @@ export const jsExp: SprogFn = (scope: SuperScope) => {
   }
 }
 
-/*
+/**
  * Call js function
  * example yaml template:
  *   $ext: simpleCall
@@ -32,35 +32,16 @@ export const jsExp: SprogFn = (scope: SuperScope) => {
  *     - 1
  *     - 'some value'
  */
-
 export const  jsCall: SprogFn = (scope: SuperScope) => {
   return async (p: {path: string, args?: any[]}): Promise<any | void> => {
-    const func = await scope.$getScopedFn('getValue')({
-      path: p.path
-    })
-
     const path: string = await scope.$resolve(p.path)
     const args: string = await scope.$resolve(p.args)
-
+    const func = await scope.$getScopedFn('getValue')({ path })
 
     if (typeof func !== 'function') {
       throw new Error(`It isn't a function`)
     }
 
-    // if (p.$jsExp) {
-    //   const vm = new NodeVM({
-    //     sandbox: scope
-    //   })
-    //
-    //   return vm.run(p.$jsExp)
-    // }
-
-    // const func = objGet(scope, p.path)
-    //
-    // if (!func) throw new Error(`Can't find function ${p.path}`)
-    //
-    // // TODO: add async
-    //
-    // return func(...p.args)
+    return func(args)
   }
 }
