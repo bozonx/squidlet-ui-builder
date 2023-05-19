@@ -19,11 +19,8 @@ export const superFuncProxyHandler: ProxyHandler<SuperFunc> = {
     return target.exec(...argArray)
   },
 
-  get(target: SuperFunc, p: keyof SuperFunc, receiver: any): any {
-
-    // TODO: что использовать target или receiver ???
-
-    return receiver[p]
+  get(target: SuperFunc, p: keyof SuperFunc): any {
+    return target[p]
   },
 
   has(target: SuperFunc, p: keyof SuperFunc): boolean {
@@ -71,7 +68,7 @@ export class SuperFunc {
     this.appliedValues = mergeDeepObjects(values, this.appliedValues)
   }
 
-  async exec(values?: Record<string, any>): ProxyHandler<any> {
+  async exec(values?: Record<string, any>): Promise<any> {
     const finalValues = mergeDeepObjects(values, this.appliedValues)
 
 
