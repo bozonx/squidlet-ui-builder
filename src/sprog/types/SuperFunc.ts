@@ -72,15 +72,17 @@ export class SuperFunc {
       mergeDeepObjects(this.appliedValues, this.propsDefaults)
     )
 
-    const execScope = newScope(finalValues, this.scope)
+    const execScope: SuperScope = newScope(finalValues, this.scope)
 
     console.log(111, values, finalValues, this.lines, this.props)
 
     for (const line of this.lines) {
-      await execScope.run(line)
+      await execScope.$run(line)
     }
 
-    // TODO: как сделать reuturn ???
+    // TODO: как сделать reuturn ??? Он может быть в if, switch или цикле
+    //       наверное им в scope передать ф-ю return
+    //       но ещё должно остановиться
   }
 
   /**

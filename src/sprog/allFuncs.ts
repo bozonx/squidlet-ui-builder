@@ -5,10 +5,10 @@ import {deleteVar, newVar} from './lang/simpleVar.js';
 import {jsExp} from './lang/jsExp.js';
 
 
-// TODO: review superFunc
 // TODO: add forEach
 // TODO: add if
 // TODO: add switch
+// TODO: SuperFunc - add return
 // TODO: add SuperStruct
 // TODO: add SuperArray
 // TODO: add SuperPrimitive
