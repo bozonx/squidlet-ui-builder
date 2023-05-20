@@ -13,9 +13,9 @@ interface ForEachParams {
 interface ForEachLocalScope {
   i: number
   key: number | string
-  item: SprogItemDefinition
-  $isFirst: i === firstIndex,
-  $isLast: i === laseIndex,
+  value: any
+  $isFirst: boolean
+  $isLast: boolean
   // TODO: add skips
   //$skipNext
   //$skip
@@ -62,17 +62,18 @@ export function forEach(scope: SuperScope) {
         (p.reverse) ? i >= src.length : i < src.length;
         (p.reverse) ? i-- : i++
       ) {
-        const localScope = newScope({
+        const localScopeInitial: ForEachLocalScope = {
           i,
           key: i,
-          item: src[i],
+          value: src[i],
           $isFirst: i === firstIndex,
           $isLast: i === laseIndex,
           // TODO: add skips
           //$skipNext
           //$skip
           //$toStep
-        }, scope)
+        }
+        const localScope = newScope(localScopeInitial, scope)
 
         for (const oneDo of p.do) {
           await localScope.$run(oneDo)
@@ -92,17 +93,18 @@ export function forEach(scope: SuperScope) {
         (p.reverse) ? i-- : i++
       ) {
         const keyStr = keys[i]
-        const localScope = newScope({
+        const localScopeInitial: ForEachLocalScope = {
           i,
           key: keyStr,
-          item: src[keyStr],
+          value: src[keyStr],
           $isFirst: keys[0] === keyStr,
           $isLast: lastItem(keys) === keyStr,
           // TODO: add skips
           //$skipNext
           //$skip
           //$toStep
-        }, scope)
+        }
+        const localScope = newScope(localScopeInitial, scope)
 
         for (const oneDo of p.do) {
           await localScope.$run(oneDo)
