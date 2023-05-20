@@ -1,7 +1,6 @@
 import {deepGet} from 'squidlet-lib'
 import {SprogFn, SuperScope} from '../scope.js'
 import {SuperFunc, SuperFuncArgs} from '../types/SuperFunc.js'
-import {EXP_MARKER} from '../constants.js'
 import {makeFuncProxy} from '../lib/functionProxy.js';
 
 
@@ -16,17 +15,12 @@ export const superCall: SprogFn = (scope: SuperScope) => {
     const fn = deepGet(scope, p.path)
 
     if (!fn) throw new Error(`Can't find super function ${p.path}`)
+    else if (typeof fn !== 'function') throw new Error(`The ${p.path} isn't a function`)
 
     const finalParams: Record<string, any> = {}
-    // collect function params
+    // collect function params, execute exp if need
     for (const paramName of Object.keys((p.values))) {
-      // execute if it is expression
-      if (typeof p.values[paramName] === 'object' && p.values[paramName][EXP_MARKER]) {
-        finalParams[paramName] = await scope.run(p.values[paramName])
-      }
-      else {
-        finalParams[paramName] = p.values[paramName]
-      }
+      finalParams[paramName] = scope.$resolve(p.values[paramName])
     }
 
     return fn(finalParams)
@@ -37,7 +31,7 @@ export const superCall: SprogFn = (scope: SuperScope) => {
  * Define super function. Which is always async.
  * Params:
  *   * props - define income props, their type and default value
- *   * lines - any code execution include set vars
+ *   * lines - any code execution include set vars in scope and return value
  */
 export const superFunc: SprogFn = (scope: SuperScope) => {
   return async (p: SuperFuncArgs): Promise<any> => {

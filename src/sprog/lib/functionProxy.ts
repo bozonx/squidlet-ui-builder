@@ -1,5 +1,5 @@
 
-export const makeSuperFuncProxyHandler = (obj: any): ProxyHandler<any> => {
+export const makeFuncProxyHandler = (obj: any): ProxyHandler<any> => {
   return {
     apply(target: any, thisArg: any, argArray: any[]) {
       return obj.exec(...argArray)
@@ -18,5 +18,5 @@ export const makeSuperFuncProxyHandler = (obj: any): ProxyHandler<any> => {
 export function makeFuncProxy(obj: any): (() => any) {
   function fakeFunction () {}
 
-  return new Proxy(fakeFunction, makeSuperFuncProxyHandler(obj))
+  return new Proxy(fakeFunction, makeFuncProxyHandler(obj))
 }

@@ -20,6 +20,9 @@ export interface SuperFuncArgs {
 }
 
 
+// TODO: как сделать reuturn ???
+
+
 export class SuperFunc {
   private scope: SuperScope
   private readonly props: Record<string, SuperFuncParam>
