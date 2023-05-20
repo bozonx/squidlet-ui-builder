@@ -1,6 +1,6 @@
 import {mergeDeepObjects, collectObjValues} from 'squidlet-lib'
 import {AllTypes} from './types.js'
-import {SprogItemDefinition, SuperScope} from '../scope.js'
+import {newScope, SprogItemDefinition, SuperScope} from '../scope.js'
 import {makeFuncProxy} from '../lib/functionProxy.js';
 
 
@@ -67,20 +67,20 @@ export class SuperFunc {
   async exec(values?: Record<string, any>): Promise<any> {
     this.validateProps(values)
 
-    // TODO: как сделать reuturn ???
-
     const finalValues = mergeDeepObjects(
       values,
       mergeDeepObjects(this.appliedValues, this.propsDefaults)
     )
 
+    const execScope = newScope(finalValues, this.scope)
+
     console.log(111, values, finalValues, this.lines, this.props)
 
     for (const line of this.lines) {
-      await this.scope.run(line)
+      await execScope.run(line)
     }
 
-    // TODO: add return definition
+    // TODO: как сделать reuturn ???
   }
 
   /**
