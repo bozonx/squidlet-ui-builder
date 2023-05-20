@@ -1,5 +1,6 @@
 import {IndexedEvents, objSetMutate, cloneDeepObject} from 'squidlet-lib';
 import {SuperScope} from '../scope.js';
+import {AllTypes} from './types.js';
 
 
 
@@ -43,8 +44,7 @@ import {SuperScope} from '../scope.js';
 
 
 interface SuperStrucDefinitionBase {
-  // TODO: get normal props
-  type: 'string' | 'number'
+  type: AllTypes
   default?: any
 }
 
@@ -58,6 +58,7 @@ export type SuperStructDefinition = SuperStrucDefinitionBase & SuperStrucDefinit
 
 
 export class SuperStruct<T = Record<any, any>> {
+  private scope: SuperScope
   // It assumes that you will not change it
   readonly definition: Record<string, SuperStructDefinition> = {}
   readonly changeEvent = new IndexedEvents<() => void>()
@@ -76,6 +77,8 @@ export class SuperStruct<T = Record<any, any>> {
     definition: Record<string, SuperStructInitDefinition>,
     defaultRo: boolean = false
   ) {
+    this.scope = scope
+
     for (const name of Object.keys(definition)) {
       this.definition[name] = {
         ...definition[name],

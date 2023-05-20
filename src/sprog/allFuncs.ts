@@ -38,8 +38,6 @@ export const sprogFuncs = {
   deleteValue,
   newVar,
   deleteVar,
-  ///// DATA
-  newSuperStruct,
   ////// Boolean logic
   logicAnd,
   logicOr,
@@ -50,4 +48,5 @@ export const sprogFuncs = {
   ////// SUPER
   superCall,
   superFunc,
+  newSuperStruct,
 }
