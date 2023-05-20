@@ -1,16 +1,5 @@
 import {SuperPromise} from '../types/SuperPromise.js';
 
-/*
- * Super for each cycle
- * * It allows to iteract arrays and objects
- * example yaml:
- *   $exp: forEach
- *   src: [0,1,2]
- *   do:
- *     $exp: superFunc
- *     lines:
- *       - $exp: simpleCall
- */
 
 // TODO: add setIterator - установить значение I
 // TODO: add isFirst
@@ -27,6 +16,29 @@ interface ForEachParams {
 }
 
 
+/**
+ * Super for each cycle
+ * It allows to iteract arrays and objects
+ * params:
+ *   $exp: forEach
+ *   # default is false. If true then the cycle will start from the end
+ *   reverse: false
+ *   # src is a source array to iteract
+ *   src:
+ *     $exp: getValue
+ *     path: somePath
+ *   # do is an array of expressions which are called in local scope
+ *   do:
+ *     - $exp: setValue
+ *       path: somePath
+ *       value: 5
+ * In local scope will be:
+ *   * i number of iteration
+ *   * key - string if it is an object and number if it is an array
+ *   * value - current value
+ *   * $skip(numberOfSteps) - will skip specified number of steps bot not greater than the last one
+ *   * $toStep(stepNumber) - go to the next specified step number. Not previous
+ */
 export function forEach(scope: Record<string, any> = {}) {
   return (p: ForEachParams) => {
 

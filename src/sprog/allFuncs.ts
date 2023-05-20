@@ -5,16 +5,16 @@ import {deleteVar, newVar} from './lang/simpleVar.js';
 import {jsExp} from './lang/jsExp.js';
 import {isLess, logicAnd, isEqual, isGreater, logicNot, logicOr} from './lang/booleanLogic.js';
 import {ifElse} from './lang/ifElse.js';
+import {forEach} from './lang/forEach.js';
 
 
-// TODO: add switch
 // TODO: add forEach
+// TODO: add switch
 // TODO: SuperFunc - add return
+// TODO: simple function вообще нужен тогда???
 // TODO: add SuperStruct
 // TODO: add SuperArray
 // TODO: add SuperPrimitive
-
-// TODO: simple function вообще нужен тогда???
 
 // TODO: add module
 // TODO: add simpleClass
@@ -29,6 +29,7 @@ export const sprogFuncs = {
   jsExp,
   simpleCall,
   ifElse,
+  forEach,
   ////// Variables
   getValue,
   setValue,
@@ -42,7 +43,6 @@ export const sprogFuncs = {
   isEqual,
   isGreater,
   isLess,
-
   ////// SUPER
   superCall,
   superFunc,
