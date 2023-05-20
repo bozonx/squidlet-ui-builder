@@ -4,6 +4,7 @@ import {deleteValue, getValue, setValue} from './lang/deepValue.js';
 import {deleteVar, newVar} from './lang/simpleVar.js';
 import {jsExp} from './lang/jsExp.js';
 import {isLess, logicAnd, isEqual, isGreater, logicNot, logicOr} from './lang/booleanLogic.js';
+import {ifElse} from './lang/if.js';
 
 
 // TODO: add if
@@ -26,14 +27,17 @@ import {isLess, logicAnd, isEqual, isGreater, logicNot, logicOr} from './lang/bo
  */
 
 export const sprogFuncs = {
-  ////// JS
+  ////// Base
+  jsExp,
+  simpleCall,
+  ifElse,
+  ////// Variables
   getValue,
   setValue,
   deleteValue,
   newVar,
   deleteVar,
-  jsExp,
-  simpleCall,
+  ////// Boolean logic
   logicAnd,
   logicOr,
   logicNot,
