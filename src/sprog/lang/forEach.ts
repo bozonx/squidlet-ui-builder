@@ -1,4 +1,5 @@
-import {SprogItemDefinition} from '../scope.js';
+import {lastItem} from 'squidlet-lib';
+import {newScope, SprogItemDefinition, SuperScope} from '../scope.js';
 
 
 interface ForEachParams {
@@ -7,6 +8,18 @@ interface ForEachParams {
   // default is 'item'
   //as?: string
   do: SprogItemDefinition[]
+}
+
+interface ForEachLocalScope {
+  i: number
+  key: number | string
+  item: SprogItemDefinition
+  $isFirst: i === firstIndex,
+  $isLast: i === laseIndex,
+  // TODO: add skips
+  //$skipNext
+  //$skip
+  //$toStep
 }
 
 
@@ -30,43 +43,74 @@ interface ForEachParams {
  *   * i number of iteration
  *   * key - string if it is an object and number if it is an array
  *   * value - current value
- *   * $isFirst - is this value first
- *   * $isLast - is this value last
+ *   * $isFirst - is this first index
+ *   * $isLast - is this last index
  *   * $skipNext() - just skip the next step
  *   * $skip(numberOfSteps) - will skip specified number of steps bot not greater than the last one
  *   * $toStep(stepNumber) - go to the next specified step number. Not previous
  */
-export function forEach(scope: Record<string, any> = {}) {
-  return (p: ForEachParams) => {
+export function forEach(scope: SuperScope) {
+  return async (p: ForEachParams) => {
+    const src: Record<any, any> | any[] = await scope.$resolve(p.src)
 
-    // TODO: add setIterator - установить значение I
-    // TODO: add isFirst
-    // TODO: add isLast
-    // TODO: add skipNext()
-    // TODO: add skip(num) - пропусть заданое количество шагов
-    // TODO: add reverse - в обратном порядке
+    if (Array.isArray(src)) {
+      const firstIndex = (p.reverse) ? src.length - 1 : 0
+      const laseIndex = (p.reverse) ? 0 : src.length - 1
+      // array iteration
+      for (
+        let i = (p.reverse) ? src.length - 1 : 0;
+        (p.reverse) ? i >= src.length : i < src.length;
+        (p.reverse) ? i-- : i++
+      ) {
+        const localScope = newScope({
+          i,
+          key: i,
+          item: src[i],
+          $isFirst: i === firstIndex,
+          $isLast: i === laseIndex,
+          // TODO: add skips
+          //$skipNext
+          //$skip
+          //$toStep
+        }, scope)
 
-    if (Array.isArray(p.src)) {
-      for (const indexStr in p.src) {
-        const index = Number(indexStr)
-        const item = p.src[index]
+        for (const oneDo of p.do) {
+          await localScope.$run(oneDo)
+        }
 
-        // TODO: await
-
-        p.do({item, index})
+        if (p.reverse) i--
+        else i++
       }
     }
-    else if (typeof p.src === 'object') {
-      for (const index of Object.keys(p.src)) {
-        const item = p.src[index]
+    else if (typeof src === 'object') {
+      const keys = Object.keys(src)
+      let i = (p.reverse) ? keys.length - 1 : 0
+      // object iteration
+      for (
+        let i = (p.reverse) ? keys.length - 1 : 0;
+        (p.reverse) ? i >= keys.length : i < keys.length;
+        (p.reverse) ? i-- : i++
+      ) {
+        const keyStr = keys[i]
+        const localScope = newScope({
+          i,
+          key: keyStr,
+          item: src[keyStr],
+          $isFirst: keys[0] === keyStr,
+          $isLast: lastItem(keys) === keyStr,
+          // TODO: add skips
+          //$skipNext
+          //$skip
+          //$toStep
+        }, scope)
 
-        // TODO: await
-
-        p.do({item, index})
+        for (const oneDo of p.do) {
+          await localScope.$run(oneDo)
+        }
       }
     }
     else {
-      throw new Error(`Unsupported types of src: ${typeof p.src}`)
+      throw new Error(`Unsupported types of src: ${typeof src}`)
     }
   }
 }
