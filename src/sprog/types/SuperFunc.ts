@@ -49,8 +49,7 @@ export class SuperFunc {
    * It replaces previously applied values
    */
   applyValues(values: Record<string, any>) {
-
-    // TODO: validate props
+    this.validateProps(values)
 
     this.appliedValues = values
   }
@@ -60,13 +59,13 @@ export class SuperFunc {
    * It merges new values with previously applied values
    */
   mergeValues(values: Record<string, any>) {
+    this.validateProps(values)
+
     this.appliedValues = mergeDeepObjects(values, this.appliedValues)
   }
 
   async exec(values?: Record<string, any>): Promise<any> {
-
-    // TODO: validate props
-
+    this.validateProps(values)
 
     // TODO: как сделать reuturn ???
 
@@ -81,7 +80,6 @@ export class SuperFunc {
       await this.scope.run(line)
     }
 
-    // TODO: add var definition
     // TODO: add return definition
   }
 
@@ -98,6 +96,12 @@ export class SuperFunc {
     if (values) newSuperFunc.applyValues(values)
 
     return makeFuncProxy(newSuperFunc)
+  }
+
+
+  private validateProps(values?: Record<string, any>) {
+    // TODO: validate props
+
   }
 
 }
