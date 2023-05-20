@@ -6,6 +6,7 @@ import {jsExp} from './lang/jsExp.js';
 import {isLess, logicAnd, isEqual, isGreater, logicNot, logicOr} from './lang/booleanLogic.js';
 import {ifElse} from './lang/ifElse.js';
 import {forEach} from './lang/forEach.js';
+import {newSuperStruct} from './lang/superStruct.js';
 
 
 // TODO: add SuperStruct
@@ -37,6 +38,8 @@ export const sprogFuncs = {
   deleteValue,
   newVar,
   deleteVar,
+  ///// DATA
+  newSuperStruct,
   ////// Boolean logic
   logicAnd,
   logicOr,

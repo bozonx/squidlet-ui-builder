@@ -1,4 +1,5 @@
 import {IndexedEvents, objSetMutate, cloneDeepObject} from 'squidlet-lib';
+import {SuperScope} from '../scope.js';
 
 
 
@@ -70,7 +71,11 @@ export class SuperStruct<T = Record<any, any>> {
   }
 
 
-  constructor(definition: Record<string, SuperStructInitDefinition>, defaultRo: boolean = false) {
+  constructor(
+    scope: SuperScope,
+    definition: Record<string, SuperStructInitDefinition>,
+    defaultRo: boolean = false
+  ) {
     for (const name of Object.keys(definition)) {
       this.definition[name] = {
         ...definition[name],
