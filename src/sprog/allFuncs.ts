@@ -4,13 +4,12 @@ import {deleteValue, getValue, setValue} from './lang/deepValue.js';
 import {deleteVar, newVar} from './lang/simpleVar.js';
 import {jsExp} from './lang/jsExp.js';
 import {isLess, logicAnd, isEqual, isGreater, logicNot, logicOr} from './lang/booleanLogic.js';
-import {ifElse} from './lang/if.js';
+import {ifElse} from './lang/ifElse.js';
 
 
 // TODO: add if
-// TODO: add forEach
-// TODO: add boolean logic
 // TODO: add switch
+// TODO: add forEach
 // TODO: SuperFunc - add return
 // TODO: add SuperStruct
 // TODO: add SuperArray
