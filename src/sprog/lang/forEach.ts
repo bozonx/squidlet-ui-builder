@@ -1,18 +1,12 @@
-import {SuperPromise} from '../types/SuperPromise.js';
+import {SprogItemDefinition} from '../scope.js';
 
-
-// TODO: add setIterator - установить значение I
-// TODO: add isFirst
-// TODO: add isLast
-// TODO: add skipNext()
-// TODO: add skip(num) - пропусть заданое количество шагов
-// TODO: add reverse - в обратном порядке
 
 interface ForEachParams {
+  reverse?: boolean
   src: any[] | Record<string, any>
   // default is 'item'
   //as?: string
-  do: (p: {item: any, index: string | number}) => SuperPromise<void>
+  do: SprogItemDefinition[]
 }
 
 
@@ -36,13 +30,21 @@ interface ForEachParams {
  *   * i number of iteration
  *   * key - string if it is an object and number if it is an array
  *   * value - current value
+ *   * $isFirst - is this value first
+ *   * $isLast - is this value last
+ *   * $skipNext() - just skip the next step
  *   * $skip(numberOfSteps) - will skip specified number of steps bot not greater than the last one
  *   * $toStep(stepNumber) - go to the next specified step number. Not previous
  */
 export function forEach(scope: Record<string, any> = {}) {
   return (p: ForEachParams) => {
 
-    // TODO: проверить чтобы do было superFunc а не обычной
+    // TODO: add setIterator - установить значение I
+    // TODO: add isFirst
+    // TODO: add isLast
+    // TODO: add skipNext()
+    // TODO: add skip(num) - пропусть заданое количество шагов
+    // TODO: add reverse - в обратном порядке
 
     if (Array.isArray(p.src)) {
       for (const indexStr in p.src) {
