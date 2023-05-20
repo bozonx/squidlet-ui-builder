@@ -7,7 +7,6 @@ import {isLess, logicAnd, isEqual, isGreater, logicNot, logicOr} from './lang/bo
 import {ifElse} from './lang/ifElse.js';
 
 
-// TODO: add if
 // TODO: add switch
 // TODO: add forEach
 // TODO: SuperFunc - add return
