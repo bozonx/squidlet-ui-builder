@@ -8,6 +8,8 @@ interface IfElseItem {
   block: SprogItemDefinition[]
 }
 
+// TODO: add switch into isElse - можно даже смешивать
+
 /**
  * If else conditions
  * params:

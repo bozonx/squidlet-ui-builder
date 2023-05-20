@@ -8,13 +8,14 @@ import {ifElse} from './lang/ifElse.js';
 import {forEach} from './lang/forEach.js';
 
 
-// TODO: add forEach
-// TODO: add switch
-// TODO: SuperFunc - add return
-// TODO: simple function вообще нужен тогда???
 // TODO: add SuperStruct
 // TODO: add SuperArray
 // TODO: add SuperPrimitive
+
+// TODO: simple function вообще нужен тогда???
+// TODO: add switch into isElse
+// TODO: SuperFunc - add return
+// TODO: review forEach - add support of return, break, continue, inner cycles and ifElse
 
 // TODO: add module
 // TODO: add simpleClass

@@ -28,6 +28,11 @@ interface ForEachLocalScope {
   //$skip(numberOfSteps)
   // go to the next specified step number. Not previous
   //$toStep(stepNumber)
+
+  // TODO: add break
+  // TODO: add continue
+  // TODO: add support of inner cycle
+  // TODO: add support of inner if else
 }
 
 
