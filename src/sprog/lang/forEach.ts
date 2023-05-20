@@ -11,15 +11,23 @@ interface ForEachParams {
 }
 
 interface ForEachLocalScope {
+  // i number of iteration
   i: number
+  // string if it is an object and number if it is an array
   key: number | string
+  // current value of iteration
   value: any
+  // is this first index
   $isFirst: boolean
+  // is this last index
   $isLast: boolean
   // TODO: add skips
+  // just skip the next step
   //$skipNext
-  //$skip
-  //$toStep
+  // will skip specified number of steps bot not greater than the last one
+  //$skip(numberOfSteps)
+  // go to the next specified step number. Not previous
+  //$toStep(stepNumber)
 }
 
 
@@ -39,15 +47,6 @@ interface ForEachLocalScope {
  *     - $exp: setValue
  *       path: somePath
  *       value: 5
- * In local scope will be:
- *   * i number of iteration
- *   * key - string if it is an object and number if it is an array
- *   * value - current value
- *   * $isFirst - is this first index
- *   * $isLast - is this last index
- *   * $skipNext() - just skip the next step
- *   * $skip(numberOfSteps) - will skip specified number of steps bot not greater than the last one
- *   * $toStep(stepNumber) - go to the next specified step number. Not previous
  */
 export function forEach(scope: SuperScope) {
   return async (p: ForEachParams) => {
