@@ -3,10 +3,12 @@ import {superCall, superFunc} from './lang/superFunc.js';
 import {deleteValue, getValue, setValue} from './lang/deepValue.js';
 import {deleteVar, newVar} from './lang/simpleVar.js';
 import {jsExp} from './lang/jsExp.js';
+import {isLess, logicAnd, isEqual, isGreater, logicNot, logicOr} from './lang/booleanLogic.js';
 
 
-// TODO: add forEach
 // TODO: add if
+// TODO: add forEach
+// TODO: add boolean logic
 // TODO: add switch
 // TODO: SuperFunc - add return
 // TODO: add SuperStruct
@@ -32,8 +34,12 @@ export const sprogFuncs = {
   deleteVar,
   jsExp,
   simpleCall,
-  // setSimpleFunc,
-  // makeSimpleFunc,
+  logicAnd,
+  logicOr,
+  logicNot,
+  isEqual,
+  isGreater,
+  isLess,
 
   ////// SUPER
   superCall,
