@@ -1,10 +1,10 @@
-import {mergeDeepObjects} from 'squidlet-lib'
+import {mergeDeepObjects, collectObjValues} from 'squidlet-lib'
 import {AllTypes} from './types.js'
-import {SuperScope} from '../scope.js'
+import {SprogItemDefinition, SuperScope} from '../scope.js'
 import {makeFuncProxy} from '../lib/functionProxy.js';
 
 
-export interface SuperFuncParam {
+export interface SuperFuncProp {
   // type of value
   type: AllTypes
   // default value
@@ -14,49 +14,31 @@ export interface SuperFuncParam {
   // TODO: do it need to rename some props?
 }
 
-export interface SuperFuncArgs {
-  props: Record<string, SuperFuncParam>
-  lines: any[]
+export interface SuperFuncParams {
+  props: Record<string, SuperFuncProp>
+  lines: SprogItemDefinition[]
 }
 
 
-// TODO: как сделать reuturn ???
-
-
 export class SuperFunc {
-  private scope: SuperScope
-  private readonly props: Record<string, SuperFuncParam>
-  // TODO: какой тип???
-  private readonly lines: any[]
+  scope: SuperScope
+
+  private readonly props: Record<string, SuperFuncProp>
+  private readonly lines: SprogItemDefinition[]
   private appliedValues: Record<string, any> = {}
 
 
   get propsDefaults(): Record<any, any> {
-
-    // TODO: move to squidlet-lib
-
-    const res: Record<any, any> = {}
-
-    for (const key of Object.keys(this.props)) {
-      if (typeof this.props[key].default === 'undefined') continue
-
-      res[key] = this.props[key].default
-    }
-
-    return res
+    return collectObjValues(this.props, 'default')
   }
 
 
-  constructor(scope: SuperScope, {props, lines}: SuperFuncArgs) {
+  constructor(scope: SuperScope, {props, lines}: SuperFuncParams) {
     this.scope = scope
     this.props = props
     this.lines = lines
   }
 
-
-  getScope(): SuperScope {
-    return this.scope
-  }
 
   replaceScope(newScope: SuperScope) {
     this.scope = newScope
@@ -84,6 +66,9 @@ export class SuperFunc {
   async exec(values?: Record<string, any>): Promise<any> {
 
     // TODO: validate props
+
+
+    // TODO: как сделать reuturn ???
 
     const finalValues = mergeDeepObjects(
       values,
