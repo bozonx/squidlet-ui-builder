@@ -1,7 +1,8 @@
-import {IndexedEvents, cloneDeepObject} from 'squidlet-lib';
+import {cloneDeepObject} from 'squidlet-lib';
 import {SuperScope} from '../scope.js';
 import {AllTypes} from './valueTypes.js';
-import {SuperChangeHandler} from './types.js';
+import {SuperValueBase, isSuperValue} from '../lib/SuperValueBase.js';
+import {SuperArray} from './SuperArray.js';
 
 
 interface SuperStrucDefinitionBase {
@@ -57,20 +58,11 @@ export function proxyStruct(struct: SuperStruct): SuperStruct {
 }
 
 
-export class SuperStruct<T = Record<any, any>> {
-  private scope: SuperScope
+export class SuperStruct<T = Record<any, any>> extends SuperValueBase {
   // It assumes that you will not change it
   readonly definition: Record<string, SuperStructDefinition> = {}
-  readonly changeEvent = new IndexedEvents<SuperChangeHandler>()
   // current values
   readonly values: Record<any, any> = {}
-
-  private inited: boolean = false
-
-
-  get isInitialized(): boolean {
-    return this.inited
-  }
 
 
   constructor(
@@ -78,7 +70,8 @@ export class SuperStruct<T = Record<any, any>> {
     definition: Record<string, SuperStructInitDefinition>,
     defaultRo: boolean = false
   ) {
-    this.scope = scope
+    super(scope)
+
     this.definition = this.prepareDefinition(definition, defaultRo)
   }
 
@@ -93,20 +86,35 @@ export class SuperStruct<T = Record<any, any>> {
 
     if (initialValues) {
       for (const name of Object.keys(initialValues)) {
-        this.justSetValue(name, initialValues[name])
+
+        // TODO: check type
+        // TODO: check readonly
+
+        this.values[name] = initialValues[name]
+
+        if (isSuperValue(this.values[name])) {
+          (this.values[name] as SuperValueBase).changeEvent
+            .addListener(this.handleChildChange)
+        }
       }
     }
 
-    // TODO: если среди значений есть SuperStruct, array, primitive
-    //       то автоматом слушать их изменения чтобы поднять свои изменения
+    // TODO: если после установки значений хотябы одно required оказалось не определено
+    //       то поднимать ошибку
 
     this.inited = true
+    // rise an event any way if any values was set or not
+    this.changeEvent.emit(this, '')
 
-    return this.justSetValue
+    return this.roSetter
   }
 
   destroy() {
-    this.changeEvent.destroy()
+    super.destroy()
+
+    for (const name of Object.keys(this.values)) {
+      if (isSuperValue(this.values[name])) (this.values[name] as SuperValueBase).destroy()
+    }
   }
 
 
@@ -161,13 +169,20 @@ export class SuperStruct<T = Record<any, any>> {
   }
 
 
-  private justSetValue = (pathTo: string, newValue: any) => {
+  private roSetter = (pathTo: string, newValue: any) => {
     // TODO: если нет определения deeply то ошибка
     // TODO: поддержка валидации по типу
 
     objSetMutate(this.value, pathTo, newValue)
 
     this.changeEvent.emit()
+  }
+
+  private handleChildChange = (target: SuperStruct | SuperArray, path: string) => {
+
+    // TODO: нужно к path добавить своё имя
+
+    this.changeEvent.emit(target, path)
   }
 
   private prepareDefinition(
