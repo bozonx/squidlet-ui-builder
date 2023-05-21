@@ -1,4 +1,4 @@
-import {cloneDeepObject} from 'squidlet-lib';
+import {cloneDeepObject, deepGet, deepSet} from 'squidlet-lib';
 import {SuperScope} from '../scope.js';
 import {AllTypes} from './valueTypes.js';
 import {SuperValueBase, isSuperValue} from '../lib/SuperValueBase.js';
@@ -39,10 +39,7 @@ export function proxyStruct(struct: SuperStruct): SuperStruct {
     },
 
     deleteProperty(target: SuperStruct, p: string): boolean {
-      // TODO: поидее удалять элемент нельзя, а только установит null, так как структура уже задана
-      delete target.values[p]
-
-      return true
+      throw new Error(`It isn't possible to delete struct value`)
     },
 
     ownKeys(target: SuperStruct): ArrayLike<string | symbol> {
@@ -118,26 +115,14 @@ export class SuperStruct<T = Record<any, any>> extends SuperValueBase {
 
 
   has(pathTo: string): boolean {
-
-    // TODO: deep
-
-    return Boolean(this.value[pathTo])
+    return Boolean(deepGet(this.values, pathTo))
   }
 
-  getValue(pathTo: string): any {
-
-    // TODO: если глубокий путь то
-    //       * если обычный объект то взять его значение
-    //       * обычный массив то взять его значение
-    //       * struct - вызвать getValue и идти дальше
-    //       * superArray - вызвать getValue и идти дальше
-
-    return this.value[pathTo]
-
-    //return objGet(this.value, pathTo)
+  getValue(pathTo: string): AllTypes | undefined {
+    return deepGet(this.values, pathTo)
   }
 
-  setValue(pathTo: string, newValue: any) {
+  setValue(pathTo: string, newValue: AllTypes) {
     // TODO: проверить если readonly то ошибка
     // TODO: если глубокий путь ???
 
@@ -177,7 +162,7 @@ export class SuperStruct<T = Record<any, any>> extends SuperValueBase {
     // TODO: если нет определения deeply то ошибка
     // TODO: поддержка валидации по типу
 
-    objSetMutate(this.value, pathTo, newValue)
+    deepSet(this.values, pathTo, newValue)
 
     this.changeEvent.emit()
   }
