@@ -1,7 +1,7 @@
 import {cloneDeepObject, deepGet, deepSet} from 'squidlet-lib';
 import {SuperScope} from '../scope.js';
 import {AllTypes} from './valueTypes.js';
-import {SuperValueBase, isSuperValue, SuperChangeHandler} from '../lib/SuperValueBase.js';
+import {SuperValueBase, isSuperValue} from '../lib/SuperValueBase.js';
 import {SuperArray} from './SuperArray.js';
 
 
@@ -55,16 +55,16 @@ export function proxyStruct(struct: SuperStruct): SuperStruct {
 }
 
 
-export class SuperStruct<T = Record<any, any>> extends SuperValueBase {
+export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
   // It assumes that you will not change it
-  readonly definition: Record<string, SuperStructDefinition> = {}
+  readonly definition: Record<keyof T, SuperStructDefinition> = {} as any
   // current values
-  readonly values: Record<any, any> = {}
+  readonly values = {} as T
 
 
   constructor(
     scope: SuperScope,
-    definition: Record<string, SuperStructInitDefinition>,
+    definition: Record<keyof T, SuperStructInitDefinition>,
     defaultRo: boolean = false
   ) {
     super(scope)
@@ -76,24 +76,26 @@ export class SuperStruct<T = Record<any, any>> extends SuperValueBase {
    * Init with initial values.
    * It returns setter for readonly params
    */
-  init(initialValues?: Record<string, any>): ((pathTo: string, newValue: any) => void) {
+  init(initialValues?: T): ((name: keyof T, newValue: AllTypes) => void) {
     if (this.inited) {
       throw new Error(`The struct has been already initialized`)
     }
 
     if (initialValues) {
-      for (const name of Object.keys(initialValues)) {
-        this.safeSetOwnValue(name, initialValues[name])
+      for (const key of Object.keys(initialValues)) {
+        const keyName = key as keyof T
+        this.safeSetOwnValue(keyName, initialValues[keyName] as any)
         // start listen for child changes
-        if (isSuperValue(this.values[name])) {
-          (this.values[name] as SuperValueBase).subscribe(this.handleChildChange)
+        if (isSuperValue(this.values[keyName])) {
+          (this.values[keyName] as SuperValueBase).subscribe(this.handleChildChange)
         }
       }
     }
     // check required values
-    for (const name of Object.keys(this.definition)) {
-      if (this.definition[name].required && typeof this.values[name] === 'undefined') {
-        throw new Error(`The value ${name} is required, but it wasn't initiated`)
+    for (const keyStr of Object.keys(this.definition)) {
+      const keyName = keyStr as keyof T
+      if (this.definition[keyName].required && typeof this.values[keyName] === 'undefined') {
+        throw new Error(`The value ${keyStr} is required, but it wasn't initiated`)
       }
     }
     // means that struct is completely initiated
@@ -107,8 +109,9 @@ export class SuperStruct<T = Record<any, any>> extends SuperValueBase {
   destroy() {
     super.destroy()
 
-    for (const name of Object.keys(this.values)) {
-      if (isSuperValue(this.values[name])) (this.values[name] as SuperValueBase).destroy()
+    for (const key of Object.keys(this.values as any)) {
+      const keyName = key as keyof T
+      if (isSuperValue(this.values[keyName])) (this.values[keyName] as SuperValueBase).destroy()
     }
   }
 
@@ -118,7 +121,7 @@ export class SuperStruct<T = Record<any, any>> extends SuperValueBase {
   }
 
   getValue(pathTo: string): AllTypes | undefined {
-    return deepGet(this.values, pathTo)
+    return deepGet(this.values as any, pathTo)
   }
 
   setValue(pathTo: string, newValue: AllTypes) {
@@ -138,7 +141,7 @@ export class SuperStruct<T = Record<any, any>> extends SuperValueBase {
    * You can change it but changes will not affect the struct.
    */
   clone(): T {
-    return cloneDeepObject(this.values)
+    return cloneDeepObject(this.values as any)
   }
 
   link() {
@@ -152,7 +155,7 @@ export class SuperStruct<T = Record<any, any>> extends SuperValueBase {
    * @param name
    * @param newValue
    */
-  private roSetter = (name: string, newValue: any) => {
+  private roSetter = (name: keyof T, newValue: any) => {
     this.safeSetOwnValue(name, newValue, true)
 
     // TODO: emit event
@@ -162,21 +165,21 @@ export class SuperStruct<T = Record<any, any>> extends SuperValueBase {
   private justSetValue(pathTo: string, value: AllTypes) {
     if (pathTo.indexOf('.') === -1) {
       // own value
-      this.safeSetOwnValue(pathTo, value)
+      this.safeSetOwnValue(pathTo as keyof T, value)
     }
     else {
       // deep value
-      deepSet(this.values, pathTo, value)
+      deepSet(this.values as any, pathTo, value)
     }
   }
 
-  private safeSetOwnValue(name: string, value: AllTypes, ignoreRo: boolean = false) {
+  private safeSetOwnValue(name: keyof T, value: AllTypes, ignoreRo: boolean = false) {
 
     // TODO: check type
     // TODO: check readonly
     // TODO: нельзя установить новое значение, не указанное в definition
 
-    this.values[name] = value
+    this.values[name] = value as any
   }
 
   private handleChildChange = (target: SuperStruct | SuperArray, path: string) => {
@@ -187,18 +190,19 @@ export class SuperStruct<T = Record<any, any>> extends SuperValueBase {
   }
 
   private prepareDefinition(
-    definition: Record<string, SuperStructInitDefinition>,
+    definition: Record<keyof T, SuperStructInitDefinition>,
     defaultRo: boolean
-  ): Record<string, SuperStructDefinition> {
-    const res: Record<string, SuperStructDefinition> = {}
+  ): Record<keyof T, SuperStructDefinition> {
+    const res: Record<keyof T, SuperStructDefinition> = {} as any
 
-    for (const name of Object.keys(definition)) {
-      res[name] = {
-        ...definition[name],
-        required: Boolean(definition[name].required),
+    for (const keyStr of Object.keys(definition)) {
+      const keyName = keyStr as keyof T
+      res[keyName] = {
+        ...definition[keyName],
+        required: Boolean(definition[keyName].required),
         readonly: (defaultRo)
-          ? definition[name].readonly !== false
-          : Boolean(definition[name].readonly),
+          ? definition[keyName].readonly !== false
+          : Boolean(definition[keyName].readonly),
       }
     }
 
