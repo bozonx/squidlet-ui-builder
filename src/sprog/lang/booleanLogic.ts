@@ -1,5 +1,5 @@
 import {SprogItemDefinition, SuperScope} from '../scope.js';
-import {SimpleType} from '../types/types.js';
+import {SimpleType} from '../types/valueTypes.js';
 
 
 export function logicAnd(scope: SuperScope) {

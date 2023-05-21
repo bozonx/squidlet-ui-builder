@@ -1,6 +1,6 @@
-import {IndexedEvents, objSetMutate, cloneDeepObject} from 'squidlet-lib';
+import {IndexedEvents, cloneDeepObject} from 'squidlet-lib';
 import {SuperScope} from '../scope.js';
-import {AllTypes} from './types.js';
+import {AllTypes} from './valueTypes.js';
 
 
 interface SuperStrucDefinitionBase {
@@ -60,7 +60,7 @@ export class SuperStruct<T = Record<any, any>> {
   private scope: SuperScope
   // It assumes that you will not change it
   readonly definition: Record<string, SuperStructDefinition> = {}
-  readonly changeEvent = new IndexedEvents<() => void>()
+  readonly changeEvent = new IndexedEvents<SuperChangeHandler>()
   // current values
   readonly values: Record<any, any> = {}
 
@@ -78,7 +78,6 @@ export class SuperStruct<T = Record<any, any>> {
     defaultRo: boolean = false
   ) {
     this.scope = scope
-
     this.definition = this.prepareDefinition(definition, defaultRo)
   }
 
@@ -96,6 +95,9 @@ export class SuperStruct<T = Record<any, any>> {
         this.justSetValue(name, initialValues[name])
       }
     }
+
+    // TODO: если среди значений есть SuperStruct, array, primitive
+    //       то автоматом слушать их изменения чтобы поднять свои изменения
 
     this.inited = true
 
