@@ -1,5 +1,5 @@
 import {SuperScope} from '../scope.js';
-import {SuperStruct, SuperStructDefinition} from '../types/SuperStruct.js';
+import {SuperStruct, SuperStructDefinition, wrapStruct} from '../types/SuperStruct.js';
 
 
 export function newSuperStruct(scope: SuperScope) {
@@ -9,7 +9,8 @@ export function newSuperStruct(scope: SuperScope) {
   }): Promise<SuperStruct> => {
     const definition = await scope.$resolve(p.definition)
     const defaultRo = await scope.$resolve(p.defaultRo)
+    const structInner = new SuperStruct(scope, definition, defaultRo)
 
-    return new SuperStruct(scope, definition, defaultRo)
+    return wrapStruct(structInner)
   }
 }

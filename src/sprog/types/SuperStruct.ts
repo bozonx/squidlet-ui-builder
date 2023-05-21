@@ -3,46 +3,6 @@ import {SuperScope} from '../scope.js';
 import {AllTypes} from './types.js';
 
 
-
-/*
- * Struct which can be changed from anywhere
- */
-
-
-// TODO: проще использовать proxy
-// TODO: поидее удалять элемент нельзя, а только установит null, так как структура уже задана
-// export async function newScope(initialScope?: Record<string, any>): Promise<SuperScope> {
-//   const originalScope = {
-//     ...initialScope,
-//   }
-//
-//   const handler: ProxyHandler<SuperScope> = {
-//     get(target: SuperScope, p: string | symbol, receiver: any) {
-//       return "world"
-//     },
-//
-//     has(target: SuperScope, p: string | symbol): boolean {
-//
-//     },
-//
-//     set(target: SuperScope, p: string | symbol, newValue: any, receiver: any): boolean {
-//
-//     },
-//
-//     deleteProperty(target: SuperScope, p: string | symbol): boolean {
-//
-//     },
-//   }
-//   const scope: SuperScope = {
-//     run(definition: SprogItemDefinition): Promise<any | void> {
-//
-//     }
-//   }
-//
-//   return new Proxy(scope, handler)
-// }
-
-
 interface SuperStrucDefinitionBase {
   type: AllTypes
   default?: any
@@ -57,13 +17,53 @@ export type SuperStructInitDefinition = SuperStrucDefinitionBase & Partial<Super
 export type SuperStructDefinition = SuperStrucDefinitionBase & SuperStrucDefinitionExtra
 
 
+/**
+ * Wrapper for SuperStruct which allows to manipulate it as common object
+ */
+export function wrapStruct(struct: SuperStruct): SuperStruct {
+  const handler: ProxyHandler<SuperStruct> = {
+    get(target: SuperStruct, p: string) {
+      return target.values[p]
+    },
+
+    has(target: SuperStruct, p: string): boolean {
+      return Boolean(target.values[p])
+    },
+
+    set(target: SuperStruct, p: string, newValue: any): boolean {
+      target.values[p] = newValue
+
+      return true
+    },
+
+    deleteProperty(target: SuperStruct, p: string): boolean {
+      // TODO: поидее удалять элемент нельзя, а только установит null, так как структура уже задана
+      delete target.values[p]
+
+      return true
+    },
+
+    ownKeys(target: SuperStruct): ArrayLike<string | symbol> {
+      // TODO: проверить что при запросе ключей должны вернуться ключи из values
+      return Object.keys(target.values)
+    }
+
+    // defineProperty?(target: T, property: string | symbol, attributes: PropertyDescriptor): boolean;
+    // getOwnPropertyDescriptor?(target: T, p: string | symbol): PropertyDescriptor | undefined;
+  }
+
+  return new Proxy(struct, handler)
+}
+
+
 export class SuperStruct<T = Record<any, any>> {
   private scope: SuperScope
   // It assumes that you will not change it
   readonly definition: Record<string, SuperStructDefinition> = {}
   readonly changeEvent = new IndexedEvents<() => void>()
   // current values
-  private value: Record<any, any> = {}
+  readonly values: Record<any, any> = {}
+
   private inited: boolean = false
 
 
@@ -79,15 +79,7 @@ export class SuperStruct<T = Record<any, any>> {
   ) {
     this.scope = scope
 
-    for (const name of Object.keys(definition)) {
-      this.definition[name] = {
-        ...definition[name],
-        required: Boolean(definition[name].required),
-        readonly: (defaultRo)
-          ? definition[name].readonly !== false
-          : Boolean(definition[name].readonly),
-      }
-    }
+    this.definition = this.prepareDefinition(definition, defaultRo)
   }
 
   /**
@@ -173,6 +165,25 @@ export class SuperStruct<T = Record<any, any>> {
     objSetMutate(this.value, pathTo, newValue)
 
     this.changeEvent.emit()
+  }
+
+  private prepareDefinition(
+    definition: Record<string, SuperStructInitDefinition>,
+    defaultRo: boolean
+  ): Record<string, SuperStructDefinition> {
+    const res: Record<string, SuperStructDefinition> = {}
+
+    for (const name of Object.keys(definition)) {
+      res[name] = {
+        ...definition[name],
+        required: Boolean(definition[name].required),
+        readonly: (defaultRo)
+          ? definition[name].readonly !== false
+          : Boolean(definition[name].readonly),
+      }
+    }
+
+    return res
   }
 
 }
