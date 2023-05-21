@@ -21,7 +21,7 @@ export function isSuperValue(val: any): boolean {
 export class SuperValueBase {
   readonly superValue = true
   protected parent?: SuperValueBase
-  // Path to myself in upper tree
+  // Path to myself in upper tree. The last part is my name
   protected myPath?: string
   protected changeEvent = new IndexedEvents<SuperChangeHandler>()
   protected inited: boolean = false

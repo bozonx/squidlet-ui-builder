@@ -137,6 +137,7 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
     this.justSetValue(pathTo, newValue)
 
     // TODO: rise change event
+    // TODO: нужно ли поднимать свое событие если устанавливается на потомка???
     //this.riseMyChangeEvent(name)
   }
 
