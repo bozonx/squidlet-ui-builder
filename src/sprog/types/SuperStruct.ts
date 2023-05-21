@@ -1,7 +1,7 @@
 import {cloneDeepObject, deepGet, deepSet} from 'squidlet-lib';
 import {SuperScope} from '../scope.js';
 import {AllTypes} from './valueTypes.js';
-import {SuperValueBase, isSuperValue} from '../lib/SuperValueBase.js';
+import {SuperValueBase, isSuperValue, SuperChangeHandler} from '../lib/SuperValueBase.js';
 import {SuperArray} from './SuperArray.js';
 
 
@@ -25,15 +25,15 @@ export type SuperStructDefinition = SuperStrucDefinitionBase & SuperStrucDefinit
 export function proxyStruct(struct: SuperStruct): SuperStruct {
   const handler: ProxyHandler<SuperStruct> = {
     get(target: SuperStruct, p: string) {
-      return target.values[p]
+      return target.getValue(p)
     },
 
     has(target: SuperStruct, p: string): boolean {
-      return Boolean(target.values[p])
+      return target.has(p)
     },
 
     set(target: SuperStruct, p: string, newValue: any): boolean {
-      target.values[p] = newValue
+      target.setValue(p, newValue)
 
       return true
     },
@@ -83,11 +83,10 @@ export class SuperStruct<T = Record<any, any>> extends SuperValueBase {
 
     if (initialValues) {
       for (const name of Object.keys(initialValues)) {
-        this.safeSetValue(name, initialValues[name])
+        this.safeSetOwnValue(name, initialValues[name])
         // start listen for child changes
         if (isSuperValue(this.values[name])) {
-          (this.values[name] as SuperValueBase).changeEvent
-            .addListener(this.handleChildChange)
+          (this.values[name] as SuperValueBase).subscribe(this.handleChildChange)
         }
       }
     }
@@ -115,7 +114,7 @@ export class SuperStruct<T = Record<any, any>> extends SuperValueBase {
 
 
   has(pathTo: string): boolean {
-    return Boolean(deepGet(this.values, pathTo))
+    return Boolean(this.getValue(pathTo))
   }
 
   getValue(pathTo: string): AllTypes | undefined {
@@ -123,25 +122,15 @@ export class SuperStruct<T = Record<any, any>> extends SuperValueBase {
   }
 
   setValue(pathTo: string, newValue: AllTypes) {
-    // TODO: проверить если readonly то ошибка
-    // TODO: если глубокий путь ???
-
     this.justSetValue(pathTo, newValue)
+
+    // TODO: rise change event
   }
 
   resetValue(pathTo: string) {
-    // TODO: проверить если readonly то ошибка
-    // TODO: если глубокий путь ???
-
     this.justSetValue(pathTo, null)
-  }
 
-  subscribe(handler: () => void): number {
-    return this.changeEvent.addListener(handler)
-  }
-
-  unsubscribe(handlerIndex: number) {
-    this.changeEvent.removeListener(handlerIndex)
+    // TODO: rise change event
   }
 
   /**
@@ -158,19 +147,34 @@ export class SuperStruct<T = Record<any, any>> extends SuperValueBase {
   }
 
 
-  private roSetter = (pathTo: string, newValue: any) => {
-    // TODO: если нет определения deeply то ошибка
-    // TODO: поддержка валидации по типу
+  /**
+   * Set value of self read only value
+   * @param name
+   * @param newValue
+   */
+  private roSetter = (name: string, newValue: any) => {
+    this.safeSetOwnValue(name, newValue, true)
 
-    deepSet(this.values, pathTo, newValue)
-
-    this.changeEvent.emit()
+    // TODO: emit event
+    // this.changeEvent.emit()
   }
 
-  private safeSetValue(name: string, value: any) {
+  private justSetValue(pathTo: string, value: AllTypes) {
+    if (pathTo.indexOf('.') === -1) {
+      // own value
+      this.safeSetOwnValue(pathTo, value)
+    }
+    else {
+      // deep value
+      deepSet(this.values, pathTo, value)
+    }
+  }
+
+  private safeSetOwnValue(name: string, value: AllTypes, ignoreRo: boolean = false) {
 
     // TODO: check type
     // TODO: check readonly
+    // TODO: нельзя установить новое значение, не указанное в definition
 
     this.values[name] = value
   }

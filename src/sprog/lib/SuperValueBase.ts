@@ -19,7 +19,7 @@ export function isSuperValue(val: any): boolean {
 
 export class SuperValueBase {
   readonly superValue = true
-  readonly changeEvent = new IndexedEvents<SuperChangeHandler>()
+  protected changeEvent = new IndexedEvents<SuperChangeHandler>()
   protected inited: boolean = false
   protected scope: SuperScope
 
@@ -36,6 +36,15 @@ export class SuperValueBase {
 
   destroy() {
     this.changeEvent.destroy()
+  }
+
+
+  subscribe(handler: SuperChangeHandler): number {
+    return this.changeEvent.addListener(handler)
+  }
+
+  unsubscribe(handlerIndex: number) {
+    this.changeEvent.removeListener(handlerIndex)
   }
 
 }
