@@ -95,8 +95,7 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
           // TODO: надо установить parent
           // TODO: надо инициализировать - передать значения
 
-          // TODO: не обязательно это слушать, события можно поднимать и через set
-          //(this.values[keyName] as SuperValueBase).subscribe(this.handleChildChange)
+          (this.values[keyName] as SuperValueBase).subscribe(this.handleChildChange)
         }
       }
     }
@@ -134,17 +133,12 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
   }
 
   setValue(pathTo: string, newValue: AllTypes) {
-    this.justSetValue(pathTo, newValue)
+    this.smartSetValue(pathTo, newValue)
 
-    // TODO: rise change event
-    // TODO: нужно ли поднимать свое событие если устанавливается на потомка???
-    //this.riseMyChangeEvent(name)
   }
 
   resetValue(pathTo: string) {
-    this.justSetValue(pathTo, null)
-
-    // TODO: rise change event
+    this.smartSetValue(pathTo, null)
   }
 
   /**
@@ -170,9 +164,10 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
   }
 
   /**
-   * Set value deeply but do not rise an event
+   * Set value for my self of deeply.
+   * It emits an event only if the deep value isn't a super type
    */
-  private justSetValue(pathTo: string, value: AllTypes) {
+  private smartSetValue(pathTo: string, value: AllTypes) {
     if (pathTo.indexOf('.') === -1) {
       // own value
       this.safeSetOwnValue(pathTo as keyof T, value)
@@ -181,6 +176,17 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
       // deep value
       deepSet(this.values as any, pathTo, value)
     }
+
+    // rise an event only if it is my children and it isn't a super value
+    // super value will rise an event by itself
+    // // TODO: простые типы могут быть deeply
+    // if (
+    //   pathTo.indexOf('.') === -1
+    //   typeof this.definition[pathTo] === 'undefined'
+    //   && !isSuperValue(this.values[pathTo])
+    // ) {
+    //   this.riseMyChangeEvent(pathTo as keyof T)
+    // }
   }
 
   private safeSetOwnValue(name: keyof T, value: AllTypes, ignoreRo: boolean = false) {
@@ -211,7 +217,8 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
     this.changeEvent.emit(this, fullPath)
   }
 
-  private handleChildChange = (target: SuperStruct | SuperArray, childPath: string) => {
+  // TODO: review
+  private handleChildChange = (target: SuperStruct | SuperArray, childPath?: string) => {
     const fullPath = (this.myPath) ? this.myPath + '.' + childPath : childPath
 
     this.changeEvent.emit(target, fullPath)
