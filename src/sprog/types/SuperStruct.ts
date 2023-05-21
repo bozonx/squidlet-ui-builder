@@ -1,6 +1,7 @@
 import {IndexedEvents, cloneDeepObject} from 'squidlet-lib';
 import {SuperScope} from '../scope.js';
 import {AllTypes} from './valueTypes.js';
+import {SuperChangeHandler} from './types.js';
 
 
 interface SuperStrucDefinitionBase {
