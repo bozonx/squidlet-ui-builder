@@ -164,7 +164,12 @@ export class SuperStruct<T = Record<any, any>> extends SuperValueBase {
    * You can change it but changes will not affect the struct.
    */
   clone(): T {
-    return cloneDeepObject(this.value)
+    return cloneDeepObject(this.values)
+  }
+
+  link() {
+    // TODO: прилинковать значения разных struct, array или primitive
+    //       чтобы эти значения менялись одновременно
   }
 
 
