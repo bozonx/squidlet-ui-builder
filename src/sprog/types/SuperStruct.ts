@@ -109,7 +109,7 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
     // means that struct is completely initiated
     this.inited = true
     // rise an event any way if any values was set or not
-    this.changeEvent.emit(this, '')
+    this.riseMyChangeEvent()
 
     return this.roSetter
   }
@@ -136,6 +136,7 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
     this.justSetValue(pathTo, newValue)
 
     // TODO: rise change event
+    //this.riseMyChangeEvent(name)
   }
 
   resetValue(pathTo: string) {
@@ -159,17 +160,16 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
 
 
   /**
-   * Set value of self read only value
-   * @param name
-   * @param newValue
+   * Set value of self readonly value and rise an event
    */
   private roSetter = (name: keyof T, newValue: any) => {
     this.safeSetOwnValue(name, newValue, true)
-
-    // TODO: emit event
-    // this.changeEvent.emit()
+    this.riseMyChangeEvent(name)
   }
 
+  /**
+   * Set value deeply but do not rise an event
+   */
   private justSetValue(pathTo: string, value: AllTypes) {
     if (pathTo.indexOf('.') === -1) {
       // own value
@@ -196,9 +196,21 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
     this.values[name] = value as any
   }
 
+  private riseMyChangeEvent(key?: keyof T) {
+    let fullPath: string | undefined = key as string
+
+    if (this.myPath && key) {
+      fullPath = this.myPath + '.' + String(key)
+    }
+    else if (this.myPath) {
+      fullPath = this.myPath
+    }
+
+    this.changeEvent.emit(this, fullPath)
+  }
+
   private handleChildChange = (target: SuperStruct | SuperArray, childPath: string) => {
-    // TODO: правильно ли будет в случае корня???
-    const fullPath = (this.key) ? this.key + '.' + childPath : childPath
+    const fullPath = (this.myPath) ? this.myPath + '.' + childPath : childPath
 
     this.changeEvent.emit(target, fullPath)
   }

@@ -8,7 +8,8 @@ export type SuperChangeHandler = (
   // link to element which is changed. It can be a parent or its child
   target: SuperStruct | SuperArray,
   // path to child element which is changed. If '' then it is parent
-  path: string
+  // if it is undefined then means any element of root was changed
+  path?: string
 ) => void
 
 
@@ -20,8 +21,8 @@ export function isSuperValue(val: any): boolean {
 export class SuperValueBase {
   readonly superValue = true
   protected parent?: SuperValueBase
-  // name of my in parent struct or array
-  protected key?: string | number
+  // Path to myself in upper tree
+  protected myPath?: string
   protected changeEvent = new IndexedEvents<SuperChangeHandler>()
   protected inited: boolean = false
   protected scope: SuperScope
