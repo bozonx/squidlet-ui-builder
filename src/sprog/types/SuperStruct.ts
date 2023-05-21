@@ -95,7 +95,8 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
           // TODO: надо установить parent
           // TODO: надо инициализировать - передать значения
 
-          (this.values[keyName] as SuperValueBase).subscribe(this.handleChildChange)
+          // TODO: не обязательно это слушать, события можно поднимать и через set
+          //(this.values[keyName] as SuperValueBase).subscribe(this.handleChildChange)
         }
       }
     }
