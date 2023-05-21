@@ -77,6 +77,9 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
    * It returns setter for readonly params
    */
   init(initialValues?: T): ((name: keyof T, newValue: AllTypes) => void) {
+
+    // TODO: надо получить key от родителя
+
     if (this.inited) {
       throw new Error(`The struct has been already initialized`)
     }
@@ -86,7 +89,12 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
         const keyName = key as keyof T
         this.safeSetOwnValue(keyName, initialValues[keyName] as any)
         // start listen for child changes
+        // TODO: может проверить это в definition ???
         if (isSuperValue(this.values[keyName])) {
+
+          // TODO: надо установить parent
+          // TODO: надо инициализировать - передать значения
+
           (this.values[keyName] as SuperValueBase).subscribe(this.handleChildChange)
         }
       }
@@ -174,19 +182,25 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
   }
 
   private safeSetOwnValue(name: keyof T, value: AllTypes, ignoreRo: boolean = false) {
+    if (typeof this.definition[name] === 'undefined') {
+      throw new Error(
+        `Can't set value with name ${String(name)} which isn't defined in definition`
+      )
+    }
+    else if (this.definition[name].readonly) {
+      throw new Error(`Can't set readonly value of name ${String(name)}`)
+    }
 
     // TODO: check type
-    // TODO: check readonly
-    // TODO: нельзя установить новое значение, не указанное в definition
 
     this.values[name] = value as any
   }
 
-  private handleChildChange = (target: SuperStruct | SuperArray, path: string) => {
+  private handleChildChange = (target: SuperStruct | SuperArray, childPath: string) => {
+    // TODO: правильно ли будет в случае корня???
+    const fullPath = (this.key) ? this.key + '.' + childPath : childPath
 
-    // TODO: нужно к path добавить своё имя
-
-    this.changeEvent.emit(target, path)
+    this.changeEvent.emit(target, fullPath)
   }
 
   private prepareDefinition(

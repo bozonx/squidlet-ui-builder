@@ -19,6 +19,9 @@ export function isSuperValue(val: any): boolean {
 
 export class SuperValueBase {
   readonly superValue = true
+  protected parent?: SuperValueBase
+  // name of my in parent struct or array
+  protected key?: string | number
   protected changeEvent = new IndexedEvents<SuperChangeHandler>()
   protected inited: boolean = false
   protected scope: SuperScope
