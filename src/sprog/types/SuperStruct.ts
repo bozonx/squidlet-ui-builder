@@ -20,7 +20,7 @@ export type SuperStructDefinition = SuperStrucDefinitionBase & SuperStrucDefinit
 /**
  * Wrapper for SuperStruct which allows to manipulate it as common object
  */
-export function wrapStruct(struct: SuperStruct): SuperStruct {
+export function proxyStruct(struct: SuperStruct): SuperStruct {
   const handler: ProxyHandler<SuperStruct> = {
     get(target: SuperStruct, p: string) {
       return target.values[p]
