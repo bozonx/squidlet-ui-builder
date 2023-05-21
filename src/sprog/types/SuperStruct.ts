@@ -86,22 +86,21 @@ export class SuperStruct<T = Record<any, any>> extends SuperValueBase {
 
     if (initialValues) {
       for (const name of Object.keys(initialValues)) {
-
-        // TODO: check type
-        // TODO: check readonly
-
-        this.values[name] = initialValues[name]
-
+        this.safeSetValue(name, initialValues[name])
+        // start listen for child changes
         if (isSuperValue(this.values[name])) {
           (this.values[name] as SuperValueBase).changeEvent
             .addListener(this.handleChildChange)
         }
       }
     }
-
-    // TODO: если после установки значений хотябы одно required оказалось не определено
-    //       то поднимать ошибку
-
+    // check required values
+    for (const name of Object.keys(this.definition)) {
+      if (this.definition[name].required && typeof this.values[name] === 'undefined') {
+        throw new Error(`The value ${name} is required, but it wasn't initiated`)
+      }
+    }
+    // means that struct is completely initiated
     this.inited = true
     // rise an event any way if any values was set or not
     this.changeEvent.emit(this, '')
@@ -176,6 +175,14 @@ export class SuperStruct<T = Record<any, any>> extends SuperValueBase {
     objSetMutate(this.value, pathTo, newValue)
 
     this.changeEvent.emit()
+  }
+
+  private safeSetValue(name: string, value: any) {
+
+    // TODO: check type
+    // TODO: check readonly
+
+    this.values[name] = value
   }
 
   private handleChildChange = (target: SuperStruct | SuperArray, path: string) => {
