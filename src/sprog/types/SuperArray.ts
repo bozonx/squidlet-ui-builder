@@ -10,7 +10,7 @@ export interface SuperArrayItemDefinition {
 export function proxyArray(arr: SuperArray): any[] {
   const handler: ProxyHandler<any[]> = {
     get(target: any[], prop: any) {
-      console.log('get', prop)
+      //console.log('get', prop)
       // Intercept array element access
       const index = Number(prop);
       if (Number.isInteger(index)) {
@@ -26,7 +26,7 @@ export function proxyArray(arr: SuperArray): any[] {
     },
     set(target: any[], prop, value) {
       // Intercept array element assignment
-      console.log('set', prop, value)
+      //console.log('set', prop, value)
 
       // TODO: push method set value and set length - do it need to catch length set???
 
@@ -43,12 +43,21 @@ export function proxyArray(arr: SuperArray): any[] {
       }
 
       return true
-    }
-
-    // TODO: add apply
+    },
   }
 
-  return new Proxy(arr.arr, handler)
+  const a = (arr.arr as any)
+
+  a.init = arr.init
+  a.destroy = arr.destroy
+  a.has = arr.has
+  a.getValue = arr.getValue
+  a.setValue = arr.setValue
+  a.resetValue = arr.resetValue
+  a.clone = arr.clone
+  a.link = arr.link
+
+  return new Proxy(a, handler)
 }
 
 
@@ -64,7 +73,7 @@ export function proxyArray(arr: SuperArray): any[] {
 
 
 export class SuperArray<T = any[]> extends SuperValueBase {
-  arr: any[] = [0,1]
+  arr: any[] = []
   private readonly item: SuperArrayItemDefinition
 
 
@@ -75,85 +84,87 @@ export class SuperArray<T = any[]> extends SuperValueBase {
   }
 
 
-  init() {
+  init = () => {
     // TODO: return setter for ro array
   }
 
-  destroy() {
+  destroy = () => {
     super.destroy()
 
     // TODO: destroy children
   }
 
 
-  has() {
+  has = () => {
     // TODO: deeply
   }
 
-  getValue() {
+  getValue = (pathTo: string | number): any => {
+    // TODO: deeply
+    return this.arr[Number(pathTo)]
+  }
+
+  setValue = () => {
     // TODO: deeply
   }
 
-  setValue() {
+  resetValue = () => {
     // TODO: deeply
   }
 
-  resetValue() {
-    // TODO: deeply
+  clone = (): T => {
+    return [] as T
   }
 
-  clone(): T {
-
-  }
-
-  link() {
+  link = () => {
 
   }
 
   ////// Standart methods
-  push() {
-
-  }
-
-  pop() {
-
-  }
-
-  shift() {
-
-  }
-
-  unshift() {
-
-  }
-
-  fill() {
-
-  }
-
-  splice() {
-
-  }
-
-  reverse() {
-
-  }
-
-  sort() {
-
-  }
+  // push = (item: any): number => {
+  //   console.log(4444)
+  //   return this.arr.push(item)
+  // }
+  //
+  // pop() {
+  //
+  // }
+  //
+  // shift() {
+  //
+  // }
+  //
+  // unshift() {
+  //
+  // }
+  //
+  // fill() {
+  //
+  // }
+  //
+  // splice() {
+  //
+  // }
+  //
+  // reverse() {
+  //
+  // }
+  //
+  // sort() {
+  //
+  // }
 
   ////// PRIVATE
 
 }
 
 
-// const a = new SuperArray({} as any)
+// const a = new SuperArray({} as any, {} as any)
 //
 // const b = proxyArray(a)
 //
 // //b[0] = 5
 //
-// //console.log(b, b[1], b.length)
+// console.log(444, (b as any).getValue(0))
 //
 // b.push(6)
