@@ -33,7 +33,7 @@ export const superCall: SprogFn = (scope: SuperScope) => {
  *   * props - define income props, their type and default value
  *   * lines - any code execution include set vars in scope and return value
  */
-export const superFunc: SprogFn = (scope: SuperScope) => {
+export const newSuperFunc: SprogFn = (scope: SuperScope) => {
   return async (p: SuperFuncParams): Promise<any> => {
     const newSuperFunc = new SuperFunc(scope, p)
 

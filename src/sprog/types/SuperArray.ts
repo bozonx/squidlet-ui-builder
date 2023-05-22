@@ -2,6 +2,11 @@ import {SuperValueBase} from '../lib/SuperValueBase.js';
 import {SuperScope} from '../scope.js';
 
 
+export interface SuperArrayItemDefinition {
+  // TODO: add
+}
+
+
 export function proxyArray(arr: SuperArray): any[] {
   const handler: ProxyHandler<any[]> = {
     get(target: any[], prop: any) {
@@ -58,10 +63,13 @@ export function proxyArray(arr: SuperArray): any[] {
 
 export class SuperArray extends SuperValueBase {
   arr: any[] = [0,1]
+  private readonly item: SuperArrayItemDefinition
 
 
-  constructor(scope: SuperScope) {
+  constructor(scope: SuperScope, item: SuperArrayItemDefinition) {
     super(scope)
+
+    this.item = item
   }
 
 

@@ -10,7 +10,7 @@ props:
       $exp: getProp
       path: children
     do:
-      $exp: superFunc
+      $exp: newSuperFunc
       lines:
         - $exp: funcReturn
           value:
@@ -32,7 +32,7 @@ tmpl:
       $exp: getProp
       path: as
     do:
-      $exp: superFunc
+      $exp: newSuperFunc
       lines:
         -
 #tmplExp: 'for (const item of src) this.main.newComponentFromTmpl(item)'

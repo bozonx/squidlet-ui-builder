@@ -1,5 +1,5 @@
 import {simpleCall} from './lang/simpleCall.js';
-import {superCall, superFunc} from './lang/superFunc.js';
+import {superCall, newSuperFunc} from './lang/superFunc.js';
 import {deleteValue, getValue, setValue} from './lang/deepValue.js';
 import {deleteVar, newVar} from './lang/simpleVar.js';
 import {jsExp} from './lang/jsExp.js';
@@ -7,6 +7,7 @@ import {isLess, logicAnd, isEqual, isGreater, logicNot, logicOr} from './lang/bo
 import {ifElse} from './lang/ifElse.js';
 import {forEach} from './lang/forEach.js';
 import {newSuperStruct} from './lang/superStruct.js';
+import {newSuperArray} from './lang/superArray.js';
 
 
 // TODO: додулать SuperStruct
@@ -46,6 +47,7 @@ export const sprogFuncs = {
   isLess,
   ////// SUPER
   superCall,
-  superFunc,
+  newSuperFunc,
   newSuperStruct,
+  newSuperArray,
 }

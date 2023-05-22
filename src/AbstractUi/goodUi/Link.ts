@@ -8,7 +8,7 @@ uiParams:
   - text
 handlers:
   click:
-    $exp: superFunc
+    $exp: newSuperFunc
     props:
       pathToRoute:
         type: string
