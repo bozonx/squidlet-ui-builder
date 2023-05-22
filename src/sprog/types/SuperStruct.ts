@@ -266,3 +266,11 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
   }
 
 }
+
+
+const a = new SuperStruct({} as any, {
+  p1: {type: 'string', default: 'a'}
+} as any)
+const b = proxyStruct(a)
+
+console.log(b.getValue('p1'))

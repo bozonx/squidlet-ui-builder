@@ -1,9 +1,6 @@
 import {SuperStruct} from './SuperStruct.js';
 import {SuperArray} from './SuperArray.js';
 import {SuperPromise} from './SuperPromise.js';
-import {SuperNumber} from './SuperNumber.js';
-import {SuperBoolean} from './SuperBoolean.js';
-import {SuperString} from './SuperString.js';
 import {SuperFunc} from './SuperFunc.js';
 
 
@@ -15,9 +12,6 @@ export type SimpleType = PrimitiveType | SimpleArray | Record<string, any>
 export type SuperTypes = SuperStruct
   | SuperArray
   | SuperPromise
-  | SuperNumber
-  | SuperBoolean
-  | SuperString
   | SuperFunc
 export type AllTypes = SimpleType | SuperTypes
 
