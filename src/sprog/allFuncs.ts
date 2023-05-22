@@ -9,9 +9,8 @@ import {forEach} from './lang/forEach.js';
 import {newSuperStruct} from './lang/superStruct.js';
 
 
-// TODO: add SuperStruct
+// TODO: додулать SuperStruct
 // TODO: add SuperArray
-// TODO: add SuperPrimitive
 
 // TODO: simple function вообще нужен тогда???
 // TODO: add switch into isElse

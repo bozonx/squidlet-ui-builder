@@ -57,7 +57,7 @@ export function proxyStruct(struct: SuperStruct): SuperStruct {
 
 
 export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
-  // It assumes that you will not change it
+  // It assumes that you will not change it after initialization
   readonly definition: Record<keyof T, SuperStructDefinition> = {} as any
   // current values
   readonly values = {} as T
@@ -236,9 +236,12 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
     this.changeEvent.emit(this, fullPath)
   }
 
-  // TODO: review
   private handleChildChange = (target: SuperStruct | SuperArray, childPath?: string) => {
     const fullPath = (this.myPath) ? this.myPath + '.' + childPath : childPath
+
+    // TODO: что должно происходить если изменился потомок ???
+    // TODO: наверное поднять событие у себя но с данными от потомка?
+    // TODO: или поднять событие у себя как будто сам изменился?
 
     this.changeEvent.emit(target, fullPath)
   }
