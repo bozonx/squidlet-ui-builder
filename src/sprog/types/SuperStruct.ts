@@ -111,7 +111,7 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
     // rise an event any way if any values was set or not
     this.riseMyChangeEvent()
 
-    return this.roSetter
+    return this.myRoSetter
   }
 
   destroy() {
@@ -128,22 +128,34 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
     return Boolean(this.getValue(pathTo))
   }
 
+  /**
+   * You cat deeply get some primitive or other struct or super array.
+   * If it is a primitive you can't change its value.
+   * To change its value get its parent and set value via parent like: parent.value = 5
+   */
   getValue(pathTo: string): AllTypes | undefined {
     return deepGet(this.values as any, pathTo)
   }
 
+  /**
+   * Set value deeply.
+   * You can set own value or value of some deep object.
+   * Even you can set value to the deepest primitive like: struct.struct.num = 5
+   */
   setValue(pathTo: string, newValue: AllTypes) {
     this.smartSetValue(pathTo, newValue)
-
   }
 
+  /**
+   * The same as setValue but it sets null
+   */
   resetValue(pathTo: string) {
     this.smartSetValue(pathTo, null)
   }
 
   /**
-   * It make full deep clone.
-   * You can change it but changes will not affect the struct.
+   * It makes full deep clone.
+   * You can change the clone but changes will not affect the struct.
    */
   clone(): T {
     return cloneDeepObject(this.values as any)
@@ -158,7 +170,7 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
   /**
    * Set value of self readonly value and rise an event
    */
-  private roSetter = (name: keyof T, newValue: any) => {
+  private myRoSetter = (name: keyof T, newValue: any) => {
     this.safeSetOwnValue(name, newValue, true)
     this.riseMyChangeEvent(name)
   }
@@ -168,6 +180,9 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
    * It emits an event only if the deep value isn't a super type
    */
   private smartSetValue(pathTo: string, value: AllTypes) {
+
+    // TODO: нужно ставить значение примитива через родителя
+
     if (pathTo.indexOf('.') === -1) {
       // own value
       this.safeSetOwnValue(pathTo as keyof T, value)
