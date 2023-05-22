@@ -48,14 +48,14 @@ export function proxyArray(arr: SuperArray): any[] {
 
   const a = (arr.arr as any)
 
-  a.init = arr.init
-  a.destroy = arr.destroy
-  a.has = arr.has
-  a.getValue = arr.getValue
-  a.setValue = arr.setValue
-  a.resetValue = arr.resetValue
-  a.clone = arr.clone
-  a.link = arr.link
+  a.__proto__.init = arr.init
+  a.__proto__.destroy = arr.destroy
+  a.__proto__.has = arr.has
+  a.__proto__.getValue = arr.getValue
+  a.__proto__.setValue = arr.setValue
+  a.__proto__.resetValue = arr.resetValue
+  a.__proto__.clone = arr.clone
+  a.__proto__.link = arr.link
 
   return new Proxy(a, handler)
 }
@@ -163,7 +163,7 @@ export class SuperArray<T = any[]> extends SuperValueBase {
 //
 // const b = proxyArray(a)
 //
-// //b[0] = 5
+// b[0] = 5
 //
 // console.log(444, (b as any).getValue(0))
 //

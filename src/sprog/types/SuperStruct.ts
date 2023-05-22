@@ -22,18 +22,18 @@ export type SuperStructDefinition = SuperStrucDefinitionBase & SuperStrucDefinit
 /**
  * Wrapper for SuperStruct which allows to manipulate it as common object
  */
-export function proxyStruct(struct: SuperStruct): SuperStruct {
-  const handler: ProxyHandler<SuperStruct> = {
+export function proxyStruct(struct: SuperStruct): Record<any, any> {
+  const handler: ProxyHandler<Record<any, any>> = {
     get(target: SuperStruct, p: string) {
-      return target.getValue(p)
+      return struct.getValue(p)
     },
 
     has(target: SuperStruct, p: string): boolean {
-      return target.has(p)
+      return struct.has(p)
     },
 
     set(target: SuperStruct, p: string, newValue: any): boolean {
-      target.setValue(p, newValue)
+      struct.setValue(p, newValue)
 
       return true
     },
@@ -43,8 +43,7 @@ export function proxyStruct(struct: SuperStruct): SuperStruct {
     },
 
     ownKeys(target: SuperStruct): ArrayLike<string | symbol> {
-      // TODO: проверить что при запросе ключей должны вернуться ключи из values
-      return Object.keys(target.values)
+      return Object.keys(struct.values)
     },
 
     // defineProperty?(target: T, property: string | symbol, attributes: PropertyDescriptor): boolean;
@@ -53,16 +52,16 @@ export function proxyStruct(struct: SuperStruct): SuperStruct {
 
   const a = struct.values as any
 
-  a.init = struct.init
-  a.destroy = struct.destroy
-  a.has = struct.has
-  a.getValue = struct.getValue
-  a.setValue = struct.setValue
-  a.resetValue = struct.resetValue
-  a.clone = struct.clone
-  a.link = struct.link
+  a.__proto__.init = struct.init
+  a.__proto__.destroy = struct.destroy
+  a.__proto__.has = struct.has
+  a.__proto__.getValue = struct.getValue
+  a.__proto__.setValue = struct.setValue
+  a.__proto__.resetValue = struct.resetValue
+  a.__proto__.clone = struct.clone
+  a.__proto__.link = struct.link
 
-  return new Proxy(struct, handler)
+  return new Proxy(struct.values, handler)
 }
 
 
@@ -287,5 +286,6 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
 //
 // a.init({p1: 'b'})
 //
-// console.log(b.getValue('p1'))
-// //console.log((b as any)['p1'])
+// console.log(1,b.getValue('p1'))
+// console.log(2,(b as any)['p1'])
+// console.log(3,Object.keys(b))
