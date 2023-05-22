@@ -45,11 +45,22 @@ export function proxyStruct(struct: SuperStruct): SuperStruct {
     ownKeys(target: SuperStruct): ArrayLike<string | symbol> {
       // TODO: проверить что при запросе ключей должны вернуться ключи из values
       return Object.keys(target.values)
-    }
+    },
 
     // defineProperty?(target: T, property: string | symbol, attributes: PropertyDescriptor): boolean;
     // getOwnPropertyDescriptor?(target: T, p: string | symbol): PropertyDescriptor | undefined;
   }
+
+  const a = struct.values as any
+
+  a.init = struct.init
+  a.destroy = struct.destroy
+  a.has = struct.has
+  a.getValue = struct.getValue
+  a.setValue = struct.setValue
+  a.resetValue = struct.resetValue
+  a.clone = struct.clone
+  a.link = struct.link
 
   return new Proxy(struct, handler)
 }
@@ -76,7 +87,7 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
    * Init with initial values.
    * It returns setter for readonly params
    */
-  init(initialValues?: T): ((name: keyof T, newValue: AllTypes) => void) {
+  init = (initialValues?: T): ((name: keyof T, newValue: AllTypes) => void) => {
 
     // TODO: установка default value не сработала
     // TODO: надо получить key от родителя
@@ -115,7 +126,7 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
     return this.myRoSetter
   }
 
-  destroy() {
+  destroy = () => {
     super.destroy()
 
     for (const key of Object.keys(this.values as any)) {
@@ -125,7 +136,7 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
   }
 
 
-  has(pathTo: string): boolean {
+  has = (pathTo: string): boolean => {
     return Boolean(this.getValue(pathTo))
   }
 
@@ -134,7 +145,7 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
    * If it is a primitive you can't change its value.
    * To change its value get its parent and set value via parent like: parent.value = 5
    */
-  getValue(pathTo: string): AllTypes | undefined {
+  getValue = (pathTo: string): AllTypes | undefined => {
     return deepGet(this.values as any, pathTo)
   }
 
@@ -143,14 +154,14 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
    * You can set own value or value of some deep object.
    * Even you can set value to the deepest primitive like: struct.struct.num = 5
    */
-  setValue(pathTo: string, newValue: AllTypes) {
+  setValue = (pathTo: string, newValue: AllTypes) => {
     this.smartSetValue(pathTo, newValue)
   }
 
   /**
    * The same as setValue but it sets null
    */
-  resetValue(pathTo: string) {
+  resetValue = (pathTo: string) => {
     this.smartSetValue(pathTo, null)
   }
 
@@ -158,11 +169,11 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
    * It makes full deep clone.
    * You can change the clone but changes will not affect the struct.
    */
-  clone(): T {
+  clone = (): T => {
     return cloneDeepObject(this.values as any)
   }
 
-  link() {
+  link = () => {
     // TODO: прилинковать значения разных struct, array или primitive
     //       чтобы эти значения менялись одновременно
   }
@@ -269,12 +280,12 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
 }
 
 
-const a = new SuperStruct({} as any, {
-  p1: {type: 'string', default: 'a'}
-} as any)
-const b = proxyStruct(a)
-
-a.init({p1: 'b'})
-
-//console.log(b.getValue('p1'))
-console.log((b as any)['p1'])
+// const a = new SuperStruct({} as any, {
+//   p1: {type: 'string', default: 'a'}
+// } as any)
+// const b = proxyStruct(a)
+//
+// a.init({p1: 'b'})
+//
+// console.log(b.getValue('p1'))
+// //console.log((b as any)['p1'])
