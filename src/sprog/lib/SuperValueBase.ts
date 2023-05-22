@@ -1,12 +1,10 @@
 import {IndexedEvents} from 'squidlet-lib';
-import {SuperStruct} from '../types/SuperStruct.js';
-import {SuperArray} from '../types/SuperArray.js';
 import {SuperScope} from '../scope.js';
 
 
 export type SuperChangeHandler = (
   // link to element which is changed. It can be a parent or its child
-  target: SuperStruct | SuperArray,
+  target: SuperValueBase,
   // path to child element which is changed. If '' then it is parent
   // if it is undefined then means any element of root was changed
   path?: string
