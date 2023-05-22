@@ -78,6 +78,7 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
    */
   init(initialValues?: T): ((name: keyof T, newValue: AllTypes) => void) {
 
+    // TODO: установка default value не сработала
     // TODO: надо получить key от родителя
 
     if (this.inited) {
@@ -273,4 +274,7 @@ const a = new SuperStruct({} as any, {
 } as any)
 const b = proxyStruct(a)
 
-console.log(b.getValue('p1'))
+a.init({p1: 'b'})
+
+//console.log(b.getValue('p1'))
+console.log((b as any)['p1'])
