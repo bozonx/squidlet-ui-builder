@@ -36,12 +36,11 @@ export const SUPER_TYPES = {
   SuperStruct: 'SuperStruct',
   SuperArray: 'SuperArray',
   SuperPromise: 'SuperPromise',
-  SuperNumber: 'SuperNumber',
-  SuperBoolean: 'SuperBoolean',
-  SuperString: 'SuperString',
   SuperFunc: 'SuperFunc',
 }
 export const All_TYPES = {
   ...SIMPLE_TYPES,
   ...SUPER_TYPES,
+  any: 'any',
+  Promise: 'Promise',
 }

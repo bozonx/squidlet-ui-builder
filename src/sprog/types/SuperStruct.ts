@@ -1,12 +1,13 @@
 import {cloneDeepObject, deepGet, deepSet} from 'squidlet-lib';
 import {SuperScope} from '../scope.js';
-import {AllTypes} from './valueTypes.js';
+import {All_TYPES, AllTypes} from './valueTypes.js';
 import {SuperValueBase, isSuperValue} from '../lib/SuperValueBase.js';
 import {SuperArray} from './SuperArray.js';
+import {isCorrespondingType} from '../lib/isCorrespondingType.js';
 
 
 interface SuperStrucDefinitionBase {
-  type: AllTypes
+  type: keyof typeof All_TYPES
   default?: any
 }
 
@@ -210,11 +211,14 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
         `Can't set value with name ${String(name)} which isn't defined in definition`
       )
     }
-    else if (this.definition[name].readonly) {
+    else if (!ignoreRo && this.definition[name].readonly) {
       throw new Error(`Can't set readonly value of name ${String(name)}`)
     }
-
-    // TODO: check type
+    else if (!isCorrespondingType(value, this.definition[name].type)) {
+      throw new Error(
+        `The value ${String(name)} is not corresponding type ${this.definition[name].type}`
+      )
+    }
 
     this.values[name] = value as any
   }
