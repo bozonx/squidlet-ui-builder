@@ -16,7 +16,7 @@ handlers:
           $exp: getPrimitive
           path: context.args[0]
     lines:
-      - $exp: superCall
+      - $exp: callSuperFunc
         path: app.router.toPath
         params:
           path:

@@ -10,7 +10,7 @@ import {makeFuncProxy} from '../lib/functionProxy.js';
  *   * path {string} - path to super function in scope
  *   * values {Object} - values of super function's props which will be called
  */
-export const superCall: SprogFn = (scope: SuperScope) => {
+export const callSuperFunc: SprogFn = (scope: SuperScope) => {
   return async (p: {path: string, values: Record<any, any>}): Promise<void> => {
     const fn = deepGet(scope, p.path)
 

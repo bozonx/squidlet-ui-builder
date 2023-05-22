@@ -1,5 +1,5 @@
 import {simpleCall} from './lang/simpleCall.js';
-import {superCall, newSuperFunc} from './lang/superFunc.js';
+import {callSuperFunc, newSuperFunc} from './lang/superFunc.js';
 import {deleteValue, getValue, setValue} from './lang/deepValue.js';
 import {deleteVar, newVar} from './lang/simpleVar.js';
 import {jsExp} from './lang/jsExp.js';
@@ -12,12 +12,11 @@ import {newSuperArray} from './lang/superArray.js';
 
 // TODO: додулать SuperStruct
 // TODO: add SuperArray
-
-// TODO: simple function вообще нужен тогда???
 // TODO: add switch into isElse
 // TODO: SuperFunc - add return
 // TODO: review forEach - add support of return, break, continue, inner cycles and ifElse
 
+// TODO: simple function вообще нужен тогда???
 // TODO: add module
 // TODO: add simpleClass
 // TODO: add SuperClass
@@ -46,7 +45,7 @@ export const sprogFuncs = {
   isGreater,
   isLess,
   ////// SUPER
-  superCall,
+  callSuperFunc,
   newSuperFunc,
   newSuperStruct,
   newSuperArray,
