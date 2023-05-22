@@ -1,12 +1,20 @@
-import {deepGet} from 'squidlet-lib';
-import {SprogFn} from '../scope.js';
+import {SuperScope} from '../scope.js';
+import {proxyNumber, SuperNumber} from '../lib/SuperNumber.js';
 
 
-// export const getPrimitive: SprogFn = (scope: Record<string, any>) => {
-//   return async (p: {path: string}): Promise<any> => {
-//
-//     // TODO: учитывать что по пути может быть superStruct или superArray
-//
-//     return deepGet(scope, p.path)
-//   }
-// }
+export function newSuperNumber(scope: SuperScope) {
+  return async (p: {initialValue: number}): Promise<number> => {
+    const numInstance = new SuperNumber(scope, p.initialValue)
+
+    return proxyNumber(numInstance)
+  }
+}
+
+(async () => {
+  let a = await newSuperNumber({} as any)({initialValue: 5})
+
+  //a = 6
+
+  console.log(111, a)
+})()
+
