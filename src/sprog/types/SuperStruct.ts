@@ -2,7 +2,6 @@ import {cloneDeepObject, deepGet, deepSet} from 'squidlet-lib';
 import {SuperScope} from '../scope.js';
 import {All_TYPES, AllTypes} from './valueTypes.js';
 import {SuperValueBase, isSuperValue} from '../lib/SuperValueBase.js';
-import {SuperArray} from './SuperArray.js';
 import {isCorrespondingType} from '../lib/isCorrespondingType.js';
 
 
@@ -236,7 +235,7 @@ export class SuperStruct<T = Record<string, AllTypes>> extends SuperValueBase {
     this.changeEvent.emit(this, fullPath)
   }
 
-  private handleChildChange = (target: SuperStruct | SuperArray, childPath?: string) => {
+  private handleChildChange = (target: SuperValueBase, childPath?: string) => {
     const fullPath = (this.myPath) ? this.myPath + '.' + childPath : childPath
 
     // TODO: что должно происходить если изменился потомок ???

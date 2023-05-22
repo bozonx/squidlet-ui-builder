@@ -44,6 +44,8 @@ export function proxyArray(arr: SuperArray): any[] {
 
       return true
     }
+
+    // TODO: add apply
   }
 
   return new Proxy(arr.arr, handler)
@@ -61,7 +63,7 @@ export function proxyArray(arr: SuperArray): any[] {
  */
 
 
-export class SuperArray extends SuperValueBase {
+export class SuperArray<T = any[]> extends SuperValueBase {
   arr: any[] = [0,1]
   private readonly item: SuperArrayItemDefinition
 
@@ -73,23 +75,75 @@ export class SuperArray extends SuperValueBase {
   }
 
 
-  push = () => {
-
+  init() {
+    // TODO: return setter for ro array
   }
 
-  pop = () => {
+  destroy() {
+    super.destroy()
 
-  }
-
-  shift = () => {
-
-  }
-
-  unshift = () => {
-
+    // TODO: destroy children
   }
 
 
+  has() {
+    // TODO: deeply
+  }
+
+  getValue() {
+    // TODO: deeply
+  }
+
+  setValue() {
+    // TODO: deeply
+  }
+
+  resetValue() {
+    // TODO: deeply
+  }
+
+  clone(): T {
+
+  }
+
+  link() {
+
+  }
+
+  ////// Standart methods
+  push() {
+
+  }
+
+  pop() {
+
+  }
+
+  shift() {
+
+  }
+
+  unshift() {
+
+  }
+
+  fill() {
+
+  }
+
+  splice() {
+
+  }
+
+  reverse() {
+
+  }
+
+  sort() {
+
+  }
+
+  ////// PRIVATE
 
 }
 
