@@ -10,8 +10,8 @@ import {newSuperStruct} from './lang/superStruct.js';
 import {newSuperArray} from './lang/superArray.js';
 
 
-// TODO: додулать SuperStruct
-// TODO: add SuperArray
+// TODO: доделать SuperStruct
+// TODO: доделать SuperArray
 // TODO: add switch into isElse
 // TODO: SuperFunc - add return
 // TODO: review forEach - add support of return, break, continue, inner cycles and ifElse
@@ -20,6 +20,7 @@ import {newSuperArray} from './lang/superArray.js';
 // TODO: add module
 // TODO: add simpleClass
 // TODO: add SuperClass
+// TODO: add test
 
 /*
  * SuperProg visual programming language
