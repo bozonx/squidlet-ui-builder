@@ -1,8 +1,7 @@
 import {IndexedEvents, IndexedEventEmitter, ConsoleLogger, Logger} from 'squidlet-lib'
 import {OutcomeEvents, IncomeEvents} from './interfaces/DomEvents.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
-import {ROOT_COMPONENT_ID, RootComponent} from './RootComponent.js';
-import {ComponentDefinition} from './Component.js';
+import {RootComponent} from './RootComponent.js';
 import {AppSingleton} from './AppSingleton.js';
 import {AbstractUiPackage} from './interfaces/types.js';
 import {PackageManager} from './PackageManager.js';
@@ -28,7 +27,7 @@ export class Main {
   log: Logger
   readonly componentsManager = new ComponentsManager(this)
   // TODO: почему это не в AppSingleton ???
-  readonly root: RootComponent
+  readonly root = new RootComponent(this)
   readonly app = new AppSingleton(this)
   private readonly packageManager = new PackageManager(this)
 
@@ -36,8 +35,6 @@ export class Main {
   constructor() {
     // TODO: какой logLevel передавать??? дебаг ставить если в конфиге дебаг
     this.log = new ConsoleLogger('info')
-
-    this.root = new RootComponent(this, this.componentsManager.getDefinition(ROOT_COMPONENT_ID))
   }
 
   async init() {

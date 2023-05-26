@@ -20,7 +20,7 @@ export class RootComponent extends Component {
   //readonly uiElId = ROOT_COMPONENT_ID
 
 
-  constructor(main: Main, componentDefinition: ComponentDefinition) {
+  constructor(main: Main) {
     const slots: SlotsDefinition = {
       // TODO: правильно ???
       default: componentDefinition.tmpl
@@ -31,6 +31,11 @@ export class RootComponent extends Component {
     super(main, parent, componentDefinition, slots, new SuperStruct({}))
   }
 
+
+  init() {
+    //, componentDefinition: ComponentDefinition
+    this.componentsManager.getDefinition(ROOT_COMPONENT_ID)
+  }
 
   protected makeId(): string {
     return ROOT_COMPONENT_ID

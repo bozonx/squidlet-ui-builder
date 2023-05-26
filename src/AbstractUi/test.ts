@@ -26,7 +26,8 @@ import {routerPlugin} from './router/routerPlugin.js';
 
   main.use(goodUiPlugin())
   main.use(routerPlugin())
-  main.componentsManager.registerAppComponents(definitions)
+  // better to register them after all the plugins in case to avoid overlay
+  main.componentsManager.registerComponents(definitions)
 
 
   main.outcomeEvents.addListener((event: OutcomeEvents, el: RenderedElement) => {
