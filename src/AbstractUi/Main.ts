@@ -1,7 +1,6 @@
 import {IndexedEvents, IndexedEventEmitter, ConsoleLogger, Logger} from 'squidlet-lib'
 import {OutcomeEvents, IncomeEvents} from './interfaces/DomEvents.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
-import {RootComponent} from './RootComponent.js';
 import {AppSingleton} from './AppSingleton.js';
 import {AbstractUiPackage} from './interfaces/types.js';
 import {PackageManager} from './PackageManager.js';
@@ -26,8 +25,6 @@ export class Main {
   readonly appEvents = new IndexedEventEmitter()
   log: Logger
   readonly componentsManager = new ComponentsManager(this)
-  // TODO: почему это не в AppSingleton ???
-  readonly root = new RootComponent(this)
   readonly app = new AppSingleton(this)
   private readonly packageManager = new PackageManager(this)
 
@@ -40,9 +37,7 @@ export class Main {
   async init() {
     this.appEvents.emit(APP_EVENTS.initStarted)
 
-    await this.root.init()
-    // render root component
-    await this.root.mount()
+    await this.app.init()
 
     this.appEvents.emit(APP_EVENTS.initFinished)
   }
@@ -53,8 +48,7 @@ export class Main {
     this.outcomeEvents.destroy()
     this.incomeEvents.destroy()
     this.appEvents.destroy()
-    await this.root.unmount()
-    await this.root.destroy()
+    await this.app.destroy()
   }
 
 
