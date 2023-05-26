@@ -22,11 +22,11 @@ import {ROUTER_COMPONENT} from './router/index.js';
     (pathTo: string) => fs.readFile(path.resolve(filesRoot, pathTo), 'utf8')
   )
 
-  const libs = {
-    goodUi: GOOD_UI,
-    router: ROUTER_COMPONENT,
-  }
-  const main = new Main(definitions, libs)
+  // const libs = {
+  //   goodUi: GOOD_UI,
+  //   router: ROUTER_COMPONENT,
+  // }
+  const main = new Main(definitions)
 
 
   main.outcomeEvents.addListener((event: OutcomeEvents, el: RenderedElement) => {

@@ -31,24 +31,11 @@ export class Main {
 
   constructor(
     preloadedComponentsDefinitions: Record<string, ComponentDefinition>,
-    // like: {libName: {componentName: ComponentDefinitionString}}
-    componentsLibsStr: Record<string, Record<string, string>> = {}
   ) {
-    // TODO: какой logLevel передавать???
+    // TODO: какой logLevel передавать??? дебаг ставить если в конфиге дебаг
     this.log = new ConsoleLogger('info')
     this.appComponentsDefinitions = preloadedComponentsDefinitions
-
-    const libs: Record<string, Record<string, string>> = {
-      std: STD_COMPONENTS,
-      ...componentsLibsStr
-    }
-
-    for (const libName of Object.keys(libs)) {
-      for (const cmpName of Object.keys(libs[libName])) {
-        this.componentsLib[cmpName] = yaml.parse(libs[libName][cmpName])
-      }
-    }
-
+    // TODO: почему это не в AppSingleton ???
     this.root = new RootComponent(this, this.appComponentsDefinitions[ROOT_COMPONENT_ID])
   }
 
