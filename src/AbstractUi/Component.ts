@@ -1,7 +1,6 @@
 import {newScope, SuperScope} from 'squidlet-sprog';
 import {omitObj, makeUniqId} from 'squidlet-lib';
 import {UiElementDefinition} from './types/UiElementDefinitionBase.js';
-import {Main} from './Main.js';
 import {IncomeEvents, OutcomeEvents} from './types/DomEvents.js';
 import {RenderedElement} from './types/RenderedElement.js';
 import {SuperStruct} from '../../../squidlet-sprog/src/index.js';
@@ -365,10 +364,11 @@ export class Component {
 
     for (const item of this.componentDefinition.uiParams) {
       if (typeof item === 'string') {
-        if (this.state.has(item)) {
+        if (this.state.hasKey(item)) {
+          // TODO: учитывай что getValue принимает deepPath
           res[item] = this.state.getValue(item)
         }
-        else if (this.props.has(item)) {
+        else if (this.props.hasKey(item)) {
           res[item] = this.props.getValue(item)
         }
       }
