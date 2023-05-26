@@ -129,16 +129,15 @@ export class Component {
 
   async destroy() {
     this.app.incomeEvents.removeListener(this.incomeEventListenerIndex)
+
+    for (const component of this.children) await component.destroy()
+
+    this.children.$super.destroy()
     await this.slots.destroy()
     // TODO: родитель должен понять что ребенок дестроится и разорвать связь у себя
     //       и удалить его у себя
     this.props.$super.destroy()
     this.state.$super.destroy()
-
-    for (const component of this.children) await component.destroy()
-
-    this.children.$super.destroy()
-
   }
 
 
