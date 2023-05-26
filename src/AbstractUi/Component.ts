@@ -22,7 +22,7 @@ import {AppSingleton, COMPONENT_EVENT_PREFIX} from './AppSingleton.js';
 // TODO: call onUnmount component's callback of component definition
 
 
-export interface ComponentDefinition {
+export interface ComponentInstanceDefinition {
   name: string
   // props which are controlled by parent component
   props?: Record<string, SuperItemDefinition>
@@ -63,7 +63,7 @@ export class Component {
 
   protected readonly app: AppSingleton
   // initial component definition with its children
-  protected readonly componentDefinition: ComponentDefinition
+  protected readonly componentDefinition: ComponentInstanceDefinition
   // position of UI children lib. Like [componentId, ...]
   protected uiChildrenPositions: string[] = []
   protected state: SuperStruct
@@ -89,7 +89,7 @@ export class Component {
     app: AppSingleton,
     parent: Component,
     // definition component itself
-    componentDefinition: ComponentDefinition,
+    componentDefinition: ComponentInstanceDefinition,
     // slots of component which get from parent component template
     slotsDefinition: SlotsDefinition,
     // props which parent give
@@ -277,7 +277,7 @@ export class Component {
     componentName: string
     propsValues: Record<string, any>
     slotDefinition: SlotsDefinition
-    componentDefinition: ComponentDefinition
+    componentDefinition: ComponentInstanceDefinition
     props: SuperStruct
     propSetter: (pathTo: string, newValue: any) => void
   } {
