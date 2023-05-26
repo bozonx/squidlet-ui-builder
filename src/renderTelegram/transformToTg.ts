@@ -1,4 +1,4 @@
-import {RenderedElement} from '../AbstractUi/types/RenderedElement.js';
+import {RenderedElement} from '../../../squidlet-abstract-ui/src/types/RenderedElement.js';
 import {TgReplyButton} from './TgReplyButton.js';
 
 
