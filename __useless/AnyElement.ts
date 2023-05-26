@@ -29,7 +29,7 @@
 // import {Text} from '../types/Text.js'
 // import {ButtonGroup} from '../types/ButtonGroup.js'
 // import {Fragment} from '../types/Fragment.js'
-import {Document} from '../stdLib/Document.js';
+import {Document} from '../src/AbstractUi/stdLib/Document';
 
 
 export type AnyElement = Document

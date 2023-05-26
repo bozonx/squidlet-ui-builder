@@ -1,8 +1,8 @@
-import {Main} from './Main.js';
 import {Component, ComponentDefinition} from './Component.js';
 import {SuperStruct} from '../../../squidlet-sprog/src/index.js';
 import {SlotsDefinition} from './ComponentSlotsManager.js';
 import {ScreenDefinition} from './router/Screen.js';
+import {AppSingleton} from './AppSingleton.js';
 
 
 export interface RootComponentDefinition extends ComponentDefinition {
@@ -20,7 +20,7 @@ export class RootComponent extends Component {
   //readonly uiElId = ROOT_COMPONENT_ID
 
 
-  constructor(main: Main) {
+  constructor(app: AppSingleton) {
     const slots: SlotsDefinition = {
       // TODO: правильно ???
       default: componentDefinition.tmpl
@@ -28,13 +28,13 @@ export class RootComponent extends Component {
     // TODO: не очень хорошо так делать
     const parent = null as any
 
-    super(main, parent, componentDefinition, slots, new SuperStruct({}))
+    super(app, parent, componentDefinition, slots, new SuperStruct({}))
   }
 
 
   init() {
     //, componentDefinition: ComponentDefinition
-    this.componentsManager.getDefinition(ROOT_COMPONENT_ID)
+    //this.app.getComponentDefinition(ROOT_COMPONENT_ID)
   }
 
   protected makeId(): string {

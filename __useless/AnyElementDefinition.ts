@@ -1,4 +1,4 @@
-import {DocumentDefinition} from '../stdLib/Document.js';
+import {DocumentDefinition} from '../src/AbstractUi/stdLib/Document';
 
 
 export interface AnyElementDefinitions {

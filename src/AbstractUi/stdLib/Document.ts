@@ -1,5 +1,5 @@
 import {IndexedEvents} from 'squidlet-lib'
-import {AnyElement} from '../types/AnyElement.js'
+import {AnyElement} from '../../../__useless/AnyElement.js'
 import {UiElementDefinitionBase} from '../types/UiElementDefinitionBase.js'
 
 

@@ -13,12 +13,12 @@ export const COMPONENT_EVENT_PREFIX = 'C|'
 
 
 /**
- * It is context for components and whole app structure
+ * It is a context for components and whole app structure
  */
 export class AppSingleton {
   readonly outcomeEvents = new IndexedEvents<OutcomeEventHandler>()
   readonly incomeEvents = new IndexedEventEmitter()
-  readonly root: RootComponent
+  readonly root: RootComponent = new RootComponent(this)
   private readonly main: Main
 
 
@@ -32,7 +32,6 @@ export class AppSingleton {
 
   constructor(main: Main) {
     this.main = main
-    this.root = new RootComponent(this.main)
   }
 
 
