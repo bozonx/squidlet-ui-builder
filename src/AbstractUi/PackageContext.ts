@@ -1,7 +1,7 @@
+import yaml from 'yaml';
 import {Logger} from 'squidlet-lib'
 import {Main} from './Main.js';
 import {STD_COMPONENTS} from './stdLib/index.js';
-import yaml from 'yaml';
 
 
 export class PackageContext {
@@ -22,7 +22,7 @@ export class PackageContext {
   }
 
   registerComponentsLib(libName: string) {
-    this.main.registerComponentsLib(libName)
+    this.main.componentsManager.registerComponentsLib(libName)
 
     // like: {libName: {componentName: ComponentDefinitionString}}
     componentsLibsStr: Record<string, Record<string, string>> = {}

@@ -288,7 +288,7 @@ export class Component {
     const componentName: string = childUiDefinition.component
     // values of child props which are set in this (parent) component
     const propsValues: Record<string, any> = omitObj(childUiDefinition, 'component', 'slot')
-    const componentDefinition = this.main
+    const componentDefinition = this.main.componentsManager
       .getComponentDefinition(componentName)
     const props = new SuperStruct(
       // if no props then put just empty props
