@@ -1,4 +1,10 @@
-import {newScope, SuperScope} from 'squidlet-sprog';
+import {
+  newScope,
+  SuperScope,
+  SuperItemDefinition,
+  SuperFuncDefinition,
+  SimpleFuncDefinition
+} from 'squidlet-sprog';
 import {omitObj, makeUniqId} from 'squidlet-lib';
 import {CmpInstanceDefinition} from './types/CmpInstanceDefinition.js';
 import {IncomeEvents, OutcomeEvents} from './types/DomEvents.js';
@@ -11,30 +17,24 @@ import {AppSingleton, COMPONENT_EVENT_PREFIX} from './AppSingleton.js';
 
 // TODO: поддержка перемещения элементов
 
-// TODO: нужен какой-то scope где будет доступ в sprog к props, state
-//       и доступ к переменным навешанные на props навешанных на потомков
-
 // TODO: run onUpdate callback of component definition
 // TODO: call onMount component's callback of component definition
 // TODO: call onUnmount component's callback of component definition
 
 
 export interface ComponentDefinition {
-
-  // TODO: add others component parameters
-
   name: string
   // props which are controlled by parent component
-  props?: Record<string, SuperStructInitDefinition>
+  props?: Record<string, SuperItemDefinition>
   // local state
-  state?: Record<string, SuperStructInitDefinition>
+  state?: Record<string, SuperItemDefinition>
   // names of params which will be sent to UI.
   // they will be got from props and state.
   // to rename or get param from component use [newName, () => { return ... }]
   uiParams?: (string | [string, () => any])[]
-  // TODO: add there type of Sprog
-  handlers?: Record<string, any>
-  tmpl?: UiElementDefinition[]
+  // handlers of income ui events. Like {click: $expDefinition}
+  handlers?: Record<string, SuperFuncDefinition | SimpleFuncDefinition>
+  tmpl?: CmpInstanceDefinition[]
 }
 
 /**
@@ -44,8 +44,10 @@ export interface ComponentScope {
   app: AppSingleton
   props: SuperStruct
   state: SuperStruct
+
+  // TODO: чо за нах?
   // local vars and context of functions execution
-  context: Record<any, any>
+  //context: Record<any, any>
 }
 
 
@@ -54,14 +56,9 @@ export class Component {
   readonly isRoot: boolean = false
   // componentId
   readonly id: string
-
-  // TODO: поидее не нужно так как 1 компонент = 1 ui элемент
-  // id of UI element which is represents this component
-  //readonly abstract uiElId: string
-
-  // like {componentId: Component}
+  // Not ordered children components. Like {componentId: Component}
   readonly children: Record<string, Component> = {}
-  // if it is root then it will be null
+  // Parent of this component. If it is root then it will be null
   readonly parent: Component
 
   protected readonly app: AppSingleton
