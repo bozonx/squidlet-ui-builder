@@ -1,10 +1,21 @@
+import {IndexedEventEmitter, IndexedEvents} from 'squidlet-lib'
 import {Main} from './Main.js';
 import {RootComponent} from './RootComponent.js';
+import {IncomeEvents, OutcomeEvents} from './types/DomEvents.js';
+import {RenderedElement} from './types/RenderedElement.js';
+
+
+type OutcomeEventHandler = (event: OutcomeEvents, el: RenderedElement) => void
+
+
+export const COMPONENT_EVENT_PREFIX = 'C|'
 
 
 export class AppSingleton {
-  private readonly main: Main
+  readonly outcomeEvents = new IndexedEvents<OutcomeEventHandler>()
+  readonly incomeEvents = new IndexedEventEmitter()
   readonly root: RootComponent
+  private readonly main: Main
 
 
   // TODO: сделать по нормальному
@@ -28,9 +39,25 @@ export class AppSingleton {
   }
 
   async destroy() {
+    this.outcomeEvents.destroy()
+    this.incomeEvents.destroy()
     await this.root.unmount()
     await this.root.destroy()
   }
 
+
+  /**
+   * Call it from outside code
+   */
+  emitIncomeEvent(event: IncomeEvents, componentId: string, ...data: any[]) {
+    // emit ordinary event
+    this.incomeEvents.emit(event, componentId, ...data)
+    // emit component specific event
+    this.incomeEvents.emit(COMPONENT_EVENT_PREFIX + componentId, event, ...data)
+  }
+
+  setRouter() {
+    // TODO: add
+  }
 
 }

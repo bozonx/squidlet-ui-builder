@@ -12,15 +12,15 @@ export class PackageContext {
 
 
   setRouter() {
-    this.main.setRouter()
+    this.main.app.setRouter()
   }
 
   setLogger(logger: Logger) {
     this.main.setLogger(logger)
   }
 
-  registerComponentsLib(components: Record<string, string>) {
-    this.main.componentsManager.registerComponentsLib(components)
+  registerComponents(components: Record<string, string>) {
+    this.main.componentsManager.registerComponents(components)
   }
 
 }

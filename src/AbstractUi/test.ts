@@ -31,7 +31,7 @@ import {AppConfig} from './types/AppConfig.js';
   main.componentsManager.registerComponents(definitions)
 
 
-  main.outcomeEvents.addListener((event: OutcomeEvents, el: RenderedElement) => {
+  main.app.outcomeEvents.addListener((event: OutcomeEvents, el: RenderedElement) => {
     //console.log(2222, event, JSON.stringify(el, null, 2))
 
     const [tgButtons, message] = transformToTg(el)
@@ -39,7 +39,7 @@ import {AppConfig} from './types/AppConfig.js';
     console.log(3333, message, tgButtons, (tgButtons[0][0] as any).callback_data)
 
     setTimeout(() => {
-      main.emitIncomeEvent(
+      main.app.emitIncomeEvent(
         IncomeEvents.click,
         (tgButtons[0][0] as any).callback_data,
         'data111'
