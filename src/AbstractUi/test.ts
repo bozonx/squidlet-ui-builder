@@ -4,11 +4,11 @@ import {fileURLToPath} from 'url';
 import {Main} from './Main.js';
 import path from 'node:path';
 import {preloader} from './preloader.js';
-import {GOOD_UI} from './goodUi/index.js';
 import {IncomeEvents, OutcomeEvents} from './interfaces/DomEvents.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
 import {transformToTg} from '../renderTelegram/transformToTg.js';
-import {ROUTER_COMPONENT} from './router/index.js';
+import {goodUiPlugin} from './goodUi/goodUiPlugin.js';
+import {routerPlugin} from './router/routerPlugin.js';
 
 
 (async () => {
@@ -22,11 +22,10 @@ import {ROUTER_COMPONENT} from './router/index.js';
     (pathTo: string) => fs.readFile(path.resolve(filesRoot, pathTo), 'utf8')
   )
 
-  // const libs = {
-  //   goodUi: GOOD_UI,
-  //   router: ROUTER_COMPONENT,
-  // }
   const main = new Main(definitions)
+
+  main.use(goodUiPlugin())
+  main.use(routerPlugin())
 
 
   main.outcomeEvents.addListener((event: OutcomeEvents, el: RenderedElement) => {

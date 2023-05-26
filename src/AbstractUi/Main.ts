@@ -25,17 +25,15 @@ export class Main {
   readonly outcomeEvents = new IndexedEvents<OutcomeEventHandler>()
   readonly incomeEvents = new IndexedEventEmitter()
   readonly appEvents = new IndexedEventEmitter()
+  log: Logger
+  readonly componentsManager = new ComponentsManager(this)
   // TODO: почему это не в AppSingleton ???
   readonly root: RootComponent
   readonly app = new AppSingleton(this)
-  readonly componentsManager = new ComponentsManager(this)
-  log: Logger
   private readonly packageManager = new PackageManager(this)
 
 
-  constructor(
-    preloadedComponentsDefinitions: Record<string, ComponentDefinition>,
-  ) {
+  constructor(preloadedComponentsDefinitions: Record<string, ComponentDefinition>) {
     // TODO: какой logLevel передавать??? дебаг ставить если в конфиге дебаг
     this.log = new ConsoleLogger('info')
 

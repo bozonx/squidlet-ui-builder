@@ -21,7 +21,7 @@ export class PackageContext {
     this.main.setLogger(logger)
   }
 
-  registerComponentsLib(libName: string) {
+  registerComponentsLib(libName: string, components: Record<string, string>) {
     this.main.componentsManager.registerComponentsLib(libName)
 
     // like: {libName: {componentName: ComponentDefinitionString}}
