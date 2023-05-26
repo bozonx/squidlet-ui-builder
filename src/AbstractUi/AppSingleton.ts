@@ -4,7 +4,7 @@ import {RootComponent} from './RootComponent.js';
 
 export class AppSingleton {
   private readonly main: Main
-  readonly root = new RootComponent(this)
+  readonly root: RootComponent
 
 
   // TODO: сделать по нормальному
@@ -17,6 +17,7 @@ export class AppSingleton {
 
   constructor(main: Main) {
     this.main = main
+    this.root = new RootComponent(this.main)
   }
 
 

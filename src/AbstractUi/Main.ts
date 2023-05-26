@@ -5,6 +5,7 @@ import {AppSingleton} from './AppSingleton.js';
 import {AbstractUiPackage} from './types/types.js';
 import {PackageManager} from './PackageManager.js';
 import {ComponentsManager} from './ComponentsManager.js';
+import {APP_CONFIG_DEFAULTS, AppConfig} from './types/AppConfig.js';
 
 
 type OutcomeEventHandler = (event: OutcomeEvents, el: RenderedElement) => void
@@ -25,13 +26,19 @@ export class Main {
   readonly appEvents = new IndexedEventEmitter()
   log: Logger
   readonly componentsManager = new ComponentsManager(this)
+  readonly config: AppConfig
   readonly app = new AppSingleton(this)
   private readonly packageManager = new PackageManager(this)
 
 
-  constructor() {
-    // TODO: какой logLevel передавать??? дебаг ставить если в конфиге дебаг
-    this.log = new ConsoleLogger('info')
+  constructor(config: Partial<AppConfig>) {
+    this.config = {
+      ...APP_CONFIG_DEFAULTS,
+      ...config,
+    }
+    this.log = new ConsoleLogger(
+      (this.config.debug) ? 'debug' : this.config.logLevel
+    )
   }
 
   async init() {

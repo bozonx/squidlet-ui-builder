@@ -9,6 +9,7 @@ import {RenderedElement} from './types/RenderedElement.js';
 import {transformToTg} from '../renderTelegram/transformToTg.js';
 import {goodUiPlugin} from './goodUi/goodUiPlugin.js';
 import {routerPlugin} from './router/routerPlugin.js';
+import {AppConfig} from './types/AppConfig.js';
 
 
 (async () => {
@@ -21,8 +22,8 @@ import {routerPlugin} from './router/routerPlugin.js';
     path.resolve(filesRoot, 'root.yaml'),
     (pathTo: string) => fs.readFile(path.resolve(filesRoot, pathTo), 'utf8')
   )
-
-  const main = new Main()
+  const config: Partial<AppConfig> = {}
+  const main = new Main(config)
 
   main.use(goodUiPlugin())
   main.use(routerPlugin())
