@@ -3,6 +3,7 @@ import {Main} from './Main.js';
 import {RootComponent} from './RootComponent.js';
 import {IncomeEvents, OutcomeEvents} from './types/DomEvents.js';
 import {RenderedElement} from './types/RenderedElement.js';
+import {ComponentDefinition} from './Component.js';
 
 
 type OutcomeEventHandler = (event: OutcomeEvents, el: RenderedElement) => void
@@ -11,6 +12,9 @@ type OutcomeEventHandler = (event: OutcomeEvents, el: RenderedElement) => void
 export const COMPONENT_EVENT_PREFIX = 'C|'
 
 
+/**
+ * It is context for components and whole app structure
+ */
 export class AppSingleton {
   readonly outcomeEvents = new IndexedEvents<OutcomeEventHandler>()
   readonly incomeEvents = new IndexedEventEmitter()
@@ -58,6 +62,10 @@ export class AppSingleton {
 
   setRouter() {
     // TODO: add
+  }
+
+  getComponentDefinition(componentName: string): ComponentDefinition {
+    return this.main.componentsManager.getComponentDefinition(componentName)
   }
 
 }

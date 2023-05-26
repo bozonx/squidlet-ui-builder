@@ -1,13 +1,13 @@
+import {newScope, SuperScope} from 'squidlet-sprog';
 import {omitObj, makeUniqId} from 'squidlet-lib';
 import {UiElementDefinition} from './types/UiElementDefinitionBase.js';
-import {COMPONENT_EVENT_PREFIX, Main} from './Main.js';
+import {Main} from './Main.js';
 import {IncomeEvents, OutcomeEvents} from './types/DomEvents.js';
 import {RenderedElement} from './types/RenderedElement.js';
-import {SuperStruct, SuperStructInitDefinition} from '../../../squidlet-sprog/src/index.js';
+import {SuperStruct} from '../../../squidlet-sprog/src/index.js';
 import {ComponentSlotsManager, SlotsDefinition} from './ComponentSlotsManager.js';
 import {COMPONENT_ID_BYTES_NUM} from './types/constants.js';
-import {AppSingleton} from './AppSingleton.js';
-import {newScope, SuperScope} from '../../../squidlet-sprog/src/index.js';
+import {AppSingleton, COMPONENT_EVENT_PREFIX} from './AppSingleton.js';
 
 
 // TODO: поддержка перемещения элементов
@@ -65,7 +65,7 @@ export class Component {
   // if it is root then it will be null
   readonly parent: Component
 
-  protected readonly main: Main
+  protected readonly app: AppSingleton
   // initial component definition with its children
   protected readonly componentDefinition: ComponentDefinition
   // position of UI children lib. Like [componentId, ...]
@@ -90,7 +90,7 @@ export class Component {
 
 
   protected constructor(
-    main: Main,
+    app: AppSingleton,
     parent: Component,
     // definition component itself
     componentDefinition: ComponentDefinition,
@@ -99,7 +99,7 @@ export class Component {
     // props which parent give
     incomeProps: SuperStruct
   ) {
-    this.main = main
+    this.app = app
     this.parent = parent
     this.componentDefinition = componentDefinition
     this.props = incomeProps
@@ -107,7 +107,7 @@ export class Component {
     this.slots = new ComponentSlotsManager(slotsDefinition)
     this.id = this.makeId()
     this.scope = newScope<ComponentScope>({
-      app: this.main.app,
+      app: this.app,
       props: this.props,
       state: this.state,
       context: {},
@@ -127,7 +127,7 @@ export class Component {
   }
 
   async destroy() {
-    this.main.incomeEvents.removeListener(this.incomeEventListenerIndex)
+    this.app.incomeEvents.removeListener(this.incomeEventListenerIndex)
     await this.slots.destroy()
     this.props.destroy()
     this.state.destroy()
@@ -155,13 +155,13 @@ export class Component {
    */
   async mount(silent: boolean = false) {
     // start listening income events
-    this.incomeEventListenerIndex = this.main.incomeEvents.addListener(
+    this.incomeEventListenerIndex = this.app.incomeEvents.addListener(
       COMPONENT_EVENT_PREFIX + this.id,
       this.handleIncomeEvent
     )
 
     if (!silent) {
-      this.main.outcomeEvents.emit(OutcomeEvents.mount, this.render())
+      this.app.outcomeEvents.emit(OutcomeEvents.mount, this.render())
     }
 
     for (const childId of Object.keys(this.children)) {
@@ -176,7 +176,7 @@ export class Component {
    */
   async unmount(silent: boolean = false) {
     // stop listening income events
-    this.main.incomeEvents.removeListener(this.incomeEventListenerIndex)
+    this.app.incomeEvents.removeListener(this.incomeEventListenerIndex)
 
     for (const childId of Object.keys(this.children)) {
       // unmount child always silent
@@ -184,7 +184,7 @@ export class Component {
     }
 
     if (!silent) {
-      this.main.outcomeEvents.emit(OutcomeEvents.unMount, this.makeRenderedEl())
+      this.app.outcomeEvents.emit(OutcomeEvents.unMount, this.makeRenderedEl())
     }
   }
 
@@ -265,7 +265,7 @@ export class Component {
     //console.log(1111, childUiDefinition, componentDefinition, slotDefinition, props)
 
     const childComponent = new Component(
-      this.main,
+      this.app,
       this,
       componentDefinition,
       slotDefinition,
@@ -288,8 +288,7 @@ export class Component {
     const componentName: string = childUiDefinition.component
     // values of child props which are set in this (parent) component
     const propsValues: Record<string, any> = omitObj(childUiDefinition, 'component', 'slot')
-    const componentDefinition = this.main.componentsManager
-      .getComponentDefinition(componentName)
+    const componentDefinition = this.app.getComponentDefinition(componentName)
     const props = new SuperStruct(
       // if no props then put just empty props
       componentDefinition.props || {},
