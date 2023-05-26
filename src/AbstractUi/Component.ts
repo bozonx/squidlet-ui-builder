@@ -1,6 +1,7 @@
 import {
   newScope,
   SuperScope,
+  SuperStruct,
   SuperItemDefinition,
   SuperFuncDefinition,
   SimpleFuncDefinition,
@@ -45,7 +46,7 @@ export interface ComponentScope {
   props: ProxyfiedStruct
   state: ProxyfiedStruct
 
-  // TODO: чо за нах?
+  // TODO: чо за нах? Нужен контекст от screen
   // local vars and context of functions execution
   //context: Record<any, any>
 }
@@ -71,6 +72,7 @@ export class Component {
   protected childrenPosition: string[] = []
   // local state of component instance
   protected readonly state: ProxyfiedStruct
+  // It is scope for template runtime
   protected readonly scope: ComponentScope & SuperScope
   private incomeEventListenerIndex?: number
 
@@ -97,15 +99,17 @@ export class Component {
     this.parent = parent
     this.componentDefinition = componentDefinition
     this.props = incomeProps
-    this.state = new SuperStruct(componentDefinition.state || {})
-    this.slots = new ComponentSlotsManager(slotsDefinition)
     this.id = this.makeId()
+    this.slots = new ComponentSlotsManager(slotsDefinition)
     this.scope = newScope<ComponentScope>({
       app: this.app,
       props: this.props,
-      state: this.state,
-      context: {},
+      // set it temporary because the state hasn't been initialized yet
+      state: {} as any,
     })
+    this.state = (new SuperStruct(this.scope, componentDefinition.state || {})).getProxy()
+    // set initialized state to scope
+    this.scope.state = this.state
   }
 
 
@@ -276,13 +280,14 @@ export class Component {
     propsValues: Record<string, any>
     slotDefinition: SlotsDefinition
     componentDefinition: ComponentDefinition
-    props: SuperStruct
+    props: ProxyfiedStruct
     propSetter: (pathTo: string, newValue: any) => void
   } {
     const componentName: string = childUiDefinition.component
     // values of child props which are set in this (parent) component
     const propsValues: Record<string, any> = omitObj(childUiDefinition, 'component', 'slot')
     const componentDefinition = this.app.getComponentDefinition(componentName)
+    // TODO: use proxy
     const props = new SuperStruct(
       // if no props then put just empty props
       componentDefinition.props || {},

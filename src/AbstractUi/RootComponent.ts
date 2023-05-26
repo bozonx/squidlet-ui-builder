@@ -5,6 +5,9 @@ import {ScreenDefinition} from './router/Screen.js';
 import {AppSingleton} from './AppSingleton.js';
 
 
+// TODO: может это screen?
+
+
 export interface RootComponentDefinition extends ComponentDefinition {
   components?: ComponentDefinition[]
   screens?: ScreenDefinition[]
