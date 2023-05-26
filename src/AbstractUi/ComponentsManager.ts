@@ -7,7 +7,7 @@ import {STD_COMPONENTS} from './stdLib/index.js';
 export class ComponentsManager {
   private readonly main: Main
   // User defined components. like: {pathToComponent: ComponentDefinition}
-  private appComponents: Record<string, ComponentDefinition> = {}
+  private readonly appComponents: Record<string, ComponentDefinition> = {}
   // Components of registered libs. like: {componentName: ComponentDefinition}
   private readonly componentsLib: Record<string, ComponentDefinition> = {}
 
@@ -18,10 +18,6 @@ export class ComponentsManager {
     this.registerComponentsLib(STD_COMPONENTS)
   }
 
-
-  getDefinition(pathToComponent: string) {
-    return this.appComponents[pathToComponent]
-  }
 
   getComponentDefinition(pathOrStdComponentName: string): ComponentDefinition {
 

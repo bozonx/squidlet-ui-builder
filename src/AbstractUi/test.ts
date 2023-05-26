@@ -22,10 +22,11 @@ import {routerPlugin} from './router/routerPlugin.js';
     (pathTo: string) => fs.readFile(path.resolve(filesRoot, pathTo), 'utf8')
   )
 
-  const main = new Main(definitions)
+  const main = new Main()
 
   main.use(goodUiPlugin())
   main.use(routerPlugin())
+  main.componentsManager.registerAppComponents(definitions)
 
 
   main.outcomeEvents.addListener((event: OutcomeEvents, el: RenderedElement) => {
