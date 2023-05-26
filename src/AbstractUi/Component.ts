@@ -2,10 +2,12 @@ import {
   newScope,
   SuperScope,
   SuperStruct,
+  SuperArray,
   SuperItemDefinition,
   SuperFuncDefinition,
   SimpleFuncDefinition,
-  ProxyfiedStruct
+  ProxyfiedStruct,
+  ProxyfiedArray
 } from 'squidlet-sprog';
 import {omitObj, makeUniqId} from 'squidlet-lib';
 import {CmpInstanceDefinition} from './types/CmpInstanceDefinition.js';
@@ -16,7 +18,7 @@ import {COMPONENT_ID_BYTES_NUM} from './types/constants.js';
 import {AppSingleton, COMPONENT_EVENT_PREFIX} from './AppSingleton.js';
 
 
-// TODO: поддержка перемещения элементов
+// TODO: поддержка перемещения элементов - добавить в SuperArray
 
 // TODO: run onUpdate callback of component definition
 // TODO: call onMount component's callback of component definition
@@ -58,7 +60,8 @@ export class Component {
   // componentId
   readonly id: string
   // Not ordered children components. Like {componentId: Component}
-  readonly children: Record<string, Component> = {}
+  //readonly children: Record<string, Component> = {}
+  readonly children: ProxyfiedArray<Component>
   // Parent of this component. If it is root then it will be null
   readonly parent: Component
   // Props values set in the parent tmpl
@@ -68,13 +71,14 @@ export class Component {
   protected readonly app: AppSingleton
   // component's class definition
   protected readonly componentDefinition: ComponentDefinition
-  // Runtime position of children components. Like [componentId, ...]
-  protected childrenPosition: string[] = []
   // local state of component instance
   protected readonly state: ProxyfiedStruct
   // It is scope for template runtime
   protected readonly scope: ComponentScope & SuperScope
   private incomeEventListenerIndex?: number
+
+  // Runtime position of children components. Like [componentId, ...]
+  //protected childrenPosition: string[] = []
 
 
   /**
@@ -110,6 +114,7 @@ export class Component {
     this.state = (new SuperStruct(this.scope, componentDefinition.state || {})).getProxy()
     // set initialized state to scope
     this.scope.state = this.state
+    this.children = (new SuperArray(this.scope)).getProxy()
   }
 
 
@@ -119,23 +124,25 @@ export class Component {
     // TODO: run onInit callback
 
     // init all the children components
-    for (const componentId of Object.keys(this.children)) {
-      await this.children[componentId].init()
-    }
+    for (const component of this.children) await component.init()
   }
 
   async destroy() {
     this.app.incomeEvents.removeListener(this.incomeEventListenerIndex)
     await this.slots.destroy()
-    this.props.destroy()
-    this.state.destroy()
+    // TODO: родитель должен понять что ребенок дестроится и разорвать связь у себя
+    //       и удалить его у себя
+    this.props.$super.destroy()
+    this.state.$super.destroy()
 
-    for (const componentId of Object.keys(this.children)) {
-      await this.children[componentId].destroy()
-    }
+    for (const component of this.children) await component.destroy()
+
+    this.children.$super.destroy()
+
   }
 
 
+  // TODO: а это нужно ???
   /**
    * Get position of child by its UI el id.
    * -1 means - can't find child
@@ -144,6 +151,7 @@ export class Component {
     return this.childrenPosition.indexOf(childrenElId)
   }
 
+  // TODO: review
   /**
    * Mount this component's element.
    * Actually means emit mount event and listen element's income events.
@@ -168,6 +176,7 @@ export class Component {
     }
   }
 
+  // TODO: review
   /**
    * Unmount this component's element.
    * Means stop listenint ui change events and But the component won't be destroyed
@@ -193,6 +202,7 @@ export class Component {
   //   this.main.outcomeEvents.emit(OutcomeEvents.update, this.renderSelf())
   // }
 
+  // TODO: review
   /**
    * Make render element only for itself without children
    */
@@ -203,6 +213,7 @@ export class Component {
     }
   }
 
+  // TODO: review
   /**
    * Make full render element with children
    */
@@ -218,6 +229,7 @@ export class Component {
   }
 
 
+  // TODO: review
   private handleIncomeEvent = (event: IncomeEvents, ...args: any[]) => {
     (async () => {
       switch (event) {
@@ -240,25 +252,27 @@ export class Component {
   }
 
   private async instantiateChildren() {
+    // If component have tmpl then get child from it - it is default behaviour
     if (this.componentDefinition.tmpl) {
       for (const child of this.componentDefinition.tmpl) {
         await this.instantiateChild(child)
       }
     }
+    // if component doesn't have a tmpl then just render default slot like it is tmpl
     else {
-      // if component doesn't have tmpl then just render default slot like it is tmpl
       for (const child of this.slots.getDefaultDefinition() || []) {
         await this.instantiateChild(child)
       }
     }
+    // if not - so not one children then
   }
 
-  async instantiateChild(childUiDefinition: UiElementDefinition) {
+  async instantiateChild(childTmplDefinition: CmpInstanceDefinition) {
     const {
       componentDefinition,
       slotDefinition,
       props,
-    } = this.prepareChild(childUiDefinition)
+    } = this.prepareChild(childTmplDefinition)
 
     //console.log(1111, childUiDefinition, componentDefinition, slotDefinition, props)
 
@@ -270,12 +284,11 @@ export class Component {
       props
     )
 
-    this.children[childComponent.id] = childComponent
-    // set initial position
-    this.childrenPosition.push(childComponent.id)
+    this.children.push(childComponent)
   }
 
-  private prepareChild(childUiDefinition: UiElementDefinition): {
+  // TODO: review
+  private prepareChild(childUiDefinition: CmpInstanceDefinition): {
     componentName: string
     propsValues: Record<string, any>
     slotDefinition: SlotsDefinition
@@ -320,6 +333,7 @@ export class Component {
     }
   }
 
+  // TODO: review
   private makeRenderedEl(): RenderedElement {
     const baseParams = {
       name: this.name,
@@ -345,6 +359,7 @@ export class Component {
     }
   }
 
+  // TODO: review
   private getChildrenUiEls(): RenderedElement[] | undefined {
     const res: RenderedElement[] = []
 
@@ -357,6 +372,7 @@ export class Component {
     return res
   }
 
+  // TODO: review
   private getUiParams(): Record<string, any> | undefined {
     if (!this.componentDefinition.uiParams) return
 

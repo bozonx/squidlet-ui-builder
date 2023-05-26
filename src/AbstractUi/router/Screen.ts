@@ -7,6 +7,9 @@ export interface ScreenDefinition extends ComponentDefinition {
 }
 
 
+// TODO: router and route - in props
+
+
 export class Screen extends Component {
   readonly isRoot: boolean = false
   readonly isScreen: boolean = true
