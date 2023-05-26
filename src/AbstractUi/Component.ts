@@ -3,13 +3,13 @@ import {
   SuperScope,
   SuperItemDefinition,
   SuperFuncDefinition,
-  SimpleFuncDefinition
+  SimpleFuncDefinition,
+  ProxyfiedStruct
 } from 'squidlet-sprog';
 import {omitObj, makeUniqId} from 'squidlet-lib';
 import {CmpInstanceDefinition} from './types/CmpInstanceDefinition.js';
 import {IncomeEvents, OutcomeEvents} from './types/DomEvents.js';
 import {RenderedElement} from './types/RenderedElement.js';
-import {SuperStruct} from '../../../squidlet-sprog/src/index.js';
 import {ComponentSlotsManager, SlotsDefinition} from './ComponentSlotsManager.js';
 import {COMPONENT_ID_BYTES_NUM} from './types/constants.js';
 import {AppSingleton, COMPONENT_EVENT_PREFIX} from './AppSingleton.js';
@@ -21,8 +21,8 @@ import {AppSingleton, COMPONENT_EVENT_PREFIX} from './AppSingleton.js';
 // TODO: call onMount component's callback of component definition
 // TODO: call onUnmount component's callback of component definition
 
-
-export interface ComponentInstanceDefinition {
+// It is definition of component class
+export interface ComponentDefinition {
   name: string
   // props which are controlled by parent component
   props?: Record<string, SuperItemDefinition>
@@ -42,8 +42,8 @@ export interface ComponentInstanceDefinition {
  */
 export interface ComponentScope {
   app: AppSingleton
-  props: SuperStruct
-  state: SuperStruct
+  props: ProxyfiedStruct
+  state: ProxyfiedStruct
 
   // TODO: чо за нах?
   // local vars and context of functions execution
@@ -60,21 +60,19 @@ export class Component {
   readonly children: Record<string, Component> = {}
   // Parent of this component. If it is root then it will be null
   readonly parent: Component
-
-  protected readonly app: AppSingleton
-  // initial component definition with its children
-  protected readonly componentDefinition: ComponentInstanceDefinition
-  // position of UI children lib. Like [componentId, ...]
-  protected uiChildrenPositions: string[] = []
-  protected state: SuperStruct
-  private incomeEventListenerIndex?: number
-  // They set in parent template
-  // TODO: тут должен быть Super Prop - так как они будут управляться из вне
-  // props set in template of parent component
-  readonly props: SuperStruct
+  // Props values set in the parent tmpl
+  readonly props: ProxyfiedStruct
   readonly slots: ComponentSlotsManager
 
+  protected readonly app: AppSingleton
+  // component's class definition
+  protected readonly componentDefinition: ComponentDefinition
+  // Runtime position of children components. Like [componentId, ...]
+  protected childrenPosition: string[] = []
+  // local state of component instance
+  protected readonly state: ProxyfiedStruct
   protected readonly scope: ComponentScope & SuperScope
+  private incomeEventListenerIndex?: number
 
 
   /**
@@ -89,11 +87,11 @@ export class Component {
     app: AppSingleton,
     parent: Component,
     // definition component itself
-    componentDefinition: ComponentInstanceDefinition,
+    componentDefinition: ComponentDefinition,
     // slots of component which get from parent component template
     slotsDefinition: SlotsDefinition,
     // props which parent give
-    incomeProps: SuperStruct
+    incomeProps: ProxyfiedStruct
   ) {
     this.app = app
     this.parent = parent
@@ -139,7 +137,7 @@ export class Component {
    * -1 means - can't find child
    */
   getPositionOfChildrenEl(childrenElId: string): number {
-    return this.uiChildrenPositions.indexOf(childrenElId)
+    return this.childrenPosition.indexOf(childrenElId)
   }
 
   /**
@@ -270,14 +268,14 @@ export class Component {
 
     this.children[childComponent.id] = childComponent
     // set initial position
-    this.uiChildrenPositions.push(childComponent.id)
+    this.childrenPosition.push(childComponent.id)
   }
 
   private prepareChild(childUiDefinition: UiElementDefinition): {
     componentName: string
     propsValues: Record<string, any>
     slotDefinition: SlotsDefinition
-    componentDefinition: ComponentInstanceDefinition
+    componentDefinition: ComponentDefinition
     props: SuperStruct
     propSetter: (pathTo: string, newValue: any) => void
   } {
@@ -345,7 +343,7 @@ export class Component {
   private getChildrenUiEls(): RenderedElement[] | undefined {
     const res: RenderedElement[] = []
 
-    for (const childComponentId of this.uiChildrenPositions) {
+    for (const childComponentId of this.childrenPosition) {
       res.push(this.children[childComponentId].render())
     }
 
