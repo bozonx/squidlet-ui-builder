@@ -1,13 +1,9 @@
-import {IndexedEvents} from 'squidlet-lib'
-import {AnyElement} from '../../../__useless/AnyElement.js'
-import {UiElementDefinitionBase} from '../types/UiElementDefinitionBase.js'
 
-
-export interface DocumentDefinition extends UiElementDefinitionBase {
-  //children: UiElementDefinitionBase[]
-}
-
-export type DocumentEventHandler = (elementPath: string, eventName: string, data: any) => void
+// export interface DocumentDefinition extends CmpInstanceDefinition {
+//   //children: CmpInstanceDefinition[]
+// }
+//
+// export type DocumentEventHandler = (elementPath: string, eventName: string, data: any) => void
 
 
 

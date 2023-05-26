@@ -1,6 +1,6 @@
 import {newScope, SuperScope} from 'squidlet-sprog';
 import {omitObj, makeUniqId} from 'squidlet-lib';
-import {UiElementDefinition} from './types/UiElementDefinitionBase.js';
+import {CmpInstanceDefinition} from './types/CmpInstanceDefinition.js';
 import {IncomeEvents, OutcomeEvents} from './types/DomEvents.js';
 import {RenderedElement} from './types/RenderedElement.js';
 import {SuperStruct} from '../../../squidlet-sprog/src/index.js';

@@ -1,4 +1,4 @@
-import {UiElementDefinition} from './types/UiElementDefinitionBase.js';
+import {UiElementDefinition} from './types/CmpInstanceDefinition.js';
 
 
 export interface SlotsDefinition {
