@@ -1,11 +1,13 @@
 import yaml from 'yaml';
-import {IndexedEvents, IndexedEventEmitter} from 'squidlet-lib'
+import {IndexedEvents, IndexedEventEmitter, ConsoleLogger, Logger} from 'squidlet-lib'
 import {OutcomeEvents, IncomeEvents} from './interfaces/DomEvents.js';
 import {RenderedElement} from './interfaces/RenderedElement.js';
 import {ROOT_COMPONENT_ID, RootComponent} from './RootComponent.js';
 import {ComponentDefinition} from './Component.js';
 import {STD_COMPONENTS} from './stdLib/index.js';
 import {AppSingleton} from './AppSingleton.js';
+import {AbstractUiPackage} from './interfaces/types.js';
+import {PackageManager} from './PackageManager.js';
 
 
 type OutcomeEventHandler = (event: OutcomeEvents, el: RenderedElement) => void
@@ -19,13 +21,12 @@ export class Main {
   readonly incomeEvents = new IndexedEventEmitter()
   readonly root: RootComponent
   readonly app = new AppSingleton(this)
+  log: Logger
   // like: {pathToComponent: ComponentDefinition}
   private readonly appComponentsDefinitions: Record<string, ComponentDefinition>
   // like: {componentName: ComponentDefinition}
   private readonly componentsLib: Record<string, ComponentDefinition> = {}
-
-
-  // TODO: add logger
+  private readonly packageManager = new PackageManager(this)
 
 
   constructor(
@@ -33,6 +34,8 @@ export class Main {
     // like: {libName: {componentName: ComponentDefinitionString}}
     componentsLibsStr: Record<string, Record<string, string>> = {}
   ) {
+    // TODO: какой logLevel передавать???
+    this.log = new ConsoleLogger('info')
     this.appComponentsDefinitions = preloadedComponentsDefinitions
 
     const libs: Record<string, Record<string, string>> = {
@@ -86,6 +89,22 @@ export class Main {
     this.incomeEvents.emit(event, componentId, ...data)
     // emit component specific event
     this.incomeEvents.emit(COMPONENT_EVENT_PREFIX + componentId, event, ...data)
+  }
+
+  setRouter() {
+
+  }
+
+  setLogger(logger: Logger) {
+    this.log = logger
+  }
+
+  registerComponentsLib(libName: string) {
+
+  }
+
+  use(pkg: AbstractUiPackage) {
+    this.packageManager.use(pkg)
   }
 
 }
