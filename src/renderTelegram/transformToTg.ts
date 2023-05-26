@@ -1,4 +1,4 @@
-import {RenderedElement} from '../AbstractUi/interfaces/RenderedElement.js';
+import {RenderedElement} from '../AbstractUi/types/RenderedElement.js';
 import {TgReplyButton} from './TgReplyButton.js';
 
 

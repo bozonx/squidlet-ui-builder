@@ -1,8 +1,8 @@
 import {IndexedEvents, IndexedEventEmitter, ConsoleLogger, Logger} from 'squidlet-lib'
-import {OutcomeEvents, IncomeEvents} from './interfaces/DomEvents.js';
-import {RenderedElement} from './interfaces/RenderedElement.js';
+import {OutcomeEvents, IncomeEvents} from './types/DomEvents.js';
+import {RenderedElement} from './types/RenderedElement.js';
 import {AppSingleton} from './AppSingleton.js';
-import {AbstractUiPackage} from './interfaces/types.js';
+import {AbstractUiPackage} from './types/types.js';
 import {PackageManager} from './PackageManager.js';
 import {ComponentsManager} from './ComponentsManager.js';
 

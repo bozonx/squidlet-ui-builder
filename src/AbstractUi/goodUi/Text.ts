@@ -5,7 +5,7 @@ uiParams:
   - text
 `
 
-// import {ELEMENT_DEFAULTS, ElementBase, ElementInitial} from '../interfaces/ElementBase';
+// import {ELEMENT_DEFAULTS, ElementBase, ElementInitial} from '../types/ElementBase';
 //
 //
 // export const TEXT_TYPE = 'Text'

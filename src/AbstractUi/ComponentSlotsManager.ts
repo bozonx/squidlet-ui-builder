@@ -1,4 +1,4 @@
-import {UiElementDefinition} from './interfaces/UiElementDefinitionBase.js';
+import {UiElementDefinition} from './types/UiElementDefinitionBase.js';
 
 
 export interface SlotsDefinition {

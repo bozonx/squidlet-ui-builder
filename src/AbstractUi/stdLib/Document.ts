@@ -1,6 +1,6 @@
 import {IndexedEvents} from 'squidlet-lib'
-import {AnyElement} from '../interfaces/AnyElement.js'
-import {UiElementDefinitionBase} from '../interfaces/UiElementDefinitionBase.js'
+import {AnyElement} from '../types/AnyElement.js'
+import {UiElementDefinitionBase} from '../types/UiElementDefinitionBase.js'
 
 
 export interface DocumentDefinition extends UiElementDefinitionBase {

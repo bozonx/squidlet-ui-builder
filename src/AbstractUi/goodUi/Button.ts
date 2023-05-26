@@ -5,7 +5,7 @@ uiParams:
 `
 
 
-// import {INPUT_DEFAULTS, InputBase, InputInitial} from '../interfaces/InputBase.js';
+// import {INPUT_DEFAULTS, InputBase, InputInitial} from '../types/InputBase.js';
 //
 //
 // export const BUTTON_TYPE = 'Button'

@@ -1,11 +1,11 @@
 import {omitObj, makeUniqId} from 'squidlet-lib';
-import {UiElementDefinition} from './interfaces/UiElementDefinitionBase.js';
+import {UiElementDefinition} from './types/UiElementDefinitionBase.js';
 import {COMPONENT_EVENT_PREFIX, Main} from './Main.js';
-import {IncomeEvents, OutcomeEvents} from './interfaces/DomEvents.js';
-import {RenderedElement} from './interfaces/RenderedElement.js';
+import {IncomeEvents, OutcomeEvents} from './types/DomEvents.js';
+import {RenderedElement} from './types/RenderedElement.js';
 import {SuperStruct, SuperStructInitDefinition} from '../../../squidlet-sprog/src/index.js';
 import {ComponentSlotsManager, SlotsDefinition} from './ComponentSlotsManager.js';
-import {COMPONENT_ID_BYTES_NUM} from './interfaces/constants.js';
+import {COMPONENT_ID_BYTES_NUM} from './types/constants.js';
 import {AppSingleton} from './AppSingleton.js';
 import {newScope, SuperScope} from '../../../squidlet-sprog/src/index.js';
 

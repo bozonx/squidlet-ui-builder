@@ -3,7 +3,7 @@ export const Container = `
 name: Container
 `
 
-// import {AnyElement} from '../interfaces/AnyElement';
+// import {AnyElement} from '../types/AnyElement';
 //
 //
 // export interface Container {
