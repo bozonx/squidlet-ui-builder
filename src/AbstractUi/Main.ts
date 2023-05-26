@@ -33,11 +33,11 @@ export class Main {
   private readonly packageManager = new PackageManager(this)
 
 
-  constructor(preloadedComponentsDefinitions: Record<string, ComponentDefinition>) {
+  constructor(appComponents: Record<string, ComponentDefinition>) {
     // TODO: какой logLevel передавать??? дебаг ставить если в конфиге дебаг
     this.log = new ConsoleLogger('info')
 
-    this.componentsManager.registerCompDefinitions(preloadedComponentsDefinitions)
+    this.componentsManager.registerAppComponents(appComponents)
     this.root = new RootComponent(this, this.componentsManager.getDefinition(ROOT_COMPONENT_ID))
   }
 

@@ -40,13 +40,29 @@ export class ComponentsManager {
     }
   }
 
-  registerCompDefinitions(definitions: Record<string, ComponentDefinition>) {
-    this.appComponents = definitions
+  registerAppComponents(components: Record<string, string | ComponentDefinition>) {
+    for (const cmpName of Object.keys(components)) {
+      const cmp = components[cmpName]
+
+      if (typeof cmp === 'string') {
+        this.appComponents[cmpName] = yaml.parse(cmp)
+      }
+      else if (typeof cmp === 'object') {
+        this.appComponents[cmpName] = cmp
+      }
+    }
   }
 
-  registerComponentsLib(components: Record<string, string>) {
+  registerComponentsLib(components: Record<string, string | ComponentDefinition>) {
     for (const cmpName of Object.keys(components)) {
-      this.componentsLib[cmpName] = yaml.parse(components[cmpName])
+      const cmp = components[cmpName]
+
+      if (typeof cmp === 'string') {
+        this.componentsLib[cmpName] = yaml.parse(cmp)
+      }
+      else if (typeof cmp === 'object') {
+        this.componentsLib[cmpName] = cmp
+      }
     }
   }
 
