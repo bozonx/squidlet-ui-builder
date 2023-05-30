@@ -8,24 +8,22 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-esm ./src/index.ts",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
     "local-files-backend": "ts-node-esm ./src/localFilesBackend/index.ts"
   },
   "dependencies": {
     "@types/koa": "^2.13.6",
     "axios": "^1.4.0",
     "koa": "^2.14.2",
-    "lodash": "^4.17.21",
-    "squidlet-lib": "file:../squidlet-lib",
-    "svelte": "^3.58.0",
-    "vm2": "^3.9.19",
-    "yaml": "^2.2.2"
+    "squidlet-lib": "*"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.194",
     "@types/node": "^18.16.0",
     "ts-node": "^10.9.1",
     "tslint": "^6.1.3",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.2",
+    "vite": "^4.3.2"
   }
 }
