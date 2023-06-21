@@ -1,4 +1,4 @@
-import {SchemaItem} from './SchemaItem.js';
+import {SchemaItem} from './SchemaItem.ts';
 
 
 // export const RESOURCE_CLASSES = {

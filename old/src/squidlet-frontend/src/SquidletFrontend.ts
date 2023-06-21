@@ -1,4 +1,4 @@
-import {Files} from './Files.js';
+import {Files} from './Files.ts';
 
 
 export class SquidletFrontend {

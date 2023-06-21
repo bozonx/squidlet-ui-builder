@@ -1,8 +1,8 @@
-import type {MenuDir} from '../../../../../../../mnt/disk2/workspace/squidlet-ui-builder/_sveltekit/src/lib/interfaces/MenuDir.js';
-import type {Screen} from '../../../../../../../mnt/disk2/workspace/squidlet-ui-builder/_sveltekit/src/lib/interfaces/Screen.js';
-import type {ScreensMenuFile} from '../../../../../../../mnt/disk2/workspace/squidlet-ui-builder/_sveltekit/src/lib/interfaces/ScreensMenuFile.js';
-import type {MenuElement} from '../../../../../../../mnt/disk2/workspace/squidlet-ui-builder/_sveltekit/src/lib/interfaces/MenuElement.js';
-import type {CustomComponent} from '../../../../../../../mnt/disk2/workspace/squidlet-ui-builder/_sveltekit/src/lib/interfaces/UiElement.js';
+import type {MenuDir} from '../../../../../../../../mnt/disk2/workspace/squidlet-ui-builder/_sveltekit/src/lib/interfaces/MenuDir.ts';
+import type {Screen} from '../../../../../../../../mnt/disk2/workspace/squidlet-ui-builder/_sveltekit/src/lib/interfaces/Screen.ts';
+import type {ScreensMenuFile} from '../../../../../../../../mnt/disk2/workspace/squidlet-ui-builder/_sveltekit/src/lib/interfaces/ScreensMenuFile.ts';
+import type {MenuElement} from '../../../../../../../../mnt/disk2/workspace/squidlet-ui-builder/_sveltekit/src/lib/interfaces/MenuElement.ts';
+import type {CustomComponent} from '../../../../../../../../mnt/disk2/workspace/squidlet-ui-builder/_sveltekit/src/lib/interfaces/UiElement.ts';
 
 
 

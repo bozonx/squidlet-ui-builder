@@ -1,5 +1,5 @@
-import type {FileStatus} from './interfaces/FileStatus.js';
-import {testData} from '../testData.js';
+import type {FileStatus} from './interfaces/FileStatus.ts';
+import {testData} from '../testData.ts';
 
 
 export class FileWrapper {

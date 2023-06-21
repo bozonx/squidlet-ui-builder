@@ -1,10 +1,10 @@
 import {mergeDeepObjects, omitObj} from 'squidlet-lib';
-import {CommonComponent, ComponentData, ComponentResource} from '../../types/CommonComponent.js';
-import {loadPrjYamlFile, makeJsObjectString} from '../buildHelpers.js';
-import {ROOT_DIRS, SVELTE_EXT, YAML_EXT} from '../../types/constants.js';
-import {BuilderMain} from '../BuilderMain.js';
-import {SchemaItem} from '../../types/SchemaItem.js';
-import {makeValueCorrespondingType} from '../../system/helpers/common.js';
+import {CommonComponent, ComponentData, ComponentResource} from '../../types/CommonComponent.ts';
+import {loadPrjYamlFile, makeJsObjectString} from '../buildHelpers.ts';
+import {ROOT_DIRS, SVELTE_EXT, YAML_EXT} from '../../types/constants.ts';
+import {BuilderMain} from '../BuilderMain.ts';
+import {SchemaItem} from '../../types/SchemaItem.ts';
+import {makeValueCorrespondingType} from '../../system/helpers/common.ts';
 
 
 export class BuildComponent {

@@ -1,9 +1,9 @@
 import path from 'node:path';
 import * as fs from 'node:fs/promises';
-import {BuilderMain} from './BuilderMain.js';
-import {mkdirP, simpleExec} from './buildHelpers.js';
+import {BuilderMain} from './BuilderMain.ts';
+import {mkdirP, simpleExec} from './buildHelpers.ts';
 import {fileURLToPath} from 'url';
-import {ROOT_DIRS} from '../types/constants.js';
+import {ROOT_DIRS} from '../types/constants.ts';
 
 
 const __filename = fileURLToPath(import.meta.url);

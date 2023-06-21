@@ -1,7 +1,7 @@
-import {BuilderMain} from './BuilderMain.js';
-import {loadPrjYamlFile} from './buildHelpers.js';
-import {FILE_NAMES, ROOT_DIRS, YAML_EXT} from '../types/constants.js';
-import {RoutesFile} from '../types/RoutesFile.js';
+import {BuilderMain} from './BuilderMain.ts';
+import {loadPrjYamlFile} from './buildHelpers.ts';
+import {FILE_NAMES, ROOT_DIRS, YAML_EXT} from '../types/constants.ts';
+import {RoutesFile} from '../types/RoutesFile.ts';
 
 
 // TODO: наверное лучше переделать в просто ф-ю

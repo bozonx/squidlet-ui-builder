@@ -1,4 +1,4 @@
-import {Frameworks} from './constants.js';
+import {Frameworks} from './constants.ts';
 
 
 export interface BuilderOptions {

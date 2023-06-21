@@ -1,12 +1,12 @@
 import path from 'node:path';
 import {fileURLToPath} from 'url';
-import {FrameworkBuilder} from '../../types/FrameworkBuilder.js';
-import {LayoutComponent} from '../../types/LayoutComponent.js';
-import {ScreenComponent} from '../../types/ScreenComponent.js';
-import {CommonComponent} from '../../types/CommonComponent.js';
-import {BuilderMain} from '../BuilderMain.js';
-import {applyTemplate} from '../buildHelpers.js';
-import {BuildComponent} from './BuildComponent.js';
+import {FrameworkBuilder} from '../../types/FrameworkBuilder.ts';
+import {LayoutComponent} from '../../types/LayoutComponent.ts';
+import {ScreenComponent} from '../../types/ScreenComponent.ts';
+import {CommonComponent} from '../../types/CommonComponent.ts';
+import {BuilderMain} from '../BuilderMain.ts';
+import {applyTemplate} from '../buildHelpers.ts';
+import {BuildComponent} from './BuildComponent.ts';
 
 
 const __filename = fileURLToPath(import.meta.url);

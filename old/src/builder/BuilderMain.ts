@@ -9,15 +9,15 @@ import {
   ROOT_DIRS,
   SVELTE_EXT,
   YAML_EXT
-} from '../types/constants.js';
-import {Output} from './Output.js';
-import {BuilderOptions} from '../types/BuilderOptions.js';
-import {fileExists, loadPrjYamlFile, loadYamlFile} from './buildHelpers.js';
-import {MakeRouter} from './MakeRouter.js';
-import {FrameworkBuilder} from '../types/FrameworkBuilder.js';
-import {SvelteBuilder} from './svelte/SvelteBuilder.js';
+} from '../types/constants.ts';
+import {Output} from './Output.ts';
+import {BuilderOptions} from '../types/BuilderOptions.ts';
+import {fileExists, loadPrjYamlFile, loadYamlFile} from './buildHelpers.ts';
+import {MakeRouter} from './MakeRouter.ts';
+import {FrameworkBuilder} from '../types/FrameworkBuilder.ts';
+import {SvelteBuilder} from './svelte/SvelteBuilder.ts';
 import {fileURLToPath} from 'url';
-import {LibCfg} from '../types/LibCfg.js';
+import {LibCfg} from '../types/LibCfg.ts';
 
 
 const __filename = fileURLToPath(import.meta.url);

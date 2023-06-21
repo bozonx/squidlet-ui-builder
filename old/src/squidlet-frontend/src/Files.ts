@@ -1,4 +1,4 @@
-import {FileWrapper} from './FileWrapper.js';
+import {FileWrapper} from './FileWrapper.ts';
 
 
 export class Files {

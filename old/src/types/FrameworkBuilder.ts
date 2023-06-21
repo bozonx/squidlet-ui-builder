@@ -1,6 +1,6 @@
-import {LayoutComponent} from './LayoutComponent.js';
-import {ScreenComponent} from './ScreenComponent.js';
-import {CommonComponent} from './CommonComponent.js';
+import {LayoutComponent} from './LayoutComponent.ts';
+import {ScreenComponent} from './ScreenComponent.ts';
+import {CommonComponent} from './CommonComponent.ts';
 
 
 export interface FrameworkBuilder {

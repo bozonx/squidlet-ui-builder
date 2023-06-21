@@ -1,4 +1,4 @@
-import {BuilderMain} from './builder/BuilderMain.js'
+import {BuilderMain} from './builder/BuilderMain.ts'
 
 (async () => {
   // TODO: get from param

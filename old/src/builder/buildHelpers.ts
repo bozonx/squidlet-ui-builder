@@ -4,7 +4,7 @@ import fs from 'node:fs/promises';
 import yaml from 'yaml';
 import _ from 'lodash';
 import {mkdirPLogic} from 'squidlet-lib'
-import {BuilderMain} from './BuilderMain.js';
+import {BuilderMain} from './BuilderMain.ts';
 
 
 export async function loadYamlFile(filePath: string): Promise<any> {
