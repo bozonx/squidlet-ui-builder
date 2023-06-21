@@ -1,7 +1,7 @@
 import './style.css'
 import {Main} from '../../src';
 import {ROOT_COMPONENT_ID} from '../../src/RootComponent.ts';
-import {Root} from './components/Root.ts';
+import {Root} from './components/App.ts';
 
 
 (async () => {

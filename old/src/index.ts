@@ -1,5 +1,5 @@
 import {Main, SYSTEM_EVENTS, APP_EVENTS} from 'squidlet-abstract-ui'
-import {App} from '../../src/components/Root';
+import {App} from '../../src/components/App';
 
 
 (async () => {
