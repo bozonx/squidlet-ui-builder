@@ -1,18 +1,28 @@
+import {
+  Main,
+  SYSTEM_EVENTS,
+  APP_EVENTS,
+  IncomeEvent,
+  RenderedElement
+} from 'squidlet-abstract-ui'
+import {App} from './App.ts';
 import './style.css'
-import {Main} from '../../src';
-import {ROOT_COMPONENT_ID} from '../../src/RootComponent.ts';
-import {Root} from './components/App.ts';
 
 
 (async () => {
-  const config = {}
-  const main = new Main(config)
+  const main = new Main()
 
-  // main.componentsManager.registerComponents({
-  //   [ROOT_COMPONENT_ID]: Root
-  // })
+  main.setApp(App)
 
+  main.systemEvents.once(SYSTEM_EVENTS.newApp, (app) => {
+    app.events.addListener(APP_EVENTS.render, (event: IncomeEvent, el: RenderedElement) => {
+      console.log(111, event, el)
+    })
+  })
+
+  await main.init()
 })()
+  .catch(console.error)
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>

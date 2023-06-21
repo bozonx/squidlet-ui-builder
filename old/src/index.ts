@@ -1,5 +1,5 @@
-import {Main, SYSTEM_EVENTS, APP_EVENTS} from 'squidlet-abstract-ui'
-import {App} from '../../src/components/App';
+import {Main, SYSTEM_EVENTS, APP_EVENTS} from '../node-modules/squidlet-abstract-ui/distr/index'
+import {App} from '../../src/App';
 
 
 (async () => {

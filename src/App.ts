@@ -7,7 +7,8 @@ export const App: AppDefinition = {
   ],
   tmpl: [
     {
-      component: 'Document'
+      component: 'Text',
+      value: 'some text',
     }
   ]
 }
