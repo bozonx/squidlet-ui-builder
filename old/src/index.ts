@@ -1,12 +1,17 @@
-import {BuilderMain} from './builder/BuilderMain.ts'
+import {Main, SYSTEM_EVENTS, APP_EVENTS} from 'squidlet-abstract-ui'
+import {App} from '../../src/components/Root';
+
 
 (async () => {
-  // TODO: get from param
-  const builder = new BuilderMain({
-    prjDir: './ui',
-    prjName: 'some-project',
+  const main = new Main()
+
+  await main.setApp(App)
+
+  main.systemEvents.once(SYSTEM_EVENTS.newApp, (app) => {
+    app.events.addListener(APP_EVENTS.render, (event, el) => {
+      console.log(111, event, el)
+    })
   })
 
-  await builder.init()
-  await builder.build()
+  await main.init()
 })()

@@ -17,7 +17,8 @@
     "@types/koa": "^2.13.6",
     "axios": "^1.4.0",
     "koa": "^2.14.2",
-    "squidlet-lib": "*"
+    "squidlet-lib": "*",
+    "squidlet-abstract-ui": "file: ../squidlet-abstract-ui"
   },
   "devDependencies": {
     "@types/node": "^18.16.0",

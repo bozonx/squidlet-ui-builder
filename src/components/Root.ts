@@ -1,12 +1,13 @@
-import {ComponentDefinition} from '../../../src/Component.ts';
+import {AppDefinition} from 'squidlet-abstract-ui'
 
 
-export const Root: ComponentDefinition = {
-  name: 'Root',
+export const App: AppDefinition = {
+  components: [
+
+  ],
   tmpl: [
     {
       component: 'Document'
     }
   ]
-
 }
