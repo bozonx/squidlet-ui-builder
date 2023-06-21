@@ -7,8 +7,13 @@ export const App: AppDefinition = {
   ],
   tmpl: [
     {
-      component: 'Text',
-      value: 'some text',
-    }
+      component: 'Div',
+      slot: [
+        {
+          component: 'Text',
+          value: 'some text',
+        }
+      ]
+    },
   ]
 }
