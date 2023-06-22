@@ -7,12 +7,13 @@ export const App: AppDefinition = {
     AppMenu,
   ],
   screens: [
-    //AppScreen,
   ],
   routes: [
-    //AppRoute,
   ],
   tmpl: [
+    {
+      component: 'AppMenu',
+    },
     {
       component: 'Div',
       slot: [

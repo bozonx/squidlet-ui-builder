@@ -7,6 +7,7 @@ import {
 } from 'squidlet-abstract-ui'
 import {HtmlRenderer} from 'squidlet-abstract-ui'
 import {App} from './App.ts';
+import 'squidlet-abstract-ui/src/rendererHtml/style.css'
 import './style.css'
 
 

@@ -9,10 +9,9 @@ export const AppMenu: ComponentDefinition = {
       slot: [
         {
           component: 'NavItem',
-          props: {
-            value: 'first item',
-            icon: 'edit',
-          }
+          value: 'first item',
+          to: '/some',
+          icon: 'edit',
         }
       ]
     }
