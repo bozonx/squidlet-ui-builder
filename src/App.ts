@@ -13,6 +13,7 @@ export const App: AppDefinition = {
   tmpl: [
     {
       component: 'Layout2Col',
+      leftColWidth: '20em',
       slot: {
         left: [
           {
