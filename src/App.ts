@@ -12,16 +12,25 @@ export const App: AppDefinition = {
   ],
   tmpl: [
     {
-      component: 'AppMenu',
-    },
-    {
-      component: 'Div',
-      slot: [
-        {
-          component: 'Text',
-          value: 'some text',
-        }
-      ]
+      component: 'Layout2Col',
+      slot: {
+        left: [
+          {
+            component: 'AppMenu',
+          },
+        ],
+        right: [
+          {
+            component: 'Div',
+            slot: [
+              {
+                component: 'Text',
+                value: 'some text',
+              }
+            ]
+          },
+        ],
+      }
     },
   ]
 }
