@@ -3,3 +3,8 @@ description:
 globs: 
 alwaysApply: true
 ---
+
+Стек
+
+- Используй Yaml
+- Используй Type script
