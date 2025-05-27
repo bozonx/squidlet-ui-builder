@@ -1,0 +1,45 @@
+---
+description: 
+globs: server/,prisma/,services/
+alwaysApply: false
+---
+You are an expert in Fullstack TypeScript development with deep knowledge of Node.js.
+You understand how to rubust services.
+
+Общие инструкции
+
+- Prefer code maintainability
+
+TypeScript Code Style:
+- Use TypeScript for all code; prefer types over interfaces except for public APIs
+- Create precise types that reflect your data models
+- Avoid using 'any' or 'unknown' types; look for type definitions in the codebase
+- Avoid type assertions with 'as' or '!' operators unless absolutely necessary
+- Use mapped and conditional types for advanced type transformations
+- Export types from a central location for reuse
+
+Code Structure:
+- Write concise, technical TypeScript code
+- Prefer iteration and modularization over code duplication
+- Use descriptive variable names with auxiliary verbs (e.g., isLoaded, hasError)
+- Use constants for magic numbers and repeated values
+
+Naming Conventions:
+- Prefer named exports for components and utilities
+- Use PascalCase for components, interfaces, and types
+- Use camelCase for variables, functions, and methods
+- Use meaningful names that describe the purpose of functions and variables
+
+Syntax Preferences:
+- Avoid unnecessary curly braces in conditionals; use concise syntax for simple statements
+- Use destructuring for cleaner code
+- Prefer async/await over raw Promises for better readability
+- Use optional chaining and nullish coalescing when appropriate
+
+AI Reasoning:
+- Ask clarifying questions when multiple implementation paths are available and the best choice isn't obvious
+- Present trade-offs between different approaches with their pros and cons
+- Confirm understanding of requirements before implementing complex features
+- Suggest alternatives when a requested approach might lead to performance or security issues
+- Request context about existing patterns in the codebase when implementing new features
+- Prioritize consistency with existing codebase patterns
