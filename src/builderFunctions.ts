@@ -24,6 +24,22 @@ export function copyBaseProject(buildDir: string, translator: string) {
   })
 }
 
+export function generateProjectFiles(
+  buildDir: string,
+  translator: string,
+  indexFile: IndexFileSchema
+) {
+  // TODO: do it
+}
+
+export function generateRouter(
+  buildDir: string,
+  translator: string,
+  indexFile: IndexFileSchema
+) {
+  // TODO: do it
+}
+
 // TODO: сбилдить по шаблонам
 
 export function installDependencies(buildDir: string) {
