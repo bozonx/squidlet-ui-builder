@@ -25,16 +25,26 @@ export class Squidlet {
   }
 
   // States of app
+
+  async getPageState(name: string): Promise<any> {
+  }
   
-  async getTabState(name: string): Promise<any> {
+  async setPageState(name: string, value: any): Promise<void> {
+  }
+
+  async removePageState(name: string): Promise<void> {
+    return window.localStorage.removeItem('STATE_' + name)
+  }
+  
+  async getBrowserState(name: string): Promise<any> {
     window.localStorage.getItem('STATE_' + name)
   }
   
-  async setTabState(name: string, value: any): Promise<void> {
+  async setBrowserState(name: string, value: any): Promise<void> {
     return window.localStorage.setItem('STATE_' + name, value)
   }
 
-  async removeTabState(name: string): Promise<void> {
+  async removeBrowserState(name: string): Promise<void> {
     return window.localStorage.removeItem('STATE_' + name)
   }
 

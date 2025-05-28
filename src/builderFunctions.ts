@@ -28,7 +28,7 @@ export function copyBaseProject(buildDir: string, translator: string) {
 
 export function installDependencies(buildDir: string) {
   try {
-    // Запускаем npm install в указанной директории
+  // Запускаем npm install в указанной директории
     execSync('npm install', {
       cwd: buildDir,
       stdio: 'inherit' // Показываем вывод в консоль
