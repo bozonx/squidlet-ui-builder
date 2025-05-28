@@ -9,16 +9,23 @@ describe('Translator Vue', () => {
         props: {
           name: 'hello-world'
         },
-        template: []
+        template: [
+          {
+            type: 'Component',
+            component: 'Button',
+            props: {
+              class: 'button'
+            },
+            children: []
+          }
+
+        ]
       }
 
-      const result = `
-      <template>
-        <div>
-          <h1>Hello World</h1>
-        </div>
-      </template>
-      `
+      const result = `<template>
+<Button class="button">
+</Button>
+</template>`
       expect(makeComponent(schema)).toBe(result)
     })
 
