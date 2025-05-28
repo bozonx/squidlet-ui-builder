@@ -10,7 +10,7 @@ export const SQUIDLET_API_HANDLER = {
   APP: 'APP'
 }
 
-export const API_BASE_PATH = '/api/v1/app'
+export const API_BASE_PATH = '/api/v1/app/'
 
 export interface SquidletConnectorSetup {
   connection: 'WS' | 'HTTP'
@@ -121,7 +121,7 @@ export class Squidlet {
 
   _callBackend(apiHandler: string, name: string, data: any): Promise<any | undefined> {
     if (this.setup.connection === 'HTTP') {
-      return fetch(this.setup.apiBaseUrl + '/api/v1/app/' + name, {
+      return fetch(this.setup.apiBaseUrl + API_BASE_PATH + name, {
         method: 'POST',
         body: JSON.stringify({
           apiHandler,
@@ -130,14 +130,9 @@ export class Squidlet {
         })
       })
     } else if (this.setup.connection === 'WS') {
-      return new Promise((resolve, reject) => {
-        const ws = new WebSocket(this.setup.apiBaseUrl + '/api/v1/app/' + name)
-        ws.onmessage = (event) => {
-          resolve(JSON.parse(event.data))
-        }
-      })
+
     }
-    
+
     return Promise.reject(new Error('Unsupported connection type'))
   }
 
