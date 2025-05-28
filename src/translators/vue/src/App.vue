@@ -5,13 +5,13 @@
 <template>
   <div class="app">
     <nav class="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <RouterLink to="/">Home</RouterLink> |
+      <RouterLink to="/about">About</RouterLink>
     </nav>
 
     <main class="main">
       <transition name="fade" mode="out-in">
-        <router-view />
+        <RouterView />
       </transition>
     </main>
   </div>
