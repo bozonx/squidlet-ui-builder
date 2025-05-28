@@ -1,0 +1,30 @@
+{
+  "name": "vue-translator",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+    "clean": "rm -rf node_modules dist",
+    "reinstall": "npm run clean && npm install",
+    "server": "node server.js"
+  },
+  "dependencies": {
+    "@tanstack/vue-query": "^5.20.5",
+    "@trpc/client": "^10.45.0",
+    "@trpc/server": "^10.45.0",
+    "pinia": "^2.1.6",
+    "vue": "^3.3.4",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.3.4",
+    "@vue/compiler-sfc": "^3.3.4",
+    "eslint": "^8.49.0",
+    "eslint-plugin-vue": "^9.17.0",
+    "vite": "^4.4.9"
+  }
+}
