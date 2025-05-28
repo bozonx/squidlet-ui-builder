@@ -4,6 +4,9 @@ globs:
 alwaysApply: true
 ---
 
+- import всегда ставь сверху кода
+
 Стек
 
 - Используй Yaml
+
