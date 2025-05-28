@@ -1,5 +1,5 @@
 export interface ComponentSchema {
-  props?: Record<string, any>
+  props?: Props
   template: TemplateItem[]
 }
 
@@ -9,4 +9,9 @@ export interface TemplateItem {
   component: string
   props?: Record<string, any>
   children?: TemplateItem[]
+}
+
+export interface Props {
+  type: 'vprog' | 'expression' | 'string'
+  value: any
 }

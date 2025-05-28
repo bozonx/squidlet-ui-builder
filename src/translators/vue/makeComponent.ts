@@ -28,6 +28,19 @@ function makeTemplateItemComponent(item: TemplateItem): string {
 function makeProps(props: Record<string, any> | undefined): string {
   if (!props) return ''
 
-  // TODO: add more props
-  return ' ' + Object.keys(props).map(key => `${key}="${props[key]}"`).join(' ')
+  const result = []
+
+  for (const key in props) {
+    const prop = props[key]
+
+    if (prop.type === 'vprog') {
+      result.push(`:${key}="${prop.value}"`)
+    } else if (prop.type === 'expression') {
+      result.push(`${key}="${prop.value}"`)
+    } else if (prop.type === 'string') {
+      result.push(`${key}="${prop.value}"`)
+    }
+  }
+
+  return ' ' + result.join(' ')
 }

@@ -6,20 +6,16 @@ describe('Translator Vue', () => {
   describe('makeComponent', () => {
     it('should convert kebab-case to camelCase', () => {
       const schema: ComponentSchema = {
-        props: {
-          name: 'hello-world'
-        },
-        template: [
-          {
-            type: 'Component',
-            component: 'Button',
-            props: {
-              class: 'button'
-            },
-            children: []
+        template: [{
+          type: 'Component',
+          component: 'Button',
+          props: {
+            'class': {
+              type: 'string',
+              value: 'button'
+            }
           }
-
-        ]
+        }]
       }
 
       const result = `<template>
