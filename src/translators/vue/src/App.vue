@@ -1,3 +1,7 @@
+<script setup>
+// Компонент использует Composition API
+</script>
+
 <template>
   <div class="app">
     <nav class="nav">
@@ -13,9 +17,6 @@
   </div>
 </template>
 
-<script setup>
-// Компонент использует Composition API
-</script>
 
 <style>
 .app {

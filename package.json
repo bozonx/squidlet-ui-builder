@@ -15,6 +15,7 @@
     "@trpc/server": "^10.45.0",
     "dotenv": "^16.3.1",
     "fastify": "^4.24.3",
+    "vue-router": "^4.5.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -25,4 +26,4 @@
     "tsx": "^4.6.2",
     "typescript": "^5.3.3"
   }
-} 
+}
