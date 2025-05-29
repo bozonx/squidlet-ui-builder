@@ -143,9 +143,36 @@ export function loadYamlFileAndParse(filePath: string) {
   return yaml.parse(fileContent);
 }
 
-export function cleanDir(dir: string) {
-  if (fs.existsSync(dir)) {
-    fs.rmSync(dir, { recursive: true, force: true });
+/**
+ * Рекурсивно удаляет содержимое директории, сохраняя папку node_modules
+ * @param dir - путь к директории для очистки
+ */
+export function cleanDirExceptNodeModules(dir: string) {
+  if (!fs.existsSync(dir)) {
+    return;
+  }
+
+  const items = fs.readdirSync(dir);
+  
+  for (const item of items) {
+    const itemPath = path.join(dir, item);
+    
+    // Пропускаем node_modules
+    if (item === 'node_modules') {
+      continue;
+    }
+
+    const stats = fs.statSync(itemPath);
+    
+    if (stats.isDirectory()) {
+      // Рекурсивно удаляем содержимое поддиректории
+      cleanDirExceptNodeModules(itemPath);
+      // Удаляем пустую директорию
+      fs.rmdirSync(itemPath);
+    } else {
+      // Удаляем файл
+      fs.unlinkSync(itemPath);
+    }
   }
 }
 
