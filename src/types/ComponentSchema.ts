@@ -4,7 +4,7 @@ export type TemplateItem =
   | TextType
   | IfType
   | ElseType
-  | IfElseType
+  | ElseIfType
   | ForType
   | RouterViewType
   | RouterLinkType
@@ -16,32 +16,27 @@ export interface ComponentSchema {
   template?: TemplateItem[];
 }
 
-// TODO: add directives : v-show, if else, foreach, etc
-
 export interface Props {
-  // TODO: add more types
-  type:
-    | 'vprog'
-    | 'expression'
-    | 'string'
-    | 'boolean'
-    | 'number'
-    | 'array'
-    | 'object';
+  type: 'expression' | 'string' | 'boolean' | 'number' | 'array' | 'object';
+  value: any;
+}
+
+export interface TemplateProps {
+  type: 'expression' | 'string' | 'boolean' | 'number';
   value: any;
 }
 
 export interface ComponentType {
   type: 'Component';
   component: string;
-  props?: Record<string, any>;
+  props?: Record<string, TemplateProps>;
   children?: TemplateItem[];
 }
 
 export interface ElementType {
   type: 'Element';
   tag: string;
-  props?: Record<string, any>;
+  props?: Record<string, TemplateProps>;
   children?: TemplateItem[];
 }
 
@@ -61,8 +56,8 @@ export interface ElseType {
   children: TemplateItem[];
 }
 
-export interface IfElseType {
-  type: 'IfElse';
+export interface ElseIfType {
+  type: 'ElseIf';
   condition: string;
   children: TemplateItem[];
 }
@@ -78,14 +73,13 @@ export interface ForType {
 
 export interface RouterViewType {
   type: 'RouterView';
-  name: string;
   //children: TemplateItem[];
 }
 
 export interface RouterLinkType {
   type: 'RouterLink';
   to: string;
-  props?: Record<string, any>;
+  props?: Record<string, TemplateProps>;
   children: TemplateItem[];
 }
 

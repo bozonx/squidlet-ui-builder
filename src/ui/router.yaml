@@ -1,7 +1,10 @@
 routes:
   - path: /
-    name: home
-    view: Home
-  - path: /about
-    name: about
-    view: About
+    view: BaseLayout
+    children:
+      - path: ''
+        name: home
+        view: Home
+      - path: /about
+        name: about
+        view: About

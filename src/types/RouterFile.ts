@@ -4,6 +4,7 @@ export interface RouterFile {
 
 export interface Route {
   path: string;
-  name: string;
+  name?: string;
   view: string;
+  children?: Route[];
 }

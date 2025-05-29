@@ -29,10 +29,9 @@ function makeComponentProps(props: Record<string, any> | undefined): string {
   for (const key in props) {
     const prop = props[key];
 
-    // TODO: add more types
-    if (prop.type === 'vprog') {
-      result += `${key}: ${prop.value},\n`;
-    } else if (prop.type === 'expression') {
+    if (
+      ['expression', 'boolean', 'number', 'array', 'object'].includes(prop.type)
+    ) {
       result += `${key}: ${prop.value},\n`;
     } else if (prop.type === 'string') {
       result += `${key}: String,\n`;

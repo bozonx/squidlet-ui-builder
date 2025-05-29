@@ -4,5 +4,4 @@ template:
     props:
       class: div-class
     children:
-      - type: Component
-        component: RouterView
+      - type: RouterView

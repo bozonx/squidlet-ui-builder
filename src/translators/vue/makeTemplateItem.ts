@@ -1,9 +1,9 @@
 import {
   ComponentType,
   ElementType,
+  ElseIfType,
   ElseType,
   ForType,
-  IfElseType,
   IfType,
   RouterLinkType,
   RouterViewType,
@@ -26,8 +26,8 @@ export function makeTemplateItems(items: TemplateItem[]): string {
       result.push(makeTemplateItemIf(item as IfType));
     } else if (item.type === 'Else') {
       result.push(makeTemplateItemElse(item as ElseType));
-    } else if (item.type === 'IfElse') {
-      result.push(makeTemplateItemIfElse(item as IfElseType));
+    } else if (item.type === 'ElseIf') {
+      result.push(makeTemplateItemElseIf(item as ElseIfType));
     } else if (item.type === 'For') {
       result.push(makeTemplateItemFor(item as ForType));
     } else if (item.type === 'RouterView') {
@@ -52,10 +52,8 @@ export function makeTemplateItemProps(
   for (const key in props) {
     const prop = props[key];
 
-    if (prop.type === 'vprog') {
+    if (['expression', 'boolean', 'number'].includes(prop.type)) {
       result.push(`:${key}="${prop.value}"`);
-    } else if (prop.type === 'expression') {
-      result.push(`${key}="${prop.value}"`);
     } else if (prop.type === 'string') {
       result.push(`${key}="${prop.value}"`);
     }
@@ -102,7 +100,7 @@ export function makeTemplateItemElse(item: ElseType): string {
   return `<template v-else>${children}</template>`;
 }
 
-export function makeTemplateItemIfElse(item: IfElseType): string {
+export function makeTemplateItemElseIf(item: ElseIfType): string {
   const children = item.children?.length
     ? '\n' + makeTemplateItems(item.children) + '\n'
     : '';
@@ -125,7 +123,7 @@ export function makeTemplateItemFor(item: ForType): string {
 }
 
 export function makeTemplateItemRouterView(item: RouterViewType): string {
-  return `<router-view ${item.name}>\n</router-view>\n`;
+  return `<RouterView></RouterView>`;
 }
 
 export function makeTemplateItemRouterLink(item: RouterLinkType): string {
@@ -134,7 +132,7 @@ export function makeTemplateItemRouterLink(item: RouterLinkType): string {
     ? '\n' + makeTemplateItems(item.children) + '\n'
     : '';
 
-  return `<RouterLink to="${item.to}" ${props}>${children}</RouterLink>\n`;
+  return `<RouterLink to="${item.to}"${props}>${children}</RouterLink>`;
 }
 
 export function makeTemplateItemSlot(item: SlotType): string {
@@ -142,5 +140,5 @@ export function makeTemplateItemSlot(item: SlotType): string {
     ? '\n' + makeTemplateItems(item.children) + '\n'
     : '';
 
-  return `<slot name="${item.name}">${children}</slot>\n`;
+  return `<slot name="${item.name}">${children}</slot>`;
 }
