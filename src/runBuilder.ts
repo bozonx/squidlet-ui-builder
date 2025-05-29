@@ -10,41 +10,73 @@ import {
 } from './builderFunctions';
 import { UI_FILES } from './constants';
 
-// Получаем аргументы командной строки
-const args = process.argv.slice(2);
-const BUILD_DIR = 'build';
-const translatorIndex = args.findIndex((arg) => arg === '-t');
-let translatorName;
-
-if (translatorIndex !== -1 && args[translatorIndex + 1]) {
-  translatorName = args[translatorIndex + 1];
-} else {
-  console.error('Translator not specified');
-  process.exit(1);
+// Интерфейс для аргументов командной строки
+interface CommandLineArgs {
+  translator: string;
+  sourceDir: string;
+  buildDir: string;
 }
 
-// Проверяем наличие аргументов
-if (args.length === 0) {
-  console.error('Error: Please provide a source directory as an argument');
-  process.exit(1);
+// Функция для парсинга аргументов командной строки
+function parseCommandLineArgs(): CommandLineArgs {
+  const args = process.argv.slice(2);
+
+  // Проверяем наличие аргументов
+  if (args.length === 0) {
+    console.error('Error: Please provide required arguments');
+    console.error(
+      'Usage: npx tsx ./src/runBuilder.ts -t <translator> <sourceDir>'
+    );
+    process.exit(1);
+  }
+
+  // Ищем флаг переводчика
+  const translatorIndex = args.findIndex((arg) => arg === '-t');
+  if (translatorIndex === -1 || !args[translatorIndex + 1]) {
+    console.error('Error: Translator not specified');
+    console.error(
+      'Usage: npx tsx ./src/runBuilder.ts -t <translator> <sourceDir>'
+    );
+    process.exit(1);
+  }
+
+  // Получаем имя переводчика
+  const translator = args[translatorIndex + 1];
+
+  // Получаем исходную директорию (последний аргумент)
+  const sourceDir = args[args.length - 1];
+
+  // Проверяем существование исходной директории
+  if (!existsSync(sourceDir)) {
+    console.error(`Error: Source directory "${sourceDir}" does not exist`);
+    process.exit(1);
+  }
+
+  return {
+    translator,
+    sourceDir,
+    buildDir: 'build', // По умолчанию используем 'build'
+  };
 }
 
-const srcDir = args[0];
-const parsedIndexFile = loadYamlFileAndParse(srcDir + '/' + UI_FILES.index);
+// Парсим аргументы
+const { translator, sourceDir, buildDir } = parseCommandLineArgs();
 
 // Создаем директорию сборки если она не существует
-if (!existsSync(BUILD_DIR)) {
+if (!existsSync(buildDir)) {
   try {
-    mkdirSync(BUILD_DIR);
-    console.log(`Created build directory: ${BUILD_DIR}`);
+    mkdirSync(buildDir);
+    console.log(`Created build directory: ${buildDir}`);
   } catch (err) {
     console.error(`Error creating build directory: ${err}`);
     process.exit(1);
   }
 }
 
-copyBaseProject(BUILD_DIR, translatorName);
-generateTemplates(BUILD_DIR, translatorName, parsedIndexFile);
-generateRouter(BUILD_DIR, translatorName, srcDir);
-buildFiles(BUILD_DIR, translatorName, parsedIndexFile);
-installDependencies(BUILD_DIR);
+const parsedIndexFile = loadYamlFileAndParse(sourceDir + '/' + UI_FILES.index);
+
+copyBaseProject(buildDir, translator);
+generateTemplates(buildDir, translator, parsedIndexFile);
+generateRouter(buildDir, translator, sourceDir);
+buildFiles(buildDir, translator, parsedIndexFile);
+installDependencies(buildDir);
