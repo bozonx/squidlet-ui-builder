@@ -1,0 +1,7 @@
+template:
+  - type: Component
+    component: Button
+    props:
+      class: button
+  - type: Text
+    text: Hello World
