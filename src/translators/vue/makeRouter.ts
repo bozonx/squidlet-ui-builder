@@ -9,7 +9,7 @@ export function makeRouter(routerFile: RouterFile) {
   result += `  routes: [\n`;
 
   for (const route of routerFile.routes) {
-    result += `    { path: "${route.path}", name: "${route.name}", component: views[${route.view}] },\n`;
+    result += `    { path: "${route.path}", name: "${route.name}", component: views["${route.view}"] },\n`;
   }
 
   result += `  ],\n`;

@@ -5,10 +5,18 @@ export interface ComponentSchema {
 
 export interface TemplateItem {
   // TODO: add more types
-  type: 'Component' | 'Text' | 'If' | 'Else' | 'IfElse' | 'ForEach'
-  component: string
-  props?: Record<string, any>
-  children?: TemplateItem[]
+  type:
+    | 'Component'
+    | 'Element'
+    | 'Text'
+    | 'InlineText'
+    | 'If'
+    | 'Else'
+    | 'IfElse'
+    | 'ForEach';
+  component: string;
+  props?: Record<string, any>;
+  children?: TemplateItem[];
 }
 
 export interface Props {

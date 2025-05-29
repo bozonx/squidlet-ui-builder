@@ -7,6 +7,7 @@ import {
   generateRouter,
   installDependencies,
   loadYamlFileAndParse,
+  cleanDir,
 } from './builderFunctions';
 import { UI_FILES } from './constants';
 
@@ -75,8 +76,9 @@ if (!existsSync(buildDir)) {
 
 const parsedIndexFile = loadYamlFileAndParse(sourceDir + '/' + UI_FILES.index);
 
+cleanDir(buildDir);
 copyBaseProject(buildDir, translator);
 generateTemplates(buildDir, translator, parsedIndexFile);
 generateRouter(buildDir, translator, sourceDir);
-buildFiles(buildDir, translator, parsedIndexFile);
-installDependencies(buildDir);
+buildFiles(buildDir, translator, sourceDir);
+//installDependencies(buildDir);

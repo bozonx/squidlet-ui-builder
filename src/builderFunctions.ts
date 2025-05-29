@@ -16,15 +16,35 @@ const TRANSLATORS: Record<string, Translator> = {
 };
 
 export function copyBaseProject(buildDir: string, translator: string) {
-  const sourceDir = path.join('translators', translator, 'rootFiles');
-  const files = fs.readdirSync(sourceDir);
+  const sourceDir = path.join('./src/translators', translator, 'rootFiles');
 
-  files.forEach((file) => {
-    const sourcePath = path.join(sourceDir, file);
-    const destPath = path.join(buildDir, file);
+  // Рекурсивная функция для копирования файлов и директорий
+  function copyRecursive(source: string, destination: string) {
+    // Создаем директорию назначения, если она не существует
+    if (!existsSync(destination)) {
+      fs.mkdirSync(destination, { recursive: true });
+    }
 
-    fs.copyFileSync(sourcePath, destPath);
-  });
+    // Получаем список файлов и директорий
+    const items = fs.readdirSync(source);
+
+    for (const item of items) {
+      const sourcePath = path.join(source, item);
+      const destPath = path.join(destination, item);
+      const stats = fs.statSync(sourcePath);
+
+      if (stats.isDirectory()) {
+        // Если это директория, рекурсивно копируем её содержимое
+        copyRecursive(sourcePath, destPath);
+      } else {
+        // Если это файл, копируем его
+        fs.copyFileSync(sourcePath, destPath);
+      }
+    }
+  }
+
+  // Начинаем копирование с корневой директории
+  copyRecursive(sourceDir, buildDir);
 }
 
 export function installDependencies(buildDir: string) {
@@ -44,7 +64,7 @@ export function generateTemplates(
   translator: string,
   indexFile: IndexFileSchema
 ) {
-  const tmplsDir = 'translators/' + translator + '/tmpls';
+  const tmplsDir = './src/translators/' + translator + '/tmpls';
   const files = fs.readdirSync(tmplsDir);
 
   // TODO: сделать рекурсивно
@@ -53,7 +73,9 @@ export function generateTemplates(
     const destPath = path.join(buildDir, file);
     const template = fs.readFileSync(sourcePath, 'utf8');
 
-    const parsedTemplate = template.replace('{{title}}', indexFile.title);
+    const parsedTemplate = template
+      .replace('{{title}}', indexFile.title)
+      .replace('{{name}}', indexFile.name);
 
     fs.writeFileSync(destPath, parsedTemplate);
   });
@@ -68,7 +90,7 @@ export function generateRouter(
   const trans = TRANSLATORS[translator];
   const router = trans.makeRouter(routerFile);
 
-  fs.writeFileSync(buildDir + '/' + UI_FILES.router, router);
+  fs.writeFileSync(buildDir + '/router.js', router);
 }
 
 export function buildFiles(
@@ -89,17 +111,17 @@ export function buildFiles(
   const trans = TRANSLATORS[translator];
 
   for (const component of componentsFile.components) {
-    const componentPath = srcDir + '/' + component;
+    const componentPath = srcDir + '/' + component + '.yaml';
     const componentContent = loadYamlFileAndParse(
       componentPath
     ) as ComponentSchema;
     const translatedComponent = trans.makeComponent(componentContent);
 
-    fs.writeFileSync(buildDir + '/' + component, translatedComponent);
+    fs.writeFileSync(buildDir + '/' + component + '.js', translatedComponent);
   }
 
   for (const layout of layoutsFile.layouts) {
-    const layoutPath = srcDir + '/' + layout;
+    const layoutPath = srcDir + '/' + layout + '.yaml';
     const layoutContent = loadYamlFileAndParse(layoutPath) as ComponentSchema;
     const translatedLayout = trans.makeComponent(layoutContent);
 
@@ -107,11 +129,11 @@ export function buildFiles(
   }
 
   for (const view of viewsFile.views) {
-    const viewPath = srcDir + '/' + view;
+    const viewPath = srcDir + '/' + view + '.yaml';
     const viewContent = loadYamlFileAndParse(viewPath) as ComponentSchema;
     const translatedView = trans.makeComponent(viewContent);
 
-    fs.writeFileSync(buildDir + '/' + view, translatedView);
+    fs.writeFileSync(buildDir + '/' + view + '.js', translatedView);
   }
 
   // Views index file
@@ -144,4 +166,10 @@ export function loadYamlFileAndParse(filePath: string) {
   const fileContent = fs.readFileSync(filePath, 'utf8');
 
   return yaml.parse(fileContent);
+}
+
+export function cleanDir(dir: string) {
+  if (fs.existsSync(dir)) {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
 }
