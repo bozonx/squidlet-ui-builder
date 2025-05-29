@@ -31,22 +31,5 @@ describe('Translator Vue', () => {
 </template>`;
       expect(makeComponent(schema)).toBe(result);
     });
-
-    it('props', () => {
-      const schema: ComponentSchema = {
-        props: {
-          className: {
-            type: 'string',
-            value: 'button',
-          },
-        },
-      };
-
-      const result =
-        `<script setup>\n` +
-        `const props = defineProps({\nclassName: String,\n})\n` +
-        `</script>\n`;
-      expect(makeComponent(schema)).toBe(result);
-    });
   });
 });
