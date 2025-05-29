@@ -62,6 +62,7 @@ function parseCommandLineArgs(): CommandLineArgs {
 
 // Парсим аргументы
 const { translator, sourceDir, buildDir } = parseCommandLineArgs();
+let buildDirExists = false;
 
 // Создаем директорию сборки если она не существует
 if (!existsSync(buildDir)) {
@@ -72,13 +73,21 @@ if (!existsSync(buildDir)) {
     console.error(`Error creating build directory: ${err}`);
     process.exit(1);
   }
+} else {
+  buildDirExists = true;
 }
 
 const parsedIndexFile = loadYamlFileAndParse(sourceDir + '/' + UI_FILES.index);
 
-cleanDir(buildDir);
+if (buildDirExists) {
+  cleanDir(buildDir);
+}
+
 copyBaseProject(buildDir, translator);
 generateTemplates(buildDir, translator, parsedIndexFile);
 generateRouter(buildDir, translator, sourceDir);
 buildFiles(buildDir, translator, sourceDir);
-//installDependencies(buildDir);
+
+if (!buildDirExists) {
+  installDependencies(buildDir);
+}

@@ -1,0 +1,6 @@
+template:
+  - type: Element
+    tag: button
+    children:
+      - type: Text
+        text: Button
