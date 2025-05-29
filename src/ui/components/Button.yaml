@@ -3,5 +3,5 @@ template:
     tag: button
     children:
       - type: Text
-        text: Button
+        value: Button
 

@@ -211,7 +211,7 @@ export function generateRouter(
   const trans = TRANSLATORS[translator];
   const router = trans.makeRouter(routerFile);
 
-  fs.writeFileSync(buildDir + '/router.js', router);
+  fs.writeFileSync(buildDir + '/src/router.js', router);
 }
 
 export function makeComponentFiles(
