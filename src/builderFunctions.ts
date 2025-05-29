@@ -76,18 +76,23 @@ export function buildFiles(
   translator: string,
   srcDir: string
 ) {
-  const componentsFile = loadYamlFileAndParse(srcDir + '/' + UI_FILES.components) as ComponentsFile;
-  const layoutsFile = loadYamlFileAndParse(srcDir + '/' + UI_FILES.layouts) as LayoutsFile;
-  const viewsFile = loadYamlFileAndParse(srcDir + '/' + UI_FILES.views) as ViewsFile;
-  
-  // TODO: add css.yaml
-  // TODO: создать файл viewsIndex.js
+  const componentsFile = loadYamlFileAndParse(
+    srcDir + '/' + UI_FILES.components
+  ) as ComponentsFile;
+  const layoutsFile = loadYamlFileAndParse(
+    srcDir + '/' + UI_FILES.layouts
+  ) as LayoutsFile;
+  const viewsFile = loadYamlFileAndParse(
+    srcDir + '/' + UI_FILES.views
+  ) as ViewsFile;
 
   const trans = TRANSLATORS[translator];
 
   for (const component of componentsFile.components) {
     const componentPath = srcDir + '/' + component;
-    const componentContent = loadYamlFileAndParse(componentPath) as ComponentSchema;
+    const componentContent = loadYamlFileAndParse(
+      componentPath
+    ) as ComponentSchema;
     const translatedComponent = trans.makeComponent(componentContent);
 
     fs.writeFileSync(buildDir + '/' + component, translatedComponent);
@@ -108,6 +113,26 @@ export function buildFiles(
 
     fs.writeFileSync(buildDir + '/' + view, translatedView);
   }
+
+  // Views index file
+  let viewsIndex = '';
+
+  for (const view of viewsFile.views) {
+    viewsIndex += `export ${view} from './${view}'\n`;
+  }
+
+  fs.writeFileSync(buildDir + '/views.js', viewsIndex);
+
+  // Components index file
+  let componentsIndex = '';
+
+  for (const component of componentsFile.components) {
+    componentsIndex += `export ${component} from './${component}'\n`;
+  }
+
+  fs.writeFileSync(buildDir + '/components.js', componentsIndex);
+
+  // TODO: add css.yaml
 }
 
 export function loadYamlFileAndParse(filePath: string) {
