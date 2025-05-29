@@ -1,7 +1,8 @@
 template:
-  - type: Component
-    component: Button
+  - type: Element
+    tag: div
     props:
-      class: button
-  - type: Text
-    text: Hello World
+      class: div-class
+    children:
+      - type: Text
+        text: Hello World

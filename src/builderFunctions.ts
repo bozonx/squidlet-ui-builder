@@ -224,7 +224,7 @@ export function makeComponentFiles(
 
   for (const componentFile of srcFiles) {
     const componentFullPath = srcDir + '/' + componentFile + '.yaml';
-    const componentDestDir = path.dirname(buildDir + '/' + componentFile);
+    const componentDestDir = path.dirname(buildDir + '/src/' + componentFile);
     const componentContent = loadYamlFileAndParse(
       componentFullPath
     ) as ComponentSchema;
@@ -242,7 +242,7 @@ export function makeComponentFiles(
     }
 
     fs.writeFileSync(
-      buildDir + '/' + componentFile + '.vue',
+      buildDir + '/src/' + componentFile + '.vue',
       translatedComponent
     );
   }
@@ -262,6 +262,6 @@ function makeIndexFile(
     componentsIndex += `export { default as ${componentName} } from './${component}.vue'\n`;
   }
 
-  fs.writeFileSync(buildDir + `/${outputFileName}.js`, componentsIndex);
+  fs.writeFileSync(buildDir + `/src/${outputFileName}.js`, componentsIndex);
 }
 
