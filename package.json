@@ -9,6 +9,7 @@
     "start": "node dist/index.js",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"src/**/*.{ts,js,json,yml}\"",
+    "build:ui": "npx tsx ./src/runBuilder.ts -t vue ./src/ui",
     "test": "vitest",
     "test:coverage": "vitest run --coverage"
   },
@@ -19,6 +20,7 @@
     "dotenv": "^16.3.1",
     "fastify": "^4.24.3",
     "lodash.template": "^4.5.0",
+    "ts-node": "^10.9.2",
     "vue-router": "^4.5.1",
     "yaml": "^2.8.0",
     "zod": "^3.22.4"

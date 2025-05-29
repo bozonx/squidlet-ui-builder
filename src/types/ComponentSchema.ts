@@ -12,6 +12,7 @@ export interface TemplateItem {
 }
 
 export interface Props {
-  type: 'vprog' | 'expression' | 'string'
-  value: any
+  // TODO: add more types
+  type: 'vprog' | 'expression' | 'string';
+  value: any;
 }
