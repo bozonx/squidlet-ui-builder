@@ -15,8 +15,10 @@
   "dependencies": {
     "@fastify/cors": "^8.4.1",
     "@trpc/server": "^10.45.0",
+    "@types/lodash.template": "^4.5.3",
     "dotenv": "^16.3.1",
     "fastify": "^4.24.3",
+    "lodash.template": "^4.5.0",
     "vue-router": "^4.5.1",
     "yaml": "^2.8.0",
     "zod": "^3.22.4"

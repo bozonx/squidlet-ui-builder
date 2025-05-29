@@ -1,3 +1,7 @@
+import { ComponentSchema } from './ComponentSchema';
+import { RouterFile } from './RouterFile';
+
 export interface Translator {
-  translateProject: (schemas: string[]) => string
+  makeComponent: (component: ComponentSchema) => string;
+  makeRouter: (routerFile: RouterFile) => string;
 }

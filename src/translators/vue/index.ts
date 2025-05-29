@@ -1,14 +1,15 @@
 import { Translator } from "@/types/Translator"
 import { makeComponent } from "./makeComponent"
 import { ComponentSchema } from "@/types/ComponentSchema"
+import { RouterFile } from '@/types/RouterFile';
+import { makeRouter } from "./makeRouter";
 
-export const vueTranslator: Translator = {
-  translateProject: (schemas: ComponentSchema[]) => {
-    const components = []
-    for (const schema of schemas) {
-      components.push(makeComponent(schema))
-    }
+export default {
+  makeComponent: (component: ComponentSchema) => {
+    return makeComponent(component);
+  },
 
-    return "Vue"
-  }
-}
+  makeRouter: (routerFile: RouterFile) => {
+    return makeRouter(routerFile);
+  },
+};

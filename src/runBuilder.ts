@@ -3,11 +3,12 @@ import { mkdirSync } from 'fs'
 import {
   buildFiles,
   copyBaseProject,
-  generateProjectFiles,
+  generateTemplates,
   generateRouter,
   installDependencies,
   loadYamlFileAndParse,
 } from './builderFunctions';
+import { UI_FILES } from './constants';
 
 // Получаем аргументы командной строки
 const args = process.argv.slice(2);
@@ -28,7 +29,8 @@ if (args.length === 0) {
   process.exit(1);
 }
 
-const parsedIndexFile = loadYamlFileAndParse(args[0]);
+const srcDir = args[0];
+const parsedIndexFile = loadYamlFileAndParse(srcDir + '/' + UI_FILES.index);
 
 // Создаем директорию сборки если она не существует
 if (!existsSync(BUILD_DIR)) {
@@ -42,7 +44,7 @@ if (!existsSync(BUILD_DIR)) {
 }
 
 copyBaseProject(BUILD_DIR, translatorName);
-generateRouter(BUILD_DIR, translatorName, parsedIndexFile);
-generateProjectFiles(BUILD_DIR, translatorName, parsedIndexFile);
+generateTemplates(BUILD_DIR, translatorName, parsedIndexFile);
+generateRouter(BUILD_DIR, translatorName, srcDir);
 buildFiles(BUILD_DIR, translatorName, parsedIndexFile);
 installDependencies(BUILD_DIR);
