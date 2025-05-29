@@ -13,33 +13,33 @@ import {
 } from '@/types/ComponentSchema';
 
 export function makeTemplateItems(items: TemplateItem[]): string {
-  let result = '';
+  let result = [];
 
   for (const item of items) {
     if (item.type === 'Element') {
-      result += '\n' + makeTemplateItemElement(item as ElementType);
+      result.push(makeTemplateItemElement(item as ElementType));
     } else if (item.type === 'Text') {
-      result += '\n' + makeTemplateItemText(item as TextType);
+      result.push(makeTemplateItemText(item as TextType));
     } else if (item.type === 'Component') {
-      result += '\n' + makeTemplateItemComponent(item as ComponentType);
+      result.push(makeTemplateItemComponent(item as ComponentType));
     } else if (item.type === 'If') {
-      result += '\n' + makeTemplateItemIf(item as IfType);
+      result.push(makeTemplateItemIf(item as IfType));
     } else if (item.type === 'Else') {
-      result += '\n' + makeTemplateItemElse(item as ElseType);
+      result.push(makeTemplateItemElse(item as ElseType));
     } else if (item.type === 'IfElse') {
-      result += '\n' + makeTemplateItemIfElse(item as IfElseType);
+      result.push(makeTemplateItemIfElse(item as IfElseType));
     } else if (item.type === 'For') {
-      result += '\n' + makeTemplateItemFor(item as ForType);
+      result.push(makeTemplateItemFor(item as ForType));
     } else if (item.type === 'RouterView') {
-      result += '\n' + makeTemplateItemRouterView(item as RouterViewType);
+      result.push(makeTemplateItemRouterView(item as RouterViewType));
     } else if (item.type === 'RouterLink') {
-      result += '\n' + makeTemplateItemRouterLink(item as RouterLinkType);
+      result.push(makeTemplateItemRouterLink(item as RouterLinkType));
     } else if (item.type === 'Slot') {
-      result += '\n' + makeTemplateItemSlot(item as SlotType);
+      result.push(makeTemplateItemSlot(item as SlotType));
     }
   }
 
-  return result;
+  return result.join('\n');
 }
 
 export function makeTemplateItemProps(
@@ -67,19 +67,19 @@ export function makeTemplateItemProps(
 export function makeTemplateItemComponent(item: ComponentType): string {
   const props = makeTemplateItemProps(item.props);
   const children = item.children?.length
-    ? makeTemplateItems(item.children) + '\n'
+    ? '\n' + makeTemplateItems(item.children) + '\n'
     : '';
 
-  return `<${item.component}${props}>${children}\n</${item.component}>\n`;
+  return `<${item.component}${props}>${children}</${item.component}>`;
 }
 
 export function makeTemplateItemElement(item: ElementType): string {
   const props = makeTemplateItemProps(item.props);
   const children = item.children?.length
-    ? makeTemplateItems(item.children)
+    ? '\n' + makeTemplateItems(item.children) + '\n'
     : '';
 
-  return `<${item.tag}${props}>${children}\n</${item.tag}>\n`;
+  return `<${item.tag}${props}>${children}</${item.tag}>`;
 }
 
 export function makeTemplateItemText(item: TextType): string {
@@ -88,37 +88,37 @@ export function makeTemplateItemText(item: TextType): string {
 
 export function makeTemplateItemIf(item: IfType): string {
   const children = item.children?.length
-    ? makeTemplateItems(item.children)
+    ? '\n' + makeTemplateItems(item.children) + '\n'
     : '';
 
-  return `<template v-if="${item.condition}">\n${children}</template>\n`;
+  return `<template v-if="${item.condition}">${children}</template>`;
 }
 
 export function makeTemplateItemElse(item: ElseType): string {
   const children = item.children?.length
-    ? makeTemplateItems(item.children)
+    ? '\n' + makeTemplateItems(item.children) + '\n'
     : '';
 
-  return `<template v-else>\n${children}</template>\n`;
+  return `<template v-else>${children}</template>`;
 }
 
 export function makeTemplateItemIfElse(item: IfElseType): string {
   const children = item.children?.length
-    ? makeTemplateItems(item.children)
+    ? '\n' + makeTemplateItems(item.children) + '\n'
     : '';
 
-  return `<template v-else-if="${item.condition}">\n${children}</template>\n`;
+  return `<template v-else-if="${item.condition}">${children}</template>`;
 }
 
 export function makeTemplateItemFor(item: ForType): string {
   const children = item.children?.length
-    ? makeTemplateItems(item.children)
+    ? '\n' + makeTemplateItems(item.children) + '\n'
     : '';
 
   if (item.array) {
-    return `<template v-for="(${item.item}, index) in ${item.array}">\n${children}</template>\n`;
+    return `<template v-for="(${item.item}, index) in ${item.array}">${children}</template>`;
   } else if (item.object) {
-    return `<template v-for="(${item.item}, key, index) in ${item.object}">\n${children}</template>\n`;
+    return `<template v-for="(${item.item}, key, index) in ${item.object}">${children}</template>`;
   }
 
   return '';
@@ -131,16 +131,16 @@ export function makeTemplateItemRouterView(item: RouterViewType): string {
 export function makeTemplateItemRouterLink(item: RouterLinkType): string {
   const props = makeTemplateItemProps(item.props);
   const children = item.children?.length
-    ? makeTemplateItems(item.children)
+    ? '\n' + makeTemplateItems(item.children) + '\n'
     : '';
 
-  return `<RouterLink to="${item.to}" ${props}>${children}\n</RouterLink>\n`;
+  return `<RouterLink to="${item.to}" ${props}>${children}</RouterLink>\n`;
 }
 
 export function makeTemplateItemSlot(item: SlotType): string {
   const children = item.children?.length
-    ? makeTemplateItems(item.children)
+    ? '\n' + makeTemplateItems(item.children) + '\n'
     : '';
 
-  return `<slot name="${item.name}">${children}\n</slot>\n`;
+  return `<slot name="${item.name}">${children}</slot>\n`;
 }

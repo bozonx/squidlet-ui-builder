@@ -15,7 +15,7 @@ export function makeComponent(schema: ComponentSchema): string {
   }
 
   if (schema.template?.length) {
-    result += `<template>${makeTemplateItems(schema.template)}</template>`;
+    result += `<template>\n${makeTemplateItems(schema.template)}\n</template>`;
   }
 
   return result;

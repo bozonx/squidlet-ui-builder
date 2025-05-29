@@ -21,8 +21,7 @@ describe('Translator Vue', () => {
       };
 
       const result = `<template>
-<Button className="button">
-</Button>
+<Button className="button"></Button>
 </template>`;
       expect(makeComponent(schema)).toBe(result);
     });
