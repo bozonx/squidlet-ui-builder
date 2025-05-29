@@ -2,6 +2,27 @@ template:
   - type: Element
     tag: div
     props:
-      class: div-class
+      class: flex
     children:
-      - type: RouterView
+      - type: Element
+        tag: div
+        children:
+          - type: RouterLink
+            to: /
+            children:
+              - type: Text
+                value: Home
+      - type: Element
+        tag: div
+        props:
+          class: flex-1
+        children:
+          - type: RouterView
+      - type: Element
+        tag: div
+        children:
+          - type: RouterLink
+            to: /settings
+            children:
+              - type: Text
+                value: Settings

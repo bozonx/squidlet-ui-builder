@@ -5,6 +5,6 @@ routes:
       - path: ''
         name: home
         view: Home
-      - path: /about
-        name: about
-        view: About
+      - path: /settings
+        name: settings
+        view: Settings
