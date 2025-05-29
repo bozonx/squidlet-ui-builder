@@ -12,4 +12,5 @@ export default {
   makeRouter: (routerFile: RouterFile) => {
     return makeRouter(routerFile);
   },
+
 };

@@ -4,3 +4,4 @@ template:
     children:
       - type: Text
         text: Button
+

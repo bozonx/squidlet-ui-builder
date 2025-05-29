@@ -15,6 +15,17 @@ const TRANSLATORS: Record<string, Translator> = {
   vue: vueTranslator,
 };
 
+export function loadYamlFileAndParse(filePath: string) {
+  if (!existsSync(filePath)) {
+    console.error(`Error: File "${filePath}" does not exist`);
+    process.exit(1);
+  }
+
+  const fileContent = fs.readFileSync(filePath, 'utf8');
+
+  return yaml.parse(fileContent);
+}
+
 export function copyBaseProject(buildDir: string, translator: string) {
   const sourceDir = path.join('./src/translators', translator, 'rootFiles');
 
@@ -81,66 +92,21 @@ export function generateTemplates(
   });
 }
 
-export function generateRouter(
-  buildDir: string,
-  translator: string,
-  srcDir: string
-) {
-  const routerFile = loadYamlFileAndParse(srcDir + '/' + UI_FILES.router);
-  const trans = TRANSLATORS[translator];
-  const router = trans.makeRouter(routerFile);
-
-  fs.writeFileSync(buildDir + '/router.js', router);
-}
-
 export function buildFiles(
   buildDir: string,
   translator: string,
   srcDir: string
 ) {
-  const componentsFile = loadYamlFileAndParse(
-    srcDir + '/' + UI_FILES.components
-  ) as ComponentsFile;
-  const layoutsFile = loadYamlFileAndParse(
-    srcDir + '/' + UI_FILES.layouts
-  ) as LayoutsFile;
-  const viewsFile = loadYamlFileAndParse(
-    srcDir + '/' + UI_FILES.views
-  ) as ViewsFile;
+  makeAllComponentsFiles(srcDir, buildDir, translator);
+  makeAllLayoutsFiles(srcDir, buildDir, translator);
+  makeAllViewsFiles(srcDir, buildDir, translator);
 
-  makeComponentFiles(
-    [...componentsFile.components, ...layoutsFile.layouts, ...viewsFile.views],
-    srcDir,
-    buildDir,
-
-    translator
-  );
-
-  // Views index file
-  let viewsIndex = '';
-
-  for (const view of viewsFile.views) {
-    viewsIndex += `export ${view} from './${view}'\n`;
-  }
-
-  fs.writeFileSync(buildDir + '/views.js', viewsIndex);
-
-  makeComponentsIndexFile(componentsFile.components, 'components', buildDir);
-  makeComponentsIndexFile(layoutsFile.layouts, 'layouts', buildDir);
-  makeComponentsIndexFile(viewsFile.views, 'views', buildDir);
+  makeComponentIndexFile(srcDir, buildDir);
+  makeLayoutsIndexFile(srcDir, buildDir);
+  makeViewsIndexFile(srcDir, buildDir);
 
   // TODO: add css.yaml
-}
-
-export function loadYamlFileAndParse(filePath: string) {
-  if (!existsSync(filePath)) {
-    console.error(`Error: File "${filePath}" does not exist`);
-    process.exit(1);
-  }
-
-  const fileContent = fs.readFileSync(filePath, 'utf8');
-
-  return yaml.parse(fileContent);
+  // TODO: add appConfig.yaml
 }
 
 /**
@@ -153,17 +119,17 @@ export function cleanDirExceptNodeModules(dir: string) {
   }
 
   const items = fs.readdirSync(dir);
-  
+
   for (const item of items) {
     const itemPath = path.join(dir, item);
-    
+
     // Пропускаем node_modules
     if (item === 'node_modules') {
       continue;
     }
 
     const stats = fs.statSync(itemPath);
-    
+
     if (stats.isDirectory()) {
       // Рекурсивно удаляем содержимое поддиректории
       cleanDirExceptNodeModules(itemPath);
@@ -176,7 +142,79 @@ export function cleanDirExceptNodeModules(dir: string) {
   }
 }
 
-function makeComponentFiles(
+export function makeComponentIndexFile(srcDir: string, buildDir: string) {
+  const componentsFile = loadYamlFileAndParse(
+    srcDir + '/' + UI_FILES.components
+  ) as ComponentsFile;
+
+  makeIndexFile(componentsFile.components, 'components', buildDir);
+}
+
+export function makeLayoutsIndexFile(srcDir: string, buildDir: string) {
+  const layoutsFile = loadYamlFileAndParse(
+    srcDir + '/' + UI_FILES.layouts
+  ) as LayoutsFile;
+
+  makeIndexFile(layoutsFile.layouts, 'layouts', buildDir);
+}
+
+export function makeViewsIndexFile(srcDir: string, buildDir: string) {
+  const viewsFile = loadYamlFileAndParse(
+    srcDir + '/' + UI_FILES.views
+  ) as ViewsFile;
+
+  makeIndexFile(viewsFile.views, 'views', buildDir);
+}
+
+export function makeAllComponentsFiles(
+  srcDir: string,
+  buildDir: string,
+  translator: string
+) {
+  const componentsFile = loadYamlFileAndParse(
+    srcDir + '/' + UI_FILES.components
+  ) as ComponentsFile;
+
+  makeComponentFiles(componentsFile.components, srcDir, buildDir, translator);
+}
+
+export function makeAllLayoutsFiles(
+  srcDir: string,
+  buildDir: string,
+  translator: string
+) {
+  const layoutsFile = loadYamlFileAndParse(
+    srcDir + '/' + UI_FILES.layouts
+  ) as LayoutsFile;
+
+  makeComponentFiles(layoutsFile.layouts, srcDir, buildDir, translator);
+}
+
+export function makeAllViewsFiles(
+  srcDir: string,
+  buildDir: string,
+  translator: string
+) {
+  const viewsFile = loadYamlFileAndParse(
+    srcDir + '/' + UI_FILES.views
+  ) as ViewsFile;
+
+  makeComponentFiles(viewsFile.views, srcDir, buildDir, translator);
+}
+
+export function generateRouter(
+  buildDir: string,
+  translator: string,
+  srcDir: string
+) {
+  const routerFile = loadYamlFileAndParse(srcDir + '/' + UI_FILES.router);
+  const trans = TRANSLATORS[translator];
+  const router = trans.makeRouter(routerFile);
+
+  fs.writeFileSync(buildDir + '/router.js', router);
+}
+
+export function makeComponentFiles(
   srcFiles: string[],
   srcDir: string,
   buildDir: string,
@@ -184,12 +222,18 @@ function makeComponentFiles(
 ) {
   const trans = TRANSLATORS[translator];
 
-  for (const component of srcFiles) {
-    const componentPath = srcDir + '/' + component + '.yaml';
-    const componentDestDir = path.dirname(buildDir + '/' + component);
+  for (const componentFile of srcFiles) {
+    const componentFullPath = srcDir + '/' + componentFile + '.yaml';
+    const componentDestDir = path.dirname(buildDir + '/' + componentFile);
     const componentContent = loadYamlFileAndParse(
-      componentPath
+      componentFullPath
     ) as ComponentSchema;
+
+    if (!componentContent) {
+      console.warn('componentContent is empty', componentFullPath);
+      continue;
+    }
+
     const translatedComponent = trans.makeComponent(componentContent);
 
     // Создаем директорию компонента если она не существует
@@ -197,11 +241,14 @@ function makeComponentFiles(
       fs.mkdirSync(componentDestDir, { recursive: true });
     }
 
-    fs.writeFileSync(buildDir + '/' + component + '.vue', translatedComponent);
+    fs.writeFileSync(
+      buildDir + '/' + componentFile + '.vue',
+      translatedComponent
+    );
   }
 }
 
-function makeComponentsIndexFile(
+function makeIndexFile(
   srcFiles: string[],
   outputFileName: string,
   buildDir: string
@@ -217,3 +264,4 @@ function makeComponentsIndexFile(
 
   fs.writeFileSync(buildDir + `/${outputFileName}.js`, componentsIndex);
 }
+

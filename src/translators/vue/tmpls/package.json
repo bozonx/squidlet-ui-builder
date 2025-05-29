@@ -7,5 +7,14 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "*",
+    "vue-router": "*"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "*",
+    "vite": "*",
+    "vite-plugin-vue-devtools": "*"
   }
 }

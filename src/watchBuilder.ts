@@ -6,7 +6,10 @@ import chokidar from 'chokidar';
  * @param cb - callback функция, которая будет вызвана при изменении файлов
  * @returns функция для остановки отслеживания
  */
-function watch(dir: string, cb: (path: string) => void): () => void {
+export function watchBuilder(
+  dir: string,
+  cb: (path: string, event: string) => void
+): () => void {
   // Проверяем входные параметры
   if (!dir) {
     throw new Error('Directory path is required');
@@ -35,9 +38,7 @@ function watch(dir: string, cb: (path: string) => void): () => void {
   // Отслеживаем все изменения файлов
   watcher.on('all', (event, path) => {
     try {
-      console.log(11111, event, path);
-
-      cb(path);
+      cb(path, event);
     } catch (error) {
       console.error('Error in watch callback:', error);
     }
@@ -48,5 +49,3 @@ function watch(dir: string, cb: (path: string) => void): () => void {
     watcher.close();
   };
 }
-
-export default watch;

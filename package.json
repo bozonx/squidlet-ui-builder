@@ -10,6 +10,7 @@
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"src/**/*.{ts,js,json,yml}\"",
     "build:ui": "npx tsx ./src/runBuilder.ts -t vue ./src/ui",
+    "watch:ui": "npx tsx ./src/runBuilder.ts -t vue -w ./src/ui",
     "test": "vitest",
     "test:coverage": "vitest run --coverage"
   },
