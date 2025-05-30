@@ -1,2 +1,5 @@
 components:
   - components/Button
+  - components/ElementParams
+  - components/PreviewView
+  - components/ElementsTree

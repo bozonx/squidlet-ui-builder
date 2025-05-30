@@ -1,0 +1,10 @@
+template:
+  - type: Element
+    tag: div
+    props:
+      class:
+        type: string
+        value: flex
+    children:
+      - type: Text
+        value: Hello WorldA

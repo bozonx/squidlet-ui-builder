@@ -2,7 +2,34 @@ template:
   - type: Element
     tag: div
     props:
-      aaa: bg-red-500
+      class:
+        type: string
+        value: flex w-full
     children:
-      - type: Text
-        value: Hello World
+      - type: Element
+        tag: div
+        props:
+          class:
+            type: string
+            value: w-60
+        children:
+          - type: Component
+            component: ElementsTree
+      - type: Element
+        tag: div
+        props:
+          class:
+            type: string
+            value: flex-1
+        children:
+          - type: Component
+            component: PreviewView
+      - type: Element
+        tag: div
+        props:
+          class:
+            type: string
+            value: w-60 bg-gray-700
+        children:
+          - type: Component
+            component: ElementParams

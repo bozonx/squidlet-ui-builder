@@ -2,27 +2,37 @@ template:
   - type: Element
     tag: div
     props:
-      class: flex
+      class:
+        type: string
+        value: w-full h-screen
     children:
       - type: Element
-        tag: div
+        tag: nav
+        props:
+          class:
+            type: string
+            value: flex w-full h-48px bg-gray-800
         children:
-          - type: RouterLink
-            to: /
+          - type: Element
+            tag: div
+            props:
+              class:
+                type: string
+                value: w-60
             children:
               - type: Text
-                value: Home
+                value: TopBar
       - type: Element
         tag: div
         props:
-          class: flex-1
+          class:
+            type: string
+            value: workarea
         children:
           - type: RouterView
-      - type: Element
-        tag: div
-        children:
-          - type: RouterLink
-            to: /settings
-            children:
-              - type: Text
-                value: Settings
+stylesScoped: |
+  .workarea {
+    display: flex;
+    flex-direction: row;
+    height: calc(100vh - 48px);
+  }
