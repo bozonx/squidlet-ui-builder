@@ -30,7 +30,7 @@ template:
             value: workarea
         children:
           - type: RouterView
-stylesScoped: |
+styleScoped: |
   .workarea {
     display: flex;
     flex-direction: row;

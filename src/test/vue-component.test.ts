@@ -39,9 +39,27 @@ describe('Translator Vue', () => {
       const result =
         `<script setup>\n` +
         `const props = defineProps({\nclassName: String,\n})\n` +
-        `</script>\n`;
+        `</script>`;
       expect(makeComponent(schema)).toBe(result);
     });
+  });
+
+  it('style', () => {
+    const schema: ComponentSchema = {
+      style: 'body { background-color: red; }',
+    };
+    const result = `<style>\nbody { background-color: red; }\n</style>`;
+    
+    expect(makeComponent(schema)).toBe(result);
+  });
+
+  it('styleScoped', () => {
+    const schema: ComponentSchema = {
+      styleScoped: 'body { background-color: red; }',
+    };
+    const result = `<style scoped>\nbody { background-color: red; }\n</style>`;
+    
+    expect(makeComponent(schema)).toBe(result);
   });
 });
 

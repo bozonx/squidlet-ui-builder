@@ -4,21 +4,29 @@ import { makeTemplateItems } from './makeTemplateItem';
 export function makeComponent(schema: ComponentSchema): string {
   const props = makeComponentProps(schema.props);
   let scriptBody = '';
-  let result = '';
+  let result = [];
 
   if (props) {
     scriptBody += props;
   }
 
   if (scriptBody) {
-    result += `<script setup>\n${scriptBody}</script>\n`;
+    result.push(`<script setup>\n${scriptBody}</script>`);
   }
 
   if (schema.template?.length) {
-    result += `<template>\n${makeTemplateItems(schema.template)}\n</template>`;
+    result.push(`<template>\n${makeTemplateItems(schema.template)}\n</template>`);
   }
 
-  return result;
+  if (schema.styleScoped) {
+    result.push(`<style scoped>\n${schema.styleScoped}\n</style>`);
+  }
+
+  if (schema.style) {
+    result.push(`<style>\n${schema.style}\n</style>`);
+  }
+
+  return result.join('');
 }
 
 function makeComponentProps(props: Record<string, any> | undefined): string {

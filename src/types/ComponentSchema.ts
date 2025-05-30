@@ -14,6 +14,8 @@ export type TemplateItem =
 export interface ComponentSchema {
   props?: Record<string, Props>;
   template?: TemplateItem[];
+  style?: string;
+  styleScoped?: string;
 }
 
 export interface Props {
