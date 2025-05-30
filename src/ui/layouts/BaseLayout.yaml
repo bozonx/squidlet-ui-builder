@@ -11,7 +11,7 @@ template:
         props:
           class:
             type: string
-            value: flex w-full h-48px bg-gray-800
+            value: flex w-full bg-gray-800 app-topbar
         children:
           - type: Element
             tag: div
@@ -30,7 +30,12 @@ template:
             value: workarea
         children:
           - type: RouterView
+
 styleScoped: |
+  .app-topbar {
+    height: 48px;
+  }
+
   .workarea {
     display: flex;
     flex-direction: row;

@@ -11,7 +11,7 @@ template:
         props:
           class:
             type: string
-            value: w-60
+            value: w-60 left-panel
         children:
           - type: Component
             component: ElementsTree
@@ -20,7 +20,7 @@ template:
         props:
           class:
             type: string
-            value: flex-1
+            value: flex-1 middle-panel
         children:
           - type: Component
             component: PreviewView
@@ -29,7 +29,23 @@ template:
         props:
           class:
             type: string
-            value: w-60 bg-gray-700
+            value: w-60 bg-gray-700 right-panel
         children:
           - type: Component
             component: ElementParams
+
+styleScoped: |
+  .left-panel {
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  .middle-panel {
+    overflow-x: scroll;
+    overflow-y: scroll;
+  }
+
+  .right-panel {
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
