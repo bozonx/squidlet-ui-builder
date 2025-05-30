@@ -10,25 +10,25 @@ export default defineConfig({
     vue({
       template: {
         compilerOptions: {
-          isCustomElement: (tag) => tag.includes('-')
-        }
-      }
-    })
+          isCustomElement: (tag) => tag.includes('-'),
+        },
+      },
+    }),
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
   },
   server: {
     port: 3000,
     strictPort: true,
-    host: true
+    host: true,
   },
   build: {
     target: 'esnext',
     outDir: 'dist',
     assetsDir: 'assets',
-    sourcemap: true
-  }
-}) 
+    sourcemap: true,
+  },
+}); 
