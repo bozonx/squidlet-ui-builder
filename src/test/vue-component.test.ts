@@ -44,6 +44,17 @@ describe('Translator Vue', () => {
     });
   });
 
+  it('handlers', () => {
+    const schema: ComponentSchema = {
+      handlers: {
+        addElement: '(e) => {console.log("addElement");}',
+      },
+    };
+
+    const result = `<script setup>\nconst addElement = (e) => {console.log("addElement");};</script>`;
+    expect(makeComponent(schema)).toBe(result);
+  });
+
   it('style', () => {
     const schema: ComponentSchema = {
       style: 'body { background-color: red; }',

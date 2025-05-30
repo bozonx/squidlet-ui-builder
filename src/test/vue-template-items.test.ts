@@ -215,4 +215,23 @@ describe('Translator Vue', () => {
     const result = `<template>\n<Button :expression="1 + 1" :num="1" :bool="true"></Button>\n</template>`;
     expect(makeComponent(schema)).toBe(result);
   });
+
+  it('on event', () => {
+    const schema: ComponentSchema = {
+      template: [
+        {
+          type: 'Element',
+          tag: 'button',
+          on: {
+            click: {
+              expr: 'addElement()',
+            },
+          },
+        },
+      ],
+    };
+
+    const result = `<template>\n<button @click="addElement()"></button>\n</template>`;
+    expect(makeComponent(schema)).toBe(result);
+  });
 });

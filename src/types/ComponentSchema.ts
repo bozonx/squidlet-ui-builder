@@ -13,6 +13,8 @@ export type TemplateItem =
 
 export interface ComponentSchema {
   props?: Record<string, Props>;
+  state?: Record<string, any>;
+  handlers?: Record<string, string>;
   template?: TemplateItem[];
   style?: string;
   styleScoped?: string;
@@ -23,6 +25,10 @@ export interface Props {
   value: any;
 }
 
+export interface OnEvent {
+  expr: string;
+}
+
 export interface TemplateProps {
   type: 'expression' | 'string' | 'boolean' | 'number';
   value: any;
@@ -31,6 +37,7 @@ export interface TemplateProps {
 export interface ComponentType {
   type: 'Component';
   component: string;
+  on?: Record<string, OnEvent>;
   props?: Record<string, TemplateProps>;
   children?: TemplateItem[];
 }
@@ -38,6 +45,7 @@ export interface ComponentType {
 export interface ElementType {
   type: 'Element';
   tag: string;
+  on?: Record<string, OnEvent>;
   props?: Record<string, TemplateProps>;
   children?: TemplateItem[];
 }
@@ -81,6 +89,7 @@ export interface RouterViewType {
 export interface RouterLinkType {
   type: 'RouterLink';
   to: string;
+  on?: Record<string, OnEvent>;
   props?: Record<string, TemplateProps>;
   children: TemplateItem[];
 }

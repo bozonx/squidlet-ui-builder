@@ -3,6 +3,7 @@ import { makeTemplateItems } from './makeTemplateItem';
 
 export function makeComponent(schema: ComponentSchema): string {
   const props = makeComponentProps(schema.props);
+  const handlers = makeComponentHandlers(schema.handlers);
   let scriptBody = '';
   let result = [];
 
@@ -10,12 +11,18 @@ export function makeComponent(schema: ComponentSchema): string {
     scriptBody += props;
   }
 
+  if (handlers) {
+    scriptBody += handlers;
+  }
+
   if (scriptBody) {
     result.push(`<script setup>\n${scriptBody}</script>`);
   }
 
   if (schema.template?.length) {
-    result.push(`<template>\n${makeTemplateItems(schema.template)}\n</template>`);
+    result.push(
+      `<template>\n${makeTemplateItems(schema.template)}\n</template>`
+    );
   }
 
   if (schema.styleScoped) {
@@ -26,7 +33,7 @@ export function makeComponent(schema: ComponentSchema): string {
     result.push(`<style>\n${schema.style}\n</style>`);
   }
 
-  return result.join('');
+  return result.join('\n\n');
 }
 
 function makeComponentProps(props: Record<string, any> | undefined): string {
@@ -47,4 +54,24 @@ function makeComponentProps(props: Record<string, any> | undefined): string {
   }
 
   return result + '})\n';
+}
+
+function makeComponentHandlers(
+  handlers: Record<string, any> | undefined
+): string {
+  if (!handlers) return '';
+
+  let result = [];
+
+  for (const key in handlers) {
+    const handler = handlers[key];
+
+    if (!handler) continue;
+
+    // TODO: parse to AST and make vue expression
+
+    result.push(`const ${key} = ${handler.trim()};`);
+  }
+
+  return result.join('\n');
 }

@@ -5,6 +5,7 @@ import {
   ElseType,
   ForType,
   IfType,
+  OnEvent,
   RouterLinkType,
   RouterViewType,
   SlotType,
@@ -62,22 +63,40 @@ export function makeTemplateItemProps(
   return ' ' + result.join(' ');
 }
 
+export function makeTemplateItemOn(
+  on: Record<string, OnEvent> | undefined
+): string {
+  if (!on) return '';
+
+  const result = [];
+
+  for (const key in on) {
+    const event = on[key];
+
+    result.push(`@${key}="${event.expr}"`);
+  }
+
+  return ' ' + result.join(' ');
+}
+
 export function makeTemplateItemComponent(item: ComponentType): string {
   const props = makeTemplateItemProps(item.props);
+  const on = makeTemplateItemOn(item.on);
   const children = item.children?.length
     ? '\n' + makeTemplateItems(item.children) + '\n'
     : '';
 
-  return `<${item.component}${props}>${children}</${item.component}>`;
+  return `<${item.component}${props}${on}>${children}</${item.component}>`;
 }
 
 export function makeTemplateItemElement(item: ElementType): string {
   const props = makeTemplateItemProps(item.props);
+  const on = makeTemplateItemOn(item.on);
   const children = item.children?.length
     ? '\n' + makeTemplateItems(item.children) + '\n'
     : '';
 
-  return `<${item.tag}${props}>${children}</${item.tag}>`;
+  return `<${item.tag}${props}${on}>${children}</${item.tag}>`;
 }
 
 export function makeTemplateItemText(item: TextType): string {
@@ -128,11 +147,12 @@ export function makeTemplateItemRouterView(item: RouterViewType): string {
 
 export function makeTemplateItemRouterLink(item: RouterLinkType): string {
   const props = makeTemplateItemProps(item.props);
+  const on = makeTemplateItemOn(item.on);
   const children = item.children?.length
     ? '\n' + makeTemplateItems(item.children) + '\n'
     : '';
 
-  return `<RouterLink to="${item.to}"${props}>${children}</RouterLink>`;
+  return `<RouterLink to="${item.to}"${props}${on}>${children}</RouterLink>`;
 }
 
 export function makeTemplateItemSlot(item: SlotType): string {

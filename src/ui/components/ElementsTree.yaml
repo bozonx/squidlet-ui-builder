@@ -1,7 +1,49 @@
+handlers:
+  addElement: |
+    (e) => {
+      console.log('addElement');
+    }
+
 template:
   - type: Element
-    tag: button
+    tag: div
+    props:
+      class:
+        type: string
+        value: elements-tree
     children:
-      - type: Text
-        value: Button
-
+      - type: Element
+        tag: div
+        props:
+          class:
+            type: string
+            value: toolbar
+        children:
+          - type: Element
+            tag: button
+            on:
+              click:
+                expr: addElement
+            children:
+              - type: Text
+                value: Add Element
+      - type: Element
+        tag: div
+        props:
+          class:
+            type: string
+            value: elements-list
+        children:
+          - type: For
+            of: elements
+            item: element
+            children:
+              - type: Element
+                tag: div
+                props:
+styleScoped: |
+  .toolbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
