@@ -2,7 +2,7 @@ template:
   - type: Element
     tag: div
     props:
-      class: div-class
+      aaa: bg-red-500
     children:
       - type: Text
         value: Hello World
