@@ -26,6 +26,28 @@ describe('Translator Vue', () => {
       expect(makeComponent(schema)).toBe(result);
     });
 
+    it('state string', () => {
+      const schema: ComponentSchema = {
+        state: {
+          tree: { type: 'string', value: 'default' },
+        },
+      };
+
+      const result = `<script setup>\nconst state = reactive({\ntree: "default",\n});\n</script>`;
+      expect(makeComponent(schema)).toBe(result);
+    });
+
+    it('state boolean', () => {
+      const schema: ComponentSchema = {
+        state: {
+          tree: { type: 'boolean', value: true },
+        },
+      };
+
+      const result = `<script setup>\nconst state = reactive({\ntree: true,\n});\n</script>`;
+      expect(makeComponent(schema)).toBe(result);
+    });
+
     it('props', () => {
       const schema: ComponentSchema = {
         props: {
@@ -38,7 +60,7 @@ describe('Translator Vue', () => {
 
       const result =
         `<script setup>\n` +
-        `const props = defineProps({\nclassName: String,\n})\n` +
+        `const props = defineProps({\nclassName: String,\n});\n` +
         `</script>`;
       expect(makeComponent(schema)).toBe(result);
     });
@@ -51,7 +73,7 @@ describe('Translator Vue', () => {
       },
     };
 
-    const result = `<script setup>\nconst addElement = (e) => {console.log("addElement");};</script>`;
+    const result = `<script setup>\nconst addElement = (e) => {console.log("addElement");}\n</script>`;
     expect(makeComponent(schema)).toBe(result);
   });
 

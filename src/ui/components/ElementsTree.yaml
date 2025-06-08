@@ -1,7 +1,12 @@
+state:
+  tree:
+    type: string
+    value: default
+
 handlers:
   addElement: |
     (e) => {
-      console.log('addElement');
+      console.log('addElement', state.tree);
     }
 
 template:

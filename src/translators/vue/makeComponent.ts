@@ -3,20 +3,25 @@ import { makeTemplateItems } from './makeTemplateItem';
 
 export function makeComponent(schema: ComponentSchema): string {
   const props = makeComponentProps(schema.props);
+  const state = makeComponentState(schema.state);
   const handlers = makeComponentHandlers(schema.handlers);
-  let scriptBody = '';
+  let scriptBody = [];
   let result = [];
 
   if (props) {
-    scriptBody += props;
+    scriptBody.push(props);
+  }
+
+  if (state) {
+    scriptBody.push(state);
   }
 
   if (handlers) {
-    scriptBody += handlers;
+    scriptBody.push(handlers);
   }
 
-  if (scriptBody) {
-    result.push(`<script setup>\n${scriptBody}</script>`);
+  if (scriptBody.length) {
+    result.push(`<script setup>\n${scriptBody.join('\n')}\n</script>`);
   }
 
   if (schema.template?.length) {
@@ -53,7 +58,27 @@ function makeComponentProps(props: Record<string, any> | undefined): string {
     }
   }
 
-  return result + '})\n';
+  return result + '});';
+}
+
+function makeComponentState(state: Record<string, any> | undefined): string {
+  if (!state) return '';
+
+  let result = 'const state = reactive({\n';
+
+  for (const key in state) {
+    const stateItem = state[key];
+
+    if (['expression', 'string'].includes(stateItem.type)) {
+      result += `${key}: "${stateItem.value}",\n`;
+    } else if (
+      ['boolean', 'number', 'array', 'object'].includes(stateItem.type)
+    ) {
+      result += `${key}: ${JSON.parse(stateItem.value)},\n`;
+    }
+  }
+
+  return result + '});';
 }
 
 function makeComponentHandlers(
@@ -70,7 +95,7 @@ function makeComponentHandlers(
 
     // TODO: parse to AST and make vue expression
 
-    result.push(`const ${key} = ${handler.trim()};`);
+    result.push(`const ${key} = ${handler.trim()}`);
   }
 
   return result.join('\n');

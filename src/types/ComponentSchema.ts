@@ -20,10 +20,12 @@ export interface ComponentSchema {
   styleScoped?: string;
 }
 
-export interface Props {
+export interface StateItem {
   type: 'expression' | 'string' | 'boolean' | 'number' | 'array' | 'object';
   value: any;
 }
+
+export interface Props extends StateItem {}
 
 export interface OnEvent {
   expr: string;

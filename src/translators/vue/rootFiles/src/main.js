@@ -8,6 +8,7 @@ const app = createApp(App)
 
 app.use(router)
 
+// TODO: есть плагин unplugin-vue-components
 for (const component in components) {
   app.component(component, components[component]);
 }
